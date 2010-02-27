@@ -50,7 +50,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Common\Client\Client.csproj">
+    <ProjectReference Include="..\..\..\graphicslib\Common\Client\Client.csproj">
       <Project>{416EE5A4-4061-4AAC-B00F-132FB4C19513}</Project>
       <Name>Client</Name>
     </ProjectReference>
