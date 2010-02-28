@@ -37,7 +37,7 @@
 				return TRUE;
 		}
 		
-		return FALSE:
+		return FALSE;
 	}
 	
 	function AccountExists ( $name )
@@ -51,7 +51,7 @@
 				return TRUE;
 		}
 		
-		return FALSE:
+		return FALSE;
 	}
 	
 	function AddUser ()
@@ -81,10 +81,10 @@
 		$passhash = md5($password);
 		$token = rand();
 		
-		$query = "INSERT INTO users (EMail, PassHash, Verified, Auth) VALUES ('$email','$passhash',0,'$token')");
+		$query = "INSERT INTO users (EMail, PassHash, Verified, Auth) VALUES ('$email','$passhash',0,'$token')";
 		SQLSet($query);
 		          
-		$query = "SELECT ID FROM users WHERE Auth='$token'");
+		$query = "SELECT ID FROM users WHERE Auth='$token'";
 		
 		$id = GetQueryResult(SQLGet($query));
 		if (!$id)
@@ -93,7 +93,7 @@
 			return;
 		}
 
-		$query = "INSERT INTO characters (UID, Callsign) VALUES ($id,'$character')");
+		$query = "INSERT INTO characters (UID, Callsign) VALUES ($id,'$character')";
 		SQLSet($query);
 		
 		echo "ok";
@@ -107,9 +107,9 @@
 	
 	function characterCount ($uid)
 	{
-		$query = "SELECT ID FROM characters WHERE UID=$uid");
+		$query = "SELECT ID FROM characters WHERE UID=$uid";
 		
-		$results = SQLGet($query));
+		$results = SQLGet($query);
 		if (!$results)
 			return 0;
 		return  mysql_num_rows($results);
@@ -151,9 +151,9 @@
 		
 		$passhash = md5($password);
 
-		$query = "SELECT ID, PassHash FROM users WHERE EMail='$email'");
+		$query = "SELECT ID, PassHash FROM users WHERE EMail='$email'";
 		
-		$results = SQLGet($query));
+		$results = SQLGet($query);
 		if (!$results || mysql_num_rows($results) == 0)
 		{
 			echo "authbadcred";
@@ -173,7 +173,7 @@
 		$token = rand();
 		$ip = $_SERVER['REMOTE_ADDR'];
 		
-		$query = String.Format("UPDATE users SET Token='$token', IP='$ip' WHERE ID=$id");
+		$query = "UPDATE users SET Token='$token', IP='$ip' WHERE ID=$id";
 		SQLSet($query);
 		
 		$_SESSION['uid'] = $id;
@@ -202,7 +202,7 @@
 		$uid = GetInput("uid");
 		$query = "SELECT ID, Callsign FROM characters WHERE UID=$uid";
 		
-		$results = SQLGet($query));
+		$results = SQLGet($query);
 		if (!$results || mysql_num_rows($results) == 0)
 			echo "0\r\n";
 		else
