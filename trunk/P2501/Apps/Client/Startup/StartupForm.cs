@@ -31,7 +31,7 @@ namespace P2501Client
 
         private void StartupForm_Load(object sender, EventArgs e)
         {
-            NewsBrowser.Navigate("http://www.awesomelaser.com/p2501/news.html");
+            NewsBrowser.Navigate("http://www.opencombat.net/?page_id=17");
 
             UpdateUIStates();
 

@@ -101,10 +101,11 @@ namespace P2501GameClient
             SendClockUpdate();
 
             Login login = new Login();
-            login.username = string.Empty;
-            login.token = string.Empty;
+            login.UID = 0;
+            login.CID = 0;
+            login.Token = 0;
             if (GetAuthentication != null)
-                GetAuthentication(ref login.username, ref login.token);
+                GetAuthentication(ref login.UID, ref login.CID, ref login.Token);
 
             client.SendMessage(login.Pack(), login.Channel());
         }
@@ -115,8 +116,14 @@ namespace P2501GameClient
             if (info == null)
                 return;
 
+            if (info.Protocoll != MessageProtcoll.Version)
+            {
+                client.Kill();
+                return;
+            }
+
             if (ServerVersionEvent != null)
-                ServerVersionEvent(this, info.Vers);
+                ServerVersionEvent(this, info.Major, info.Minor, info.Rev);
         }
 
         protected void PlayerInfoHandler(MessageClass message)
