@@ -12,10 +12,10 @@ namespace P2501GameClient
 {
     public delegate void MessageHandler(MessageClass message);
 
-    public delegate void AuthenticationCallback(ref string username, ref string token);
+    public delegate void AuthenticationCallback(ref UInt64 UID, ref UInt64 CID, ref UInt64 Token);
     public delegate void JoinInfoCallback(ref string callsign, ref string pilot);
 
-    public delegate void ServerVersionHandler ( object sender, int version );
+    public delegate void ServerVersionHandler ( object sender, int major, int minor, int rev );
     public delegate void PlayerEventHandler(object sender, Player player);
 
     public delegate void ChatEventHandler ( object sender, string channel, string from, string message );
