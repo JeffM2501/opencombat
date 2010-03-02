@@ -73,7 +73,7 @@ namespace P2501Client
         {
             lock (GameServers)
             {
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://www.awesomelaser.com/p2501/List/list.php?action=viewlist&uid=" + UID.ToString());
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://www.opencombat.net/services/list.php?action=viewlist&uid=" + UID.ToString());
                 HttpWebResponse response = (HttpWebResponse)request.GetResponse();
 
                 GameServers.Clear();
