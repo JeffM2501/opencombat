@@ -129,106 +129,31 @@ namespace P2501Client
             // do the registration
             WaitBox box = new WaitBox("Registering Account");
             box.Show();
-            box.Update(10, "Contacting secure host");
+            box.Update("Connecting to secure host");
 
-           // CryptoClient client = new CryptoClient("www.awesomelaser.com", 4111);
-            CryptoClient client = new CryptoClient("localhost", 4111);
-
-            Stopwatch timer = new Stopwatch();
-            timer.Start();
-
-            int timeout = 120;
-
-            bool done = false;
-            bool connected = false;
-            bool worked = false;
-
-            while (!done)
+            switch(Login.Register(Email.Text,Password.Text,Callsign.Text))
             {
-                if (!connected && client.IsConnected)
-                    box.Update(20, "Connection established");
-                if (connected && !client.IsConnected)
-                {
-                    client.Kill();
-                    box.Close();
+                case Login.RegisterCode.Error:
                     MessageBox.Show("The registration server could not be contacted");
                     DialogResult = DialogResult.None;
-                    return;
-                }
+                    break;
 
-                NetBuffer buffer = client.GetPentMessage();
-                while (buffer != null)
-                {
-                    int name = buffer.ReadInt32();
+                case Login.RegisterCode.BadCallsign:
+                    MessageBox.Show("The name " + Callsign.Text + " was not available");
+                    Callsign.Text = string.Empty;
+                    Callsign.Select();
+                    DialogResult = DialogResult.None;
+                    break; 
 
-                    if (name == AuthMessage.Hail)
-                    {
-                        RequestAdd msg = new RequestAdd();
-                        msg.email = Email.Text;
-                        msg.password = Password.Text;
-                        msg.callsign = Callsign.Text;
+                case Login.RegisterCode.BadEmail:
+                    MessageBox.Show("The email " + Email.Text + " is already registered");
+                    Email.Text = string.Empty;
+                    Email.Select();
+                    DialogResult = DialogResult.None;
+                    break;
 
-                        box.Update(75, "Registering account");
-                        client.SendMessage(msg.Pack(), msg.Channel());
-                    }
-                    else if (name == AuthMessage.AddOK)
-                    {
-                        box.Update(100, "Registration complete");
-                        client.Kill();
-                        done = true;
-                        worked = true;
-                    }
-                    else if (name == AuthMessage.AddBadCallsign)
-                    {
-                        client.Kill();
-                        box.Close();
-                        MessageBox.Show("The name " + Callsign.Text + " was not available");
-                        Callsign.Text = string.Empty;
-                        Callsign.Select();
-                        DialogResult = DialogResult.None;
-                        return;
-                    }
-                    else if (name == AuthMessage.AddBadEmail)
-                    {
-                        client.Kill();
-                        box.Close();
-                        MessageBox.Show("The email " + Email.Text + " is already registered");
-                        Email.Text = string.Empty;
-                        Email.Select();
-                        DialogResult = DialogResult.None;
-                        return;
-                    }
-                    else
-                    {
-                        done = true;
-                        connected = false;
-                    }
-
-                    if (!done)
-                        buffer = client.GetPentMessage();
-                    else
-                        buffer = null;
-                }
-
-                if (timer.ElapsedMilliseconds / 1000 > timeout)
-                {
-                    done = true;
-                    connected = false;
-                }
-                Application.DoEvents();
-                Thread.Sleep(100);
             }
-            client.Kill();
             box.Close();
-
-            if (!worked)
-            {
-                box.Close();
-                MessageBox.Show("The registration server could not be contacted");
-                DialogResult = DialogResult.None;
-                return;
-            }
-
             AccountName = Email.Text;
         }
     }

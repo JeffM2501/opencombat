@@ -4,9 +4,12 @@ using System.Windows.Forms;
 using System.Text;
 using System.Net;
 using System.Web;
+using System.Net.Security;
 using System.Diagnostics;
 using System.Threading;
 using System.IO;
+using System.Security.Cryptography;
+using System.Security.Cryptography.X509Certificates;
 
 using Clients;
 using Lidgren.Network;
@@ -20,13 +23,62 @@ namespace P2501Client
         public UInt64 UID = 0;
         public UInt64 Token = 0;
 
-        CryptoClient client = null; 
+        CryptoClient client = null;
+
+        static bool useUDP = false;
+
+        WebClient webClient = null;
 
         public bool Connect (string email, string password )
         {
+            if (useUDP)
+                return ConnectUDP(email, password);
+
+            return ConnectHTML(email, password);
+        }
+
+        protected bool ConnectHTML(string email, string password)
+        {
             WaitBox box = new WaitBox("Logon");
             box.Show();
-            box.Update(10, "Contacting secure host");
+            box.Update("Contacting secure server");
+            SetSLL();
+
+            UID = 0;
+            Token = 0;
+
+            string url = "https://secure.opencombat.net/authserver.php?action=login&email=" + HttpUtility.UrlEncode(email) + "&password=" + HttpUtility.UrlEncode(password);
+            webClient = new WebClient();
+
+            Stream stream = webClient.OpenRead(url);
+            StreamReader reader = new StreamReader(stream);
+
+            string code = reader.ReadLine();
+            if (code != "ok")
+            {
+                reader.Close();
+                stream.Close();
+                webClient = null;
+                box.Close();
+                return false;
+            }
+
+            UID = UInt64.Parse(reader.ReadLine());
+            Token = UInt64.Parse(reader.ReadLine());
+
+            reader.Close();
+            stream.Close();
+
+            box.Update("Login complete");
+            box.Close();
+            return true;
+        }
+
+        protected bool ConnectUDP(string email, string password)
+        {
+            WaitBox box = new WaitBox("Logon");
+            box.Show();
+            box.Update("Contacting secure host");
 
             if (client != null)
                 client.Kill();
@@ -62,14 +114,14 @@ namespace P2501Client
                             msg.email = email;
                             msg.password = password;
 
-                            box.Update(75, "Sending credentials");
+                            box.Update("Sending credentials");
                             client.SendMessage(msg.Pack(), msg.Channel());
                         }
                         else if (name == AuthMessage.AuthOK)
                         {
                             AuthOK ok = new AuthOK();
                             ok.Unpack(ref buffer);
-                            box.Update(100, "Login complete");
+                            box.Update("Login complete");
                             box.Close();
                             UID = ok.ID;
                             Token = ok.Token;
@@ -115,19 +167,180 @@ namespace P2501Client
 
         static public bool CheckName ( string name )
         {
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://www.awesomelaser.com/p2501/Auth/callsigncheck.php?name=" + HttpUtility.UrlEncode(name));
-            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+            SetSLL();
 
-            Stream resStream = response.GetResponseStream();
+            WebClient request = new WebClient();
+            Stream resStream = request.OpenRead("https://secure.opencombat.net/callsigncheck.php?name=" + HttpUtility.UrlEncode(name));
             StreamReader reader = new StreamReader(resStream);
-            string ret = reader.ReadToEnd();
+            string ret = reader.ReadLine();
             reader.Close();
             resStream.Close();
 
             return ret == "OK";
         }
 
+        public enum RegisterCode
+        {
+            OK,
+            BadEmail,
+            BadCallsign,
+            Error
+        }
+
+        public static RegisterCode Register ( string email, string password, string character )
+        {
+            if (useUDP)
+                return RegisterUDP(email, password, character);
+
+            return RegisterHTML(email, password, character);
+        }
+
+        protected static void SetSLL ()
+        {
+             ServicePointManager.ServerCertificateValidationCallback +=  
+                delegate(  
+                object sender,  
+                X509Certificate certificate,  
+                X509Chain chain,  
+                SslPolicyErrors sslPolicyErrors)  
+                {  
+                   return true;  
+                };  
+        }
+
+        protected static RegisterCode RegisterHTML(string email, string password, string character)
+        {
+            SetSLL();
+
+            string url = "https://secure.opencombat.net/authserver.php?action=adduser&email=" + HttpUtility.UrlEncode(email) + "&password=" + HttpUtility.UrlEncode(password) + "&character=" + HttpUtility.UrlEncode(character) ;
+
+            WebClient request = new WebClient();
+            Stream stream = request.OpenRead(url);
+            StreamReader reader = new StreamReader(stream);
+
+            string code = reader.ReadLine();
+            if (code == "authbademail")
+                return RegisterCode.BadEmail;
+            if (code == "authbadcallsign")
+                return RegisterCode.BadCallsign;
+            if (code != "ok")
+                return RegisterCode.Error;
+
+            reader.Close();
+            stream.Close();
+
+            return RegisterCode.OK;
+        }
+
+        protected static RegisterCode RegisterUDP ( string email, string password, string character )
+        {
+            // CryptoClient client = new CryptoClient("www.awesomelaser.com", 4111);
+            CryptoClient client = new CryptoClient("localhost", 4111);
+
+            Stopwatch timer = new Stopwatch();
+            timer.Start();
+
+            int timeout = 120;
+
+            bool done = false;
+            bool connected = false;
+
+            while (!done)
+            {
+                if (connected && !client.IsConnected)
+                {
+                    client.Kill();
+                    return RegisterCode.Error;
+                }
+
+                NetBuffer buffer = client.GetPentMessage();
+                while (buffer != null)
+                {
+                    int name = buffer.ReadInt32();
+
+                    if (name == AuthMessage.Hail)
+                    {
+                        RequestAdd msg = new RequestAdd();
+                        msg.email = email;
+                        msg.password = password;
+                        msg.callsign = character;
+
+                        client.SendMessage(msg.Pack(), msg.Channel());
+                    }
+                    else if (name == AuthMessage.AddOK)
+                    {
+                        client.Kill();
+                        done = true;
+                    }
+                    else if (name == AuthMessage.AddBadCallsign)
+                    {
+                        client.Kill();
+                        return RegisterCode.BadCallsign;
+                    }
+                    else if (name == AuthMessage.AddBadEmail)
+                    {
+                        client.Kill();
+                        return RegisterCode.BadEmail;
+
+                    }
+                    else
+                    {
+                        done = true;
+                        connected = false;
+                    }
+
+                    if (!done)
+                        buffer = client.GetPentMessage();
+                    else
+                        buffer = null;
+                }
+
+                if (timer.ElapsedMilliseconds / 1000 > timeout)
+                {
+                    done = true;
+                    client.Kill();
+                    return RegisterCode.Error;
+                }
+                Application.DoEvents();
+                Thread.Sleep(100);
+            }
+            client.Kill();
+
+            return RegisterCode.OK;
+        }
+
         public bool AddCharacter ( string name )
+        {
+            if (useUDP)
+                return AddCharacterUDP(name);
+
+            return AddCharacterHTML(name);
+        }
+
+        public bool AddCharacterHTML ( string name )
+        {
+            if (webClient == null)
+                return false;
+
+            WaitBox box = new WaitBox("Adding Callsign");
+            box.Update("Contacting Server");
+            
+            SetSLL();
+
+            string url = "https://secure.opencombat.net/authserver.php?action=addchar&UID=" + UID.ToString() + "&callsign=" + HttpUtility.UrlEncode(name);
+            Stream stream = webClient.OpenRead(url);
+            StreamReader reader = new StreamReader(stream);
+
+            webClient = null;
+            string code = reader.ReadLine();
+            reader.Close();
+            stream.Close();
+            box.Close();
+
+            return code == "ok";
+        }
+
+        public bool AddCharacterUDP ( string name )
         {
             if (client == null || !CheckName(name))
                 return false;
@@ -177,6 +390,50 @@ namespace P2501Client
         }
 
         public Dictionary<UInt64,string> GetCharacterList ()
+        {
+            if (useUDP)
+                return GetCharacterListUDP();
+            return GetCharacterListHTML();
+        }
+
+        protected Dictionary<UInt64,string> GetCharacterListHTML ()
+        {
+            if (webClient == null)
+                return null;
+
+            Dictionary<UInt64, string> list = new Dictionary<UInt64, string>();
+
+            SetSLL();
+            WaitBox box = new WaitBox("Callsigns");
+            box.Show();
+            box.Update("Requesting list");
+
+            string url = "https://secure.opencombat.net/authserver.php?action=listchar&uid=" + UID.ToString() + "&token=" + Token.ToString();
+            Stream stream = webClient.OpenRead(url);
+            StreamReader reader = new StreamReader(stream);
+
+            string code = reader.ReadLine();
+            int count = 0;
+            if (int.TryParse(code,out count))
+            {
+                for (int i = 0; i < count; i++)
+                {
+                    string item = reader.ReadLine();
+                    string[] nugs = item.Split("\t".ToCharArray());
+
+                    list.Add(UInt64.Parse(nugs[0]), nugs[1]);
+                }
+            }
+         
+            webClient = null;
+            reader.Close();
+            stream.Close();
+            box.Close();
+
+            return list;
+        }
+
+        protected Dictionary<UInt64,string> GetCharacterListUDP ()
         {
             if (client == null)
                 return null;
