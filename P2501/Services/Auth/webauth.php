@@ -31,7 +31,7 @@
 		$id = GetInput("id");
 		$token = GetInput("token");
 		
-		$query = "SELECT Token FROM users WHERE ID=$id";
+		$query = "SELECT Auth FROM users WHERE ID=$id";
 		$result = SQLGet($query);
 		if ($result)
 		{
@@ -59,19 +59,7 @@
 			}
 		}
 	}
-	
-	if (!$callsign)
-		echo "bad\r\n";
-	else
-	{
-		echo "ok\r\n";
-		if ($verified)
-			echo "verified\r\n";
-		else
-			echo "unverified\r\n";
-		echo $callsign . "\r\n";
-	}	}
-	
+
 	if (!defined('CONFIGURATION'))
 		die("ERROR: Unable to load configuration.\n");
 		
