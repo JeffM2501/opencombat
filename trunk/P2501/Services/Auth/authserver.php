@@ -156,19 +156,18 @@
 		$results = SQLGet($query);
 		if (!$results || mysql_num_rows($results) == 0)
 		{
-			echo "authbadcred";
+			echo "authbadcred1";
 			return;
 		}
 		
 		$row = mysql_fetch_array($results);
 		if (!$row[0] || $passhash != $row[1])
 		{
-			echo "authbadcred";
+			echo "authbadcred2";
 			return;
 		}
 		
 		$id = $row[0];
-		
 		
 		$token = rand();
 		$ip = $_SERVER['REMOTE_ADDR'];
@@ -180,15 +179,33 @@
 	  $_SESSION['token'] = $token;
 		$_SESSION['ip'] = $ip;
 
-		echo "ok\r\n" . $id . "\r\n" ."token\r\n";
+		echo "ok\r\n" . $id . "\r\n" .$token ."\r\n";
 	}
 	
 	function checkAuth ()
 	{
 		$uid = GetInput("uid");
-		$ip = $_SERVER['REMOTE_ADDR'];
-
-		return $_SESSION['uid'] == $uid && $_SESSION['ip'] == $ip;
+		$token = GetInput("token");
+		
+		if ($token)
+		{
+			$query = "SELECT Token FROM users WHERE ID=$uid";
+		
+			$results = SQLGet($query);
+			if (!$results || mysql_num_rows($results) == 0)
+				return FALSE;
+			
+			$row = mysql_fetch_array($results);
+			return $row[0] == $token;
+		}
+		else
+		{
+			$ip = $_SERVER['REMOTE_ADDR'];
+			
+			echo $_SESSION['ip'] . " " . $uid;
+	
+			return $_SESSION['uid'] == $uid && $_SESSION['ip'] == $ip;
+		}
 	}
 	
 	function ListCharacters()
