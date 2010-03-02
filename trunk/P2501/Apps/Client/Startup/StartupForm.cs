@@ -16,6 +16,8 @@ namespace P2501Client
         public UInt64 CharacterID = 0;
         public string ConnectHost = string.Empty;
 
+        public bool OkToPlay = false;
+
         GameList gameList = null;
 
         Timer timer;
@@ -187,8 +189,8 @@ namespace P2501Client
             {
                 if (!prefs.Accounts.Contains(Username.Text))
                 {
-                    prefs.Accounts.Add(Username.Text);
-                    Username.Items.Add(Username.Text);
+                    prefs.Accounts.Insert(0,Username.Text);
+                    Username.Items.Insert(0,Username.Text);
                     prefs.Write();
                 }
             }
@@ -269,6 +271,7 @@ namespace P2501Client
             CharacterID = ((CharaterListItem)CallsignList.SelectedItem).CID;
             ConnectHost = host.Host;
 
+            OkToPlay = true;
             DialogResult = DialogResult.OK;
             this.Close();
         }

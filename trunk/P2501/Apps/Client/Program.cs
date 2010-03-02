@@ -22,7 +22,7 @@ namespace P2501Client
                 StartupForm startupForm = new StartupForm();
                 Application.Run(startupForm);
 
-                if (startupForm.Token != 0)
+                if (startupForm.OkToPlay)
                     new Game(startupForm.ConnectHost, startupForm.UID, startupForm.Token, startupForm.CharacterID).Run();
                 else
                     done = true;
