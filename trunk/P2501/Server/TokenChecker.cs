@@ -55,6 +55,8 @@ namespace Project2501Server
         {
             bool done = false;
 
+            WebClient client = new WebClient();
+
             while (!done)
             {
                 Job job = null;
@@ -76,10 +78,9 @@ namespace Project2501Server
                     job.Checked = false;
                     job.Verified = false;
 
-                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://www.awesomelaser.com/p2501/Auth/authceck.php?uid=" + job.UID.ToString() + "&token=" + job.Token.ToString() + "&cid=" + job.CID.ToString() + "&ip=" + HttpUtility.UrlEncode(job.IP));
-                    HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                    string url = "http://www.opencombat.net/services/authceck.php?uid=" + job.UID.ToString() + "&token=" + job.Token.ToString() + "&cid=" + job.CID.ToString() + "&ip=" + HttpUtility.UrlEncode(job.IP);
 
-                    Stream stream = response.GetResponseStream();
+                    Stream stream = client.OpenRead(url);
                     StreamReader reader = new StreamReader(stream);
 
                     string code = reader.ReadLine();

@@ -39,6 +39,7 @@ namespace Project2501Server
     }
 
     public delegate void MessageHandler ( Client client, MessageClass message );
+    public delegate bool PublicListCallback(ref string host, ref string name, ref string description, ref string key, ref string type);
 
     public partial class Server
     {
@@ -46,7 +47,10 @@ namespace Project2501Server
         Host host;
 
         protected TokenChecker tokenChecker = null;
+        protected ServerLister serverLister = null;
         public bool SaveMessages = true;
+
+        public PublicListCallback PublicListInfo = null;
 
         MessageMapper messageMapper = new MessageMapper();
 
@@ -61,8 +65,14 @@ namespace Project2501Server
         Thread ServerThread = null;
 
         public int ServerSleepTime = 10;
+        protected int port = 2501;
 
-        public Server ( int port )
+        public Server ( int p )
+        {
+            port = p;
+        }
+
+        public void Init ()
         {
             timer = new Stopwatch();
             timer.Start();
@@ -70,6 +80,7 @@ namespace Project2501Server
             sim.Init();
 
             tokenChecker = new TokenChecker();
+            serverLister = new ServerLister();
 
             host.Connect += new MonitoringEvent(host_Message);
             host.Disconnect += new MonitoringEvent(host_Message);
@@ -80,6 +91,31 @@ namespace Project2501Server
             sim.PlayerStatusChanged += new PlayerStatusChangeHandler(sim_PlayerStatusChanged);
 
             InitMessageHandlers();
+
+            listServer();
+        }
+
+        protected void listServer()
+        {
+            if (serverLister == null)
+                return;
+
+            if (PublicListInfo == null)
+            {
+                serverLister.Kill();
+                serverLister = null;
+                return;
+            }
+
+            ServerLister.Job job = new ServerLister.Job();
+            if (!PublicListInfo(ref job.host, ref job.name, ref job.desc, ref job.key, ref job.serverType))
+            {
+                serverLister.Kill();
+                serverLister = null;
+                return;
+            }
+
+            serverLister.AddHost(job);
         }
 
         public void Run ()
@@ -101,9 +137,19 @@ namespace Project2501Server
         {
             if (ServerThread != null)
                 ServerThread.Abort();
-            host.Kill();
             ServerThread = null;
-            tokenChecker.Kill();
+
+            if (host != null)
+                host.Kill();
+            host = null;
+
+            if (tokenChecker != null)
+                tokenChecker.Kill();
+            tokenChecker = null;
+
+            if(serverLister != null)
+                serverLister.Kill();
+            serverLister = null;
         }
 
         void sim_PlayerStatusChanged(object sender, PlayerEventArgs args)
