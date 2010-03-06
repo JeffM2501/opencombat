@@ -1,0 +1,2 @@
+The textures in this directory ( and sub directories) are used under the lgpl license from BZFlag.org and are copyright 2010 Tim Riker.
+Additional information can be found at http://bzflag.org
