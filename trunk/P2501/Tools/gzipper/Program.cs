@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.IO.Compression;
+using System.Security.Cryptography;
 
 namespace gzipper
 {
@@ -15,17 +16,41 @@ namespace gzipper
             if (!inDir.Exists)
                 return;
 
+            string baseURL = string.Empty;
+            if (args.Length > 1)
+                baseURL = args[1];
+
             DirectoryInfo outdir = new DirectoryInfo(Path.Combine(Path.GetDirectoryName(inDir.FullName), inDir.Name + "_out"));
             outdir.Create();
 
-            ProcessDir(inDir,outdir);
-           
+            FileInfo outlog = new FileInfo(Path.Combine(outdir.FullName,"files.txt"));
+            Stream logStream = outlog.OpenWrite();
+            StreamWriter logWriter = new StreamWriter(logStream);
+
+            ProcessDir(inDir, outdir, string.Empty, baseURL, logWriter);
+
+            logWriter.Close();
+            logStream.Close();
         }
 
-        static void ProcessDir ( DirectoryInfo inDir, DirectoryInfo outDir )
+        static void ProcessDir ( DirectoryInfo inDir, DirectoryInfo outDir, string path, string baseURL, StreamWriter log )
         {
-            foreach ( FileInfo file in inDir.GetFiles() )
-                CopyCompressedFile(file,outDir);
+            foreach (FileInfo file in inDir.GetFiles())
+            {
+                Console.WriteLine(file.FullName);
+
+                CopyCompressedFile(file, outDir);
+
+                string localpath = Path.Combine(path, file.Name);
+                localpath = localpath.Replace('\\', '/');
+
+                string url = baseURL + localpath;
+
+
+                string md5 = ComputeMD5(file);
+
+                log.WriteLine(localpath + "\t" + url + "\t" + md5);
+            }
 
             foreach (DirectoryInfo dir in inDir.GetDirectories())
             {
@@ -33,8 +58,24 @@ namespace gzipper
                     continue;
                 DirectoryInfo newDir = new DirectoryInfo(Path.Combine(outDir.FullName,dir.Name));
                 newDir.Create();
-                ProcessDir(dir,newDir);
+
+                string d = Path.Combine(path, dir.Name);
+                ProcessDir(dir,newDir,d,baseURL,log);
             }
+        }
+
+        static string ComputeMD5 ( FileInfo file )
+        {
+            Stream f = file.OpenRead();
+            MD5 md5 = MD5.Create();
+            byte[] inputHash = md5.ComputeHash(f);
+            f.Close();
+
+            string hash = "";
+            foreach (byte b in inputHash)
+                hash += b.ToString("x2");
+
+            return hash;
         }
 
         static void CopyCompressedFile (FileInfo file, DirectoryInfo outDir )
