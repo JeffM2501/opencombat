@@ -83,7 +83,6 @@ namespace Launcher
                 count = files.Count;
             }
            
-
             DirectoryInfo AppSettingsDir = new DirectoryInfo(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Projekt2501"));
             if (!AppSettingsDir.Exists)
                 AppSettingsDir.Create();
@@ -167,6 +166,7 @@ namespace Launcher
                     }
                 }
             }
+            Application.DoEvents();
         }
     }
 }

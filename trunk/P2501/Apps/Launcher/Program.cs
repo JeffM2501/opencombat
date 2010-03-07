@@ -54,7 +54,7 @@ namespace Launcher
                 return;
 
             patcher = new FileInfo(Path.Combine(updateDir.FullName,"Patcher.exe"));
-            if (!patcher.Exists)
+            if (patcher.Exists)
             {  
                 StartApp(patcher.FullName,theAppDir);
                 return;
@@ -76,7 +76,6 @@ namespace Launcher
               Process.Start(path, args);
           else
               Process.Start("mono", path + " " + args);
-
         }
     }
 }
