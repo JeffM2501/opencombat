@@ -7,10 +7,17 @@ using System.Xml.Serialization;
 using System.Reflection;
 using System.IO;
 
+using OpenTK.Graphics.OpenGL;
+
 namespace GUIObjects
 {
     public class GUIObject
     {
+        public static float ChildOffset = 0.01f;
+
+        public static Font GUIFont = new Font(FontFamily.GenericSansSerif,12);
+        public static Font GUIHeaderFont = new Font(FontFamily.GenericSerif, 24);
+    
         public GUIObject Parrent;
         public string ValueName = string.Empty;
 
@@ -44,7 +51,7 @@ namespace GUIObjects
             set { hasFocus = value; FocusChange();}
         }
 
-        public Color BackgroundColor = Color.Transparent;
+        public Color BackgroundColor = Color.White;
         public Color ForegroundColor = Color.Black;
 
         public virtual void Think ( double time )
@@ -55,8 +62,20 @@ namespace GUIObjects
 
         public virtual void Draw ( double time )
         {
+            GL.PushMatrix();
+            GL.Translate((float)position.X, (float)position.Y, 0);
+            Render(time);
+
+            GL.Translate(0, 0, ChildOffset);
+
             foreach (GUIObject child in Children)
                 child.Draw(time);
+
+            GL.PopMatrix();
+        }
+
+        protected virtual void Render(double time)
+        {
         }
 
         public virtual void Activate ( bool show )
@@ -103,9 +122,44 @@ namespace GUIObjects
             public string BackgroundColor = string.Empty;
             public string ForegroundColor = string.Empty;
 
-            public List<ElementDefinition> Children;
+            public List<ElementDefinition> Children = new List<ElementDefinition>();
 
             public List<KeyValuePair<string, string>> Options = new List<KeyValuePair<string, string>>();
+
+            public static KeyValuePair<string, string> EmptyOption = new KeyValuePair<string, string>(string.Empty, string.Empty);
+
+            public string GetOptionValue ( string name )
+            {
+                foreach(KeyValuePair<string,string> option in Options)
+                {
+                    if (option.Key == name)
+                        return option.Value;
+                }
+
+                return string.Empty;
+            }
+
+            public void SetOptionValue ( string name, string value )
+            {
+                KeyValuePair<string, string> item = EmptyOption;
+
+                bool foundOne = true;
+
+                foreach (KeyValuePair<string, string> option in Options)
+                {
+                    if (option.Key == name)
+                    {
+                        foundOne = true;
+                        item = option;
+                    }
+                }
+
+                if (foundOne)
+                    Options.Remove(item);
+
+                if (value != string.Empty)
+                    Options.Add(new KeyValuePair<string, string>(name, value));
+            }
         }
 
         protected Color ParseColor (string val)
@@ -177,8 +231,10 @@ namespace GUIObjects
             ValueName = def.ValueName;
             Poisition = def.Position;
             Size = def.Size;
-            BackgroundColor = ParseColor(def.BackgroundColor);
-            ForegroundColor = ParseColor(def.ForegroundColor);
+            if (def.BackgroundColor != string.Empty)
+                BackgroundColor = ParseColor(def.BackgroundColor);
+            if (def.ForegroundColor != string.Empty)
+                ForegroundColor = ParseColor(def.ForegroundColor);
             ReadExtraDefInfo(def);
 
             foreach (ElementDefinition childDef in def.Children)
@@ -193,8 +249,6 @@ namespace GUIObjects
         }
     }
 
-   
-
     public class GUIObjectManager
     {
         public static Dictionary<string, Type> Components = new Dictionary<string, Type>();
@@ -203,6 +257,14 @@ namespace GUIObjects
         public static void AddDefaultElements()
         {
 
+        }
+
+        public static GUIObject GetElement ( string name )
+        {
+            if (!Elements.ContainsKey(name))
+                return null;
+
+            return Elements[name];
         }
 
         public static void SaveAllElements ( DirectoryInfo dir )
@@ -244,7 +306,7 @@ namespace GUIObjects
 
         public static void AddDefaultComponents()
         {
-            AddComonentsFromAssembly(Assembly.GetCallingAssembly());
+            AddComonentsFromAssembly(Assembly.GetExecutingAssembly());
         }
 
         public static void AddComonentsFromAssembly ( Assembly assembly )
@@ -256,10 +318,10 @@ namespace GUIObjects
         public static void AddElement(GUIObject.ElementDefinition element)
         {
             GUIObject parrent = ElementToObject(element);
-            if (Elements.ContainsKey(parrent.Name))
-                Elements[parrent.Name] = parrent;
+            if (Elements.ContainsKey(element.Name))
+                Elements[element.Name] = parrent;
             else
-                Elements.Add(parrent.Name, parrent);
+                Elements.Add(element.Name, parrent);
 
             parrent.Bind();
         }
