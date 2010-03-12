@@ -217,7 +217,7 @@ namespace GUIObjects
                 imageTexture = TextureSystem.system.GetTexture(ResourceManager.FindFile(image));
 
             string c = def.GetOptionValue("ClampImage");
-            if (c != string.Empty && (c != "0" || c != "False"))
+            if (c != string.Empty && (c != "0" && c != "False"))
                 clamp = true;
 
             if (imageTexture != null && clamp)

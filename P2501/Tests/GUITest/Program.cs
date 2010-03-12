@@ -41,50 +41,56 @@ namespace GUITest
         {
             changingVal.Name = "DynamicVal";
             changingVal.Value = "10";
+            GlobalValueCache.Values.Add(changingVal.Name, changingVal);
 
-            GlobalValueCache.Values.Add(changingVal.Name,changingVal);
+            if (false)
+            {
+                GUIObject.ElementDefinition def = new GUIObject.ElementDefinition();
+                def.Name = "SampleFrame";
+                def.Position = new Point(100, 200);
 
-            GUIObject.ElementDefinition def = new GUIObject.ElementDefinition();
-            def.Name = "SampleFrame";
-            def.Position = new Point(100,200);
-            
-            GUIObject.ElementDefinition def2 = new GUIObject.ElementDefinition();
-            def2.Name = "Frame";
-            def2.Position = new Point(0, 0);
-            def2.Size = new Size(320, 284);
-            def2.SetOptionValue("BackgroundTexture", "brushed.png");
-            def2.SetOptionValue("RepeatTexture", "On");
+                GUIObject.ElementDefinition def2 = new GUIObject.ElementDefinition();
+                def2.Name = "Frame";
+                def2.Position = new Point(0, 0);
+                def2.Size = new Size(320, 284);
+                def2.SetOptionValue("BackgroundTexture", "brushed.png");
+                def2.SetOptionValue("RepeatTexture", "On");
 
-            GUIObject.ElementDefinition def3 = new GUIObject.ElementDefinition();
-            def3.Name = "GroupBox";
-            def3.Position = new Point(10, 10);
-            def3.Size = new Size(300, 150);
-            def3.ValueName = "Group";
-            def2.Children.Add(def3);
+                GUIObject.ElementDefinition def3 = new GUIObject.ElementDefinition();
+                def3.Name = "GroupBox";
+                def3.Position = new Point(10, 10);
+                def3.Size = new Size(300, 150);
+                def3.ValueName = "Group";
+                def2.Children.Add(def3);
 
-            GUIObject.ElementDefinition def4 = new GUIObject.ElementDefinition();
-            def4.Name = "Label";
-            def4.Position = new Point(5, 5);
-            def4.ValueName = "Frame Time";
-            def3.Children.Add(def4);
+                GUIObject.ElementDefinition def4 = new GUIObject.ElementDefinition();
+                def4.Name = "Label";
+                def4.Position = new Point(5, 5);
+                def4.ValueName = "Frame Time";
+                def3.Children.Add(def4);
 
-            def4 = new GUIObject.ElementDefinition();
-            def4.Name = "ValueLabel";
-            def4.Position = new Point(100, 5);
-            def4.ValueName = "DynamicVal";
-            def3.Children.Add(def4);
+                def4 = new GUIObject.ElementDefinition();
+                def4.Name = "ValueLabel";
+                def4.Position = new Point(100, 5);
+                def4.ValueName = "DynamicVal";
+                def3.Children.Add(def4);
 
-            def4 = new GUIObject.ElementDefinition();
-            def4.Name = "Picture";
-            def4.Position = new Point(5, 25);
-            def4.Size = new Size(128, 128);
-            def4.SetOptionValue("Image", "kspaceduel.png");
-            //def4.SetOptionValue("ClampImage", "True");
-            def3.Children.Add(def4);
+                def4 = new GUIObject.ElementDefinition();
+                def4.Name = "Picture";
+                def4.Position = new Point(5, 25);
+                def4.Size = new Size(128, 128);
+                def4.SetOptionValue("Image", "kspaceduel.png");
+                //def4.SetOptionValue("ClampImage", "True");
+                def3.Children.Add(def4);
 
 
-            def.Children.Add(def2);
-            GUIObjectManager.AddElement(def);
+                def.Children.Add(def2);
+                GUIObjectManager.AddElement(def);
+            }
+            else
+            {
+                GUIObjectManager.ReadElementFromDisk(new FileInfo(ResourceManager.FindFile("SampleFrame.xml")));
+            }
 
             sampleElement = GUIObjectManager.GetElement("SampleFrame");
         }
@@ -118,7 +124,7 @@ namespace GUITest
             LoadTestData();
 
             DirectoryInfo dir = new DirectoryInfo("./");
-         //   GUIObjectManager.SaveAllElements(dir);
+            GUIObjectManager.SaveAllElements(dir);
         }
 
         protected override void OnUpdateFrame(FrameEventArgs e)

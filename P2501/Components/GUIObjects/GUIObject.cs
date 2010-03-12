@@ -140,15 +140,28 @@ namespace GUIObjects
 
             public List<ElementDefinition> Children = new List<ElementDefinition>();
 
-            public List<KeyValuePair<string, string>> Options = new List<KeyValuePair<string, string>>();
 
-            public static KeyValuePair<string, string> EmptyOption = new KeyValuePair<string, string>(string.Empty, string.Empty);
+            public class OptionValue
+            {
+                public string Name = string.Empty;
+                public string Value = string.Empty;
+
+                public OptionValue()
+                {}
+
+                public OptionValue ( string n, string v)
+                {
+                    Name = n;
+                    Value = v;
+                }
+            }
+            public List<OptionValue> Options = new List<OptionValue>();
 
             public string GetOptionValue ( string name )
             {
-                foreach(KeyValuePair<string,string> option in Options)
+                foreach(OptionValue option in Options)
                 {
-                    if (option.Key == name)
+                    if (option.Name == name)
                         return option.Value;
                 }
 
@@ -157,24 +170,19 @@ namespace GUIObjects
 
             public void SetOptionValue ( string name, string value )
             {
-                KeyValuePair<string, string> item = EmptyOption;
+                OptionValue item = null;
 
-                bool foundOne = true;
-
-                foreach (KeyValuePair<string, string> option in Options)
+                foreach (OptionValue option in Options)
                 {
-                    if (option.Key == name)
-                    {
-                        foundOne = true;
+                    if (option.Name == name)
                         item = option;
-                    }
                 }
 
-                if (foundOne)
+                if (item != null)
                     Options.Remove(item);
 
                 if (value != string.Empty)
-                    Options.Add(new KeyValuePair<string, string>(name, value));
+                    Options.Add(new OptionValue(name, value));
             }
         }
 
@@ -224,6 +232,9 @@ namespace GUIObjects
             element.Name = Name;
             if (Value != null && Value != GlobalValue.Empty)
                 element.ValueName = Value.Name;
+            else
+                element.ValueName = ValueName;
+
             element.Position =Poisition;
             element.Size = Size;
             element.BackgroundColor = GetColorName(BackgroundColor);
@@ -360,6 +371,7 @@ namespace GUIObjects
         protected static GUIObject ElementToObject ( GUIObject.ElementDefinition def )
         {
             GUIObject element = new GUIObject();
+            element.Name = def.Name;
 
             if(Components.ContainsKey(def.Name))
                 element = (GUIObject)Activator.CreateInstance(Components[def.Name]);
