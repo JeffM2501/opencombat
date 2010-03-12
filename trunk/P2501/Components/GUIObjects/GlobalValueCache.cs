@@ -9,6 +9,7 @@ namespace GUIObjects
     {
         public string Name = string.Empty;
         public string Value = string.Empty;
+        public object Tag = null;
 
         public static GlobalValue Empty = new GlobalValue();
     }

@@ -15,6 +15,8 @@ namespace GUIObjects
         string backgroundTexture = string.Empty;
         Texture BGTexture = null;
 
+        bool repeats = false;
+
         public Frame()
         {
             Name = "Frame";
@@ -27,6 +29,10 @@ namespace GUIObjects
             backgroundTexture = def.GetOptionValue("BackgroundTexture");
             if (backgroundTexture != string.Empty)
                 BGTexture = TextureSystem.system.GetTexture(ResourceManager.FindFile(backgroundTexture));
+
+            string rep = def.GetOptionValue("RepeaTexture");
+            if (rep != string.Empty && (rep != "0" || rep != "Off"))
+                repeats = true;
         }
 
         protected override void WriteExtraDefInfo(ElementDefinition def)
@@ -39,7 +45,12 @@ namespace GUIObjects
         {
             GL.Color4(BackgroundColor);
             if (BGTexture != null)
-                BGTexture.Draw(size.Width, size.Height);
+            {
+                if (repeats)
+                    BGTexture.Draw(size.Width, size.Height,1);
+                else
+                    BGTexture.Draw(size.Width, size.Height);
+            }
             else
             {
                 GL.Disable(EnableCap.Texture2D);

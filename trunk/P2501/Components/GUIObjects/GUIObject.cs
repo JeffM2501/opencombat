@@ -254,6 +254,18 @@ namespace GUIObjects
         public static Dictionary<string, Type> Components = new Dictionary<string, Type>();
         public static Dictionary<string, GUIObject> Elements = new Dictionary<string, GUIObject>();
 
+        protected static float ScreenY = -1;
+
+        public static void Resize ( int widht, int height )
+        {
+            ScreenY = (float)height;
+        }
+
+        public static float GetYValue ( float y )
+        {
+            return ScreenY - y;
+        }
+
         public static void AddDefaultElements()
         {
 
