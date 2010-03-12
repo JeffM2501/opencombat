@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Drawing;
 using System.Text;
 
 using OpenTK;
-using OpenTK.Graphics.OpenGL;
+using OpenTK.Graphics;
+using OpenTK.Platform;
+
 using Drawables.Textures;
 using Utilities.Paths;
 
@@ -30,8 +32,8 @@ namespace GUIObjects
             if (backgroundTexture != string.Empty)
                 BGTexture = TextureSystem.system.GetTexture(ResourceManager.FindFile(backgroundTexture));
 
-            string rep = def.GetOptionValue("RepeaTexture");
-            if (rep != string.Empty && (rep != "0" || rep != "Off"))
+            string rep = def.GetOptionValue("RepeatTexture");
+            if (rep != string.Empty && (rep != "0" || rep != "False"))
                 repeats = true;
         }
 
@@ -39,6 +41,7 @@ namespace GUIObjects
         {
             base.WriteExtraDefInfo(def);
             def.SetOptionValue("BackgroundTexture", backgroundTexture);
+            def.SetOptionValue("RepeatTexture", repeats.ToString());
         }
 
         protected override void Render(double time)
@@ -68,9 +71,24 @@ namespace GUIObjects
 
     public class GroupBox : GUIObject
     {
+        public float TextSize = -1;
+        public float TextHeight = -1;
+
         public GroupBox()
         {
             Name = "GroupBox";
+        }
+
+        protected override void ReadExtraDefInfo(GUIObject.ElementDefinition def)
+        {
+            base.ReadExtraDefInfo(def);
+
+            if (ValueName != string.Empty)
+            {
+                TextExtents extents = GUIObjectManager.Printer.Measure(ValueName, GUIObject.GUIFont);
+                TextSize = (float)extents.BoundingBox.Width;
+                TextHeight = (float)extents.BoundingBox.Height;
+            }
         }
 
         protected override void Render(double time)
@@ -80,14 +98,154 @@ namespace GUIObjects
             GL.Color4(ForegroundColor);
 
             GL.Disable(EnableCap.Texture2D);
-            GL.Begin(BeginMode.LineLoop);
+            GL.Begin(BeginMode.Lines);
 
             GL.Vertex2(0, 0);
             GL.Vertex2(size.Width, 0);
+           
+            GL.Vertex2(size.Width, 0);
             GL.Vertex2(size.Width, size.Height);
+           
+            GL.Vertex2(0, 0);
             GL.Vertex2(0, size.Height);
 
+            if (ValueName != string.Empty)
+            {
+                if (TextSize < size.Width-4)
+                {
+                    GL.Vertex2(size.Width, size.Height);
+                    GL.Vertex2(TextSize+4, size.Height);
+                }
+            }
+            else
+            {
+                GL.Vertex2(size.Width, size.Height);
+                GL.Vertex2(0, size.Height);
+            }
+
             GL.End();
+
+            GUIObjectManager.Printer.Begin();
+            GUIObjectManager.Printer.Print(ValueName, GUIObject.GUIFont, ForegroundColor, GetTextRect(2, size.Height + TextHeight / 2, TextSize + 2));
+            GUIObjectManager.Printer.End();
+        }
+    }
+
+    public class Label : GUIObject
+    {
+        public float TextSize = -1;
+        public float TextHeight = -1;
+
+        public Label()
+        {
+            Name = "Label";
+        }
+
+        protected override void ReadExtraDefInfo(GUIObject.ElementDefinition def)
+        {
+            base.ReadExtraDefInfo(def);
+
+            if (ValueName != string.Empty)
+            {
+                TextExtents extents = GUIObjectManager.Printer.Measure(ValueName, GUIObject.GUIFont);
+                TextSize = (float)extents.BoundingBox.Width;
+                TextHeight = (float)extents.BoundingBox.Height;
+            }
+        }
+      
+        protected override void Render(double time)
+        {
+            base.Render(time);
+
+            GUIObjectManager.Printer.Begin();
+            GUIObjectManager.Printer.Print(ValueName, GUIObject.GUIFont, ForegroundColor, GetTextRect(0, TextHeight, TextSize+2));
+            GUIObjectManager.Printer.End();
+        }
+    }
+
+    public class ValueLabel : GUIObject
+    {
+        public float TextSize = -1;
+        public float TextHeight = -1;
+
+        public ValueLabel()
+        {
+            Name = "ValueLabel";
+        }
+
+        protected override void ReadExtraDefInfo(GUIObject.ElementDefinition def)
+        {
+            base.ReadExtraDefInfo(def);
+
+           
+        }
+
+        protected override void Render(double time)
+        {
+            base.Render(time);
+            if (Value != null && Value.Value != string.Empty)
+            {
+                TextExtents extents = GUIObjectManager.Printer.Measure(Value.Value, GUIObject.GUIFont);
+                TextSize = (float)extents.BoundingBox.Width;
+                TextHeight = (float)extents.BoundingBox.Height;
+               
+                GUIObjectManager.Printer.Begin();
+                GUIObjectManager.Printer.Print(Value.Value, GUIObject.GUIFont, ForegroundColor, GetTextRect(0, TextHeight, TextSize + 2));
+                GUIObjectManager.Printer.End();
+            }
+        }
+    }
+
+    public class Picture : GUIObject
+    {
+        string image = string.Empty;
+        Texture imageTexture = null;
+
+        bool clamp = false;
+
+        public Picture()
+        {
+            Name = "Picture";
+        }
+
+        protected override void ReadExtraDefInfo(ElementDefinition def)
+        {
+            base.ReadExtraDefInfo(def);
+
+            image = def.GetOptionValue("Image");
+            if (image != string.Empty)
+                imageTexture = TextureSystem.system.GetTexture(ResourceManager.FindFile(image));
+
+            string c = def.GetOptionValue("ClampImage");
+            if (c != string.Empty && (c != "0" || c != "False"))
+                clamp = true;
+
+            if (imageTexture != null && clamp)
+            {
+                if (imageTexture.Width < size.Width)
+                    size.Width = imageTexture.Width;
+                if (imageTexture.Height < size.Height)
+                    size.Height = imageTexture.Height;
+            }
+        }
+
+        protected override void WriteExtraDefInfo(ElementDefinition def)
+        {
+            base.WriteExtraDefInfo(def);
+            def.SetOptionValue("Image", image);
+            def.SetOptionValue("ClampImage", clamp.ToString());
+        }
+
+        protected override void Render(double time)
+        {
+            GL.Color4(BackgroundColor);
+            if (imageTexture == null)
+                return;
+
+            if (clamp)
+                imageTexture.Draw(size.Width, size.Height, 1);
+            else
+                imageTexture.Draw(size.Width, size.Height);
         }
     }
 }

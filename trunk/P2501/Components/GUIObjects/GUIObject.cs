@@ -7,7 +7,9 @@ using System.Xml.Serialization;
 using System.Reflection;
 using System.IO;
 
-using OpenTK.Graphics.OpenGL;
+using OpenTK.Graphics;
+using OpenTK;
+using OpenTK.Platform;
 
 namespace GUIObjects
 {
@@ -36,12 +38,19 @@ namespace GUIObjects
             set {position = value;Moved();}
         }
 
+        public Point AbsolutePosition
+        {
+            get { if (Parrent == null)return position; return new Point(position.X + Parrent.AbsolutePosition.X, position.Y + Parrent.AbsolutePosition.Y); }
+        }
+
         protected Size size = Size.Empty;
         public Size Size
         {
             get {return size;}
             set {size = value;Resized();}
         }
+
+        public bool Visible = true;
 
         protected bool hasFocus = false;
 
@@ -62,6 +71,9 @@ namespace GUIObjects
 
         public virtual void Draw ( double time )
         {
+            if (!Visible)
+                return;
+
             GL.PushMatrix();
             GL.Translate((float)position.X, (float)position.Y, 0);
             Render(time);
@@ -110,6 +122,10 @@ namespace GUIObjects
                 child.Parrent = this;
                 child.Bind();
             }
+        }
+        protected RectangleF GetTextRect(float x, float y, float width)
+        {
+            return new RectangleF(x + AbsolutePosition.X, GUIObjectManager.GetYValue(y + AbsolutePosition.Y), width, 0);
         }
 
         public class ElementDefinition
@@ -206,7 +222,7 @@ namespace GUIObjects
         {
             ElementDefinition element = new ElementDefinition();
             element.Name = Name;
-            if (Value != GlobalValue.Empty)
+            if (Value != null && Value != GlobalValue.Empty)
                 element.ValueName = Value.Name;
             element.Position =Poisition;
             element.Size = Size;
@@ -254,11 +270,14 @@ namespace GUIObjects
         public static Dictionary<string, Type> Components = new Dictionary<string, Type>();
         public static Dictionary<string, GUIObject> Elements = new Dictionary<string, GUIObject>();
 
+        public static TextPrinter Printer = null;
         protected static float ScreenY = -1;
 
         public static void Resize ( int widht, int height )
         {
             ScreenY = (float)height;
+            if (Printer == null)
+                Printer = new TextPrinter(TextQuality.High);
         }
 
         public static float GetYValue ( float y )

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
+using System.IO;
 
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
@@ -28,6 +29,8 @@ namespace GUITest
     {
         Camera camera;
 
+        GlobalValue changingVal = new GlobalValue();
+
         public Visual() : base(1024,800)
         {
         }
@@ -36,6 +39,11 @@ namespace GUITest
 
         protected void LoadTestData ()
         {
+            changingVal.Name = "DynamicVal";
+            changingVal.Value = "10";
+
+            GlobalValueCache.Values.Add(changingVal.Name,changingVal);
+
             GUIObject.ElementDefinition def = new GUIObject.ElementDefinition();
             def.Name = "SampleFrame";
             def.Position = new Point(100,200);
@@ -43,8 +51,37 @@ namespace GUITest
             GUIObject.ElementDefinition def2 = new GUIObject.ElementDefinition();
             def2.Name = "Frame";
             def2.Position = new Point(0, 0);
-            def2.Size = new Size(300, 284);
-            def2.SetOptionValue("BackgroundTexture", "class1_300.png");
+            def2.Size = new Size(320, 284);
+            def2.SetOptionValue("BackgroundTexture", "brushed.png");
+            def2.SetOptionValue("RepeatTexture", "On");
+
+            GUIObject.ElementDefinition def3 = new GUIObject.ElementDefinition();
+            def3.Name = "GroupBox";
+            def3.Position = new Point(10, 10);
+            def3.Size = new Size(300, 150);
+            def3.ValueName = "Group";
+            def2.Children.Add(def3);
+
+            GUIObject.ElementDefinition def4 = new GUIObject.ElementDefinition();
+            def4.Name = "Label";
+            def4.Position = new Point(5, 5);
+            def4.ValueName = "Frame Time";
+            def3.Children.Add(def4);
+
+            def4 = new GUIObject.ElementDefinition();
+            def4.Name = "ValueLabel";
+            def4.Position = new Point(100, 5);
+            def4.ValueName = "DynamicVal";
+            def3.Children.Add(def4);
+
+            def4 = new GUIObject.ElementDefinition();
+            def4.Name = "Picture";
+            def4.Position = new Point(5, 25);
+            def4.Size = new Size(128, 128);
+            def4.SetOptionValue("Image", "kspaceduel.png");
+            //def4.SetOptionValue("ClampImage", "True");
+            def3.Children.Add(def4);
+
 
             def.Children.Add(def2);
             GUIObjectManager.AddElement(def);
@@ -79,6 +116,9 @@ namespace GUITest
 
             OnResize(EventArgs.Empty);
             LoadTestData();
+
+            DirectoryInfo dir = new DirectoryInfo("./");
+         //   GUIObjectManager.SaveAllElements(dir);
         }
 
         protected override void OnUpdateFrame(FrameEventArgs e)
@@ -90,12 +130,15 @@ namespace GUITest
         {
             base.OnResize(e);
             GL.Viewport(0, 0, Width, Height);
+            GUIObjectManager.Resize(Width, Height);
             if (camera != null)
                 camera.Resize(Width, Height);
         }
 
         protected override void OnRenderFrame(FrameEventArgs e)
         {
+            changingVal.Value = e.Time.ToString();
+
             base.OnRenderFrame(e);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
