@@ -170,8 +170,8 @@ namespace GUIElementConstructor
 
         private void DrawUI ()
         {
-            foreach(GUIObject element in GUIObjectManager.Elements)
-                element.Draw(stopwatch.ElapsedMilliseconds / 1000.0);
+            foreach(KeyValuePair<string,GUIObject> element in GUIObjectManager.Elements)
+                element.Value.Draw(stopwatch.ElapsedMilliseconds / 1000.0);
         }
 
         private void GLView_Resize(object sender, EventArgs e)
@@ -186,6 +186,129 @@ namespace GUIElementConstructor
         private void UpdateTimer_Tick(object sender, EventArgs e)
         {
             GLView.Invalidate(true);
+        }
+
+        private TreeNode AddControlsToNode ( TreeNode node, GUIObject obj )
+        {
+            foreach (GUIObject child in obj.Children)
+            {
+                TreeNode childNode = new TreeNode(child.Name, 1, 1);
+                childNode.Tag = child;
+                node.Nodes.Add(childNode);
+
+                AddControlsToNode(childNode, child);
+            }
+            return node;
+        }
+
+        private void UpdateUIList()
+        {
+            ElementTree.Nodes.Clear();
+
+            foreach (KeyValuePair<string, GUIObject> element in GUIObjectManager.Elements)
+            {
+                TreeNode node = new TreeNode(element.Key, 0, 0);
+                node.Tag = element.Value;
+                ElementTree.Nodes.Add(node);
+
+                AddControlsToNode(node, element.Value); ;
+            }
+
+            ElementTree.ExpandAll();
+        }
+
+        protected void UpdateComponentInfo ( GUIObject obj )
+        {
+            if (obj == null)
+            {
+                ObjectDataPannel.Enabled = false;
+                return;
+            }
+            ObjectDataPannel.Enabled = true;
+            SuspendLayout();
+            GUIObject.ElementDefinition def = obj.GetDefinition(false);
+
+            XPos.Value = (decimal)obj.Poisition.X;
+            YPos.Value = (decimal)obj.Poisition.Y;
+
+            XSize.Value = (decimal)obj.Size.Width;
+            YSize.Value = (decimal)obj.Size.Height;
+
+            BGColorPanel.BackColor = obj.BackgroundColor;
+            FGColorPanel.BackColor = obj.ForegroundColor;
+            ValueName.Text = obj.ValueName;
+
+            Options.Items.Clear();
+            foreach (GUIObject.ElementDefinition.OptionValue value in def.Options)
+            {
+                string[] temp = new string[2];
+                temp[0] = value.Name;
+                temp[1] = value.Value;
+
+                Options.Items.Add(new ListViewItem(temp));
+            }
+
+            ResumeLayout();
+        }
+
+        private void NewElement_Click(object sender, EventArgs e)
+        {
+            GUIObject.ElementDefinition def = new GUIObject.ElementDefinition();
+            def.Name = "New Element";
+            GUIObjectManager.AddElement(def);
+            UpdateUIList();
+        }
+
+        private void Add_Click(object sender, EventArgs e)
+        {
+            GUIObject parent = ElementTree.SelectedNode.Tag as GUIObject;
+            string component = ComponentList.SelectedItem as string;
+            if (parent == null || component == null)
+                return;
+
+            parent.Children.Add(GUIObjectManager.CreateComponent(component));
+
+            UpdateUIList();
+        }
+
+        private void ElementTree_AfterLabelEdit(object sender, NodeLabelEditEventArgs e)
+        {
+            GUIObject obj = e.Node.Tag as GUIObject;
+            if (obj == null)
+                return;
+
+            ElementTree.SuspendLayout();
+            if (e.Node.ImageIndex != 0)
+                e.Node.Text = string.Copy(obj.Name);
+            else
+                obj.Name = string.Copy(e.Label);
+
+            ElementTree.ResumeLayout();
+        }
+
+        private void ElementTree_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+
+        }
+
+        private void Options_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Options_DoubleClick(object sender, EventArgs e)
+        {
+
+        }
+
+        private void BGColorPanel_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void FGColorPanel_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
