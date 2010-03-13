@@ -140,7 +140,6 @@ namespace GUIObjects
 
             public List<ElementDefinition> Children = new List<ElementDefinition>();
 
-
             public class OptionValue
             {
                 public string Name = string.Empty;
@@ -228,6 +227,11 @@ namespace GUIObjects
 
         public virtual ElementDefinition GetDefinition()
         {
+            return GetDefinition(true);
+        }
+
+        public virtual ElementDefinition GetDefinition( bool includeChildren )
+        {
             ElementDefinition element = new ElementDefinition();
             element.Name = Name;
             if (Value != null && Value != GlobalValue.Empty)
@@ -242,8 +246,11 @@ namespace GUIObjects
 
             WriteExtraDefInfo(element);
 
-            foreach (GUIObject child in Children)
-                element.Children.Add(child.GetDefinition());
+            if (includeChildren)
+            {
+                foreach (GUIObject child in Children)
+                    element.Children.Add(child.GetDefinition());
+            }
 
             return element;
         }
@@ -266,9 +273,7 @@ namespace GUIObjects
 
             foreach (ElementDefinition childDef in def.Children)
             {
-                GUIObject childObject = new GUIObject();
-                if (GUIObjectManager.Components.ContainsKey(childDef.Name))
-                    childObject = (GUIObject)Activator.CreateInstance(GUIObjectManager.Components[childDef.Name]);
+                GUIObject childObject = GUIObjectManager.CreateComponent(childDef.Name);
 
                 childObject.CreateFromDefinition(childDef);
                 Children.Add(childObject);
@@ -294,6 +299,15 @@ namespace GUIObjects
         public static float GetYValue ( float y )
         {
             return ScreenY - y;
+        }
+
+        public static GUIObject CreateComponent(string name)
+        {
+            GUIObject childObject = new GUIObject();
+            if (Components.ContainsKey(name))
+                childObject = (GUIObject)Activator.CreateInstance(Components[name]);
+
+            return childObject;
         }
 
         public static void AddDefaultElements()
