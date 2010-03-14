@@ -36,30 +36,30 @@
             this.NewElement = new System.Windows.Forms.Button();
             this.ElementTree = new System.Windows.Forms.TreeView();
             this.TreeImages = new System.Windows.Forms.ImageList(this.components);
+            this.Add = new System.Windows.Forms.Button();
             this.ObjectDataPannel = new System.Windows.Forms.GroupBox();
-            this.YPos = new System.Windows.Forms.NumericUpDown();
-            this.label2 = new System.Windows.Forms.Label();
-            this.XPos = new System.Windows.Forms.NumericUpDown();
-            this.XPosLabel = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
-            this.ComponentList = new System.Windows.Forms.ListBox();
-            this.UpdateTimer = new System.Windows.Forms.Timer(this.components);
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.ValueName = new System.Windows.Forms.TextBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.FGColorPanel = new System.Windows.Forms.Panel();
+            this.label6 = new System.Windows.Forms.Label();
+            this.BGColorPanel = new System.Windows.Forms.Panel();
+            this.label5 = new System.Windows.Forms.Label();
+            this.Options = new System.Windows.Forms.ListView();
+            this.OptionName = new System.Windows.Forms.ColumnHeader();
+            this.OptionValue = new System.Windows.Forms.ColumnHeader();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.label3 = new System.Windows.Forms.Label();
             this.YSize = new System.Windows.Forms.NumericUpDown();
             this.XSize = new System.Windows.Forms.NumericUpDown();
             this.label4 = new System.Windows.Forms.Label();
-            this.Options = new System.Windows.Forms.ListView();
-            this.OptionName = new System.Windows.Forms.ColumnHeader();
-            this.OptionValue = new System.Windows.Forms.ColumnHeader();
-            this.label5 = new System.Windows.Forms.Label();
-            this.BGColorPanel = new System.Windows.Forms.Panel();
-            this.FGColorPanel = new System.Windows.Forms.Panel();
-            this.label6 = new System.Windows.Forms.Label();
-            this.label7 = new System.Windows.Forms.Label();
-            this.ValueName = new System.Windows.Forms.TextBox();
-            this.Add = new System.Windows.Forms.Button();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.XPosLabel = new System.Windows.Forms.Label();
+            this.YPos = new System.Windows.Forms.NumericUpDown();
+            this.XPos = new System.Windows.Forms.NumericUpDown();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.ComponentList = new System.Windows.Forms.ListBox();
+            this.UpdateTimer = new System.Windows.Forms.Timer(this.components);
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -67,12 +67,12 @@
             this.splitContainer2.Panel2.SuspendLayout();
             this.splitContainer2.SuspendLayout();
             this.ObjectDataPannel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.YPos)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.XPos)).BeginInit();
-            this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.YSize)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.XSize)).BeginInit();
+            this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.YPos)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.XPos)).BeginInit();
             this.SuspendLayout();
             // 
             // splitContainer1
@@ -168,6 +168,16 @@
             this.TreeImages.Images.SetKeyName(0, "list.png");
             this.TreeImages.Images.SetKeyName(1, "field.png");
             // 
+            // Add
+            // 
+            this.Add.Location = new System.Drawing.Point(230, 12);
+            this.Add.Name = "Add";
+            this.Add.Size = new System.Drawing.Size(75, 23);
+            this.Add.TabIndex = 3;
+            this.Add.Text = "Add";
+            this.Add.UseVisualStyleBackColor = true;
+            this.Add.Click += new System.EventHandler(this.Add_Click);
+            // 
             // ObjectDataPannel
             // 
             this.ObjectDataPannel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
@@ -189,96 +199,83 @@
             this.ObjectDataPannel.TabStop = false;
             this.ObjectDataPannel.Text = "Info";
             // 
-            // YPos
+            // ValueName
             // 
-            this.YPos.Location = new System.Drawing.Point(108, 14);
-            this.YPos.Maximum = new decimal(new int[] {
-            2000,
-            0,
-            0,
-            0});
-            this.YPos.Minimum = new decimal(new int[] {
-            2000,
-            0,
-            0,
-            -2147483648});
-            this.YPos.Name = "YPos";
-            this.YPos.Size = new System.Drawing.Size(56, 20);
-            this.YPos.TabIndex = 3;
+            this.ValueName.Location = new System.Drawing.Point(46, 185);
+            this.ValueName.Name = "ValueName";
+            this.ValueName.Size = new System.Drawing.Size(166, 20);
+            this.ValueName.TabIndex = 12;
             // 
-            // label2
+            // label7
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(88, 17);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(14, 13);
-            this.label2.TabIndex = 2;
-            this.label2.Text = "Y";
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(6, 188);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(34, 13);
+            this.label7.TabIndex = 11;
+            this.label7.Text = "Value";
             // 
-            // XPos
+            // FGColorPanel
             // 
-            this.XPos.Location = new System.Drawing.Point(26, 14);
-            this.XPos.Maximum = new decimal(new int[] {
-            2000,
-            0,
-            0,
-            0});
-            this.XPos.Minimum = new decimal(new int[] {
-            2000,
-            0,
-            0,
-            -2147483648});
-            this.XPos.Name = "XPos";
-            this.XPos.Size = new System.Drawing.Size(56, 20);
-            this.XPos.TabIndex = 1;
+            this.FGColorPanel.Location = new System.Drawing.Point(99, 149);
+            this.FGColorPanel.Name = "FGColorPanel";
+            this.FGColorPanel.Size = new System.Drawing.Size(28, 24);
+            this.FGColorPanel.TabIndex = 10;
+            this.FGColorPanel.Click += new System.EventHandler(this.FGColorPanel_Click);
             // 
-            // XPosLabel
+            // label6
             // 
-            this.XPosLabel.AutoSize = true;
-            this.XPosLabel.Location = new System.Drawing.Point(6, 16);
-            this.XPosLabel.Name = "XPosLabel";
-            this.XPosLabel.Size = new System.Drawing.Size(14, 13);
-            this.XPosLabel.TabIndex = 0;
-            this.XPosLabel.Text = "X";
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(6, 153);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(88, 13);
+            this.label6.TabIndex = 9;
+            this.label6.Text = "Foreground Color";
             // 
-            // label1
+            // BGColorPanel
             // 
-            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            this.BGColorPanel.Location = new System.Drawing.Point(99, 119);
+            this.BGColorPanel.Name = "BGColorPanel";
+            this.BGColorPanel.Size = new System.Drawing.Size(28, 24);
+            this.BGColorPanel.TabIndex = 8;
+            this.BGColorPanel.Click += new System.EventHandler(this.BGColorPanel_Click);
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(6, 123);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(92, 13);
+            this.label5.TabIndex = 7;
+            this.label5.Text = "Background Color";
+            // 
+            // Options
+            // 
+            this.Options.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(227, 96);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(66, 13);
-            this.label1.TabIndex = 1;
-            this.label1.Text = "Components";
+            this.Options.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.OptionName,
+            this.OptionValue});
+            this.Options.GridLines = true;
+            this.Options.Location = new System.Drawing.Point(6, 211);
+            this.Options.Name = "Options";
+            this.Options.Size = new System.Drawing.Size(206, 104);
+            this.Options.TabIndex = 6;
+            this.Options.UseCompatibleStateImageBehavior = false;
+            this.Options.View = System.Windows.Forms.View.Details;
+            this.Options.SelectedIndexChanged += new System.EventHandler(this.Options_SelectedIndexChanged);
+            this.Options.DoubleClick += new System.EventHandler(this.Options_DoubleClick);
             // 
-            // ComponentList
+            // OptionName
             // 
-            this.ComponentList.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.ComponentList.FormattingEnabled = true;
-            this.ComponentList.Location = new System.Drawing.Point(227, 116);
-            this.ComponentList.Name = "ComponentList";
-            this.ComponentList.Size = new System.Drawing.Size(151, 212);
-            this.ComponentList.TabIndex = 0;
+            this.OptionName.Text = "Name";
+            this.OptionName.Width = 86;
             // 
-            // UpdateTimer
+            // OptionValue
             // 
-            this.UpdateTimer.Interval = 10;
-            this.UpdateTimer.Tick += new System.EventHandler(this.UpdateTimer_Tick);
-            // 
-            // groupBox1
-            // 
-            this.groupBox1.Controls.Add(this.XPosLabel);
-            this.groupBox1.Controls.Add(this.YPos);
-            this.groupBox1.Controls.Add(this.XPos);
-            this.groupBox1.Controls.Add(this.label2);
-            this.groupBox1.Location = new System.Drawing.Point(6, 19);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(174, 42);
-            this.groupBox1.TabIndex = 4;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Position";
+            this.OptionValue.Text = "Option";
+            this.OptionValue.Width = 116;
             // 
             // groupBox2
             // 
@@ -318,6 +315,7 @@
             this.YSize.Name = "YSize";
             this.YSize.Size = new System.Drawing.Size(56, 20);
             this.YSize.TabIndex = 3;
+            this.YSize.ValueChanged += new System.EventHandler(this.Size_ValueChanged);
             // 
             // XSize
             // 
@@ -335,6 +333,7 @@
             this.XSize.Name = "XSize";
             this.XSize.Size = new System.Drawing.Size(56, 20);
             this.XSize.TabIndex = 1;
+            this.XSize.ValueChanged += new System.EventHandler(this.Size_ValueChanged);
             // 
             // label4
             // 
@@ -345,93 +344,98 @@
             this.label4.TabIndex = 2;
             this.label4.Text = "Y";
             // 
-            // Options
+            // groupBox1
             // 
-            this.Options.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
+            this.groupBox1.Controls.Add(this.XPosLabel);
+            this.groupBox1.Controls.Add(this.YPos);
+            this.groupBox1.Controls.Add(this.XPos);
+            this.groupBox1.Controls.Add(this.label2);
+            this.groupBox1.Location = new System.Drawing.Point(6, 19);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(174, 42);
+            this.groupBox1.TabIndex = 4;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Position";
+            // 
+            // XPosLabel
+            // 
+            this.XPosLabel.AutoSize = true;
+            this.XPosLabel.Location = new System.Drawing.Point(6, 16);
+            this.XPosLabel.Name = "XPosLabel";
+            this.XPosLabel.Size = new System.Drawing.Size(14, 13);
+            this.XPosLabel.TabIndex = 0;
+            this.XPosLabel.Text = "X";
+            // 
+            // YPos
+            // 
+            this.YPos.Location = new System.Drawing.Point(108, 14);
+            this.YPos.Maximum = new decimal(new int[] {
+            2000,
+            0,
+            0,
+            0});
+            this.YPos.Minimum = new decimal(new int[] {
+            2000,
+            0,
+            0,
+            -2147483648});
+            this.YPos.Name = "YPos";
+            this.YPos.Size = new System.Drawing.Size(56, 20);
+            this.YPos.TabIndex = 3;
+            this.YPos.ValueChanged += new System.EventHandler(this.Pos_ValueChanged);
+            // 
+            // XPos
+            // 
+            this.XPos.Location = new System.Drawing.Point(26, 14);
+            this.XPos.Maximum = new decimal(new int[] {
+            2000,
+            0,
+            0,
+            0});
+            this.XPos.Minimum = new decimal(new int[] {
+            2000,
+            0,
+            0,
+            -2147483648});
+            this.XPos.Name = "XPos";
+            this.XPos.Size = new System.Drawing.Size(56, 20);
+            this.XPos.TabIndex = 1;
+            this.XPos.ValueChanged += new System.EventHandler(this.Pos_ValueChanged);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(88, 17);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(14, 13);
+            this.label2.TabIndex = 2;
+            this.label2.Text = "Y";
+            // 
+            // label1
+            // 
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.Options.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.OptionName,
-            this.OptionValue});
-            this.Options.GridLines = true;
-            this.Options.Location = new System.Drawing.Point(6, 211);
-            this.Options.Name = "Options";
-            this.Options.Size = new System.Drawing.Size(206, 104);
-            this.Options.TabIndex = 6;
-            this.Options.UseCompatibleStateImageBehavior = false;
-            this.Options.View = System.Windows.Forms.View.Details;
-            this.Options.SelectedIndexChanged += new System.EventHandler(this.Options_SelectedIndexChanged);
-            this.Options.DoubleClick += new System.EventHandler(this.Options_DoubleClick);
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(227, 96);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(66, 13);
+            this.label1.TabIndex = 1;
+            this.label1.Text = "Components";
             // 
-            // OptionName
+            // ComponentList
             // 
-            this.OptionName.Text = "Name";
-            this.OptionName.Width = 86;
+            this.ComponentList.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.ComponentList.FormattingEnabled = true;
+            this.ComponentList.Location = new System.Drawing.Point(227, 116);
+            this.ComponentList.Name = "ComponentList";
+            this.ComponentList.Size = new System.Drawing.Size(151, 212);
+            this.ComponentList.TabIndex = 0;
             // 
-            // OptionValue
+            // UpdateTimer
             // 
-            this.OptionValue.Text = "Option";
-            this.OptionValue.Width = 116;
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(6, 123);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(92, 13);
-            this.label5.TabIndex = 7;
-            this.label5.Text = "Background Color";
-            // 
-            // BGColorPanel
-            // 
-            this.BGColorPanel.Location = new System.Drawing.Point(99, 119);
-            this.BGColorPanel.Name = "BGColorPanel";
-            this.BGColorPanel.Size = new System.Drawing.Size(28, 24);
-            this.BGColorPanel.TabIndex = 8;
-            this.BGColorPanel.Click += new System.EventHandler(this.BGColorPanel_Click);
-            // 
-            // FGColorPanel
-            // 
-            this.FGColorPanel.Location = new System.Drawing.Point(99, 149);
-            this.FGColorPanel.Name = "FGColorPanel";
-            this.FGColorPanel.Size = new System.Drawing.Size(28, 24);
-            this.FGColorPanel.TabIndex = 10;
-            this.FGColorPanel.Click += new System.EventHandler(this.FGColorPanel_Click);
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(6, 153);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(88, 13);
-            this.label6.TabIndex = 9;
-            this.label6.Text = "Foreground Color";
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(6, 188);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(34, 13);
-            this.label7.TabIndex = 11;
-            this.label7.Text = "Value";
-            // 
-            // ValueName
-            // 
-            this.ValueName.Location = new System.Drawing.Point(46, 185);
-            this.ValueName.Name = "ValueName";
-            this.ValueName.Size = new System.Drawing.Size(166, 20);
-            this.ValueName.TabIndex = 12;
-            // 
-            // Add
-            // 
-            this.Add.Location = new System.Drawing.Point(230, 12);
-            this.Add.Name = "Add";
-            this.Add.Size = new System.Drawing.Size(75, 23);
-            this.Add.TabIndex = 3;
-            this.Add.Text = "Add";
-            this.Add.UseVisualStyleBackColor = true;
-            this.Add.Click += new System.EventHandler(this.Add_Click);
+            this.UpdateTimer.Interval = 10;
+            this.UpdateTimer.Tick += new System.EventHandler(this.UpdateTimer_Tick);
             // 
             // Editor
             // 
@@ -450,14 +454,14 @@
             this.splitContainer2.ResumeLayout(false);
             this.ObjectDataPannel.ResumeLayout(false);
             this.ObjectDataPannel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.YPos)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.XPos)).EndInit();
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.YSize)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.XSize)).EndInit();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.YPos)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.XPos)).EndInit();
             this.ResumeLayout(false);
 
         }

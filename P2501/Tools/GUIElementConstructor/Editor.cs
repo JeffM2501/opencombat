@@ -28,6 +28,8 @@ namespace GUIElementConstructor
         Texture cautionTexture;
         Texture grass;
 
+        bool LoadingInterface = false;
+
         public Editor()
         {
             InitializeComponent();
@@ -215,6 +217,7 @@ namespace GUIElementConstructor
             }
 
             ElementTree.ExpandAll();
+            UpdateComponentInfo(null);
         }
 
         protected void UpdateComponentInfo ( GUIObject obj )
@@ -226,6 +229,7 @@ namespace GUIElementConstructor
             }
             ObjectDataPannel.Enabled = true;
             SuspendLayout();
+            LoadingInterface = true;
             GUIObject.ElementDefinition def = obj.GetDefinition(false);
 
             XPos.Value = (decimal)obj.Poisition.X;
@@ -247,7 +251,7 @@ namespace GUIElementConstructor
 
                 Options.Items.Add(new ListViewItem(temp));
             }
-
+            LoadingInterface = false;
             ResumeLayout();
         }
 
@@ -261,6 +265,9 @@ namespace GUIElementConstructor
 
         private void Add_Click(object sender, EventArgs e)
         {
+            if (ElementTree.SelectedNode == null)
+                return;
+
             GUIObject parent = ElementTree.SelectedNode.Tag as GUIObject;
             string component = ComponentList.SelectedItem as string;
             if (parent == null || component == null)
@@ -273,6 +280,9 @@ namespace GUIElementConstructor
 
         private void ElementTree_AfterLabelEdit(object sender, NodeLabelEditEventArgs e)
         {
+            if (LoadingInterface)
+                return;
+
             GUIObject obj = e.Node.Tag as GUIObject;
             if (obj == null)
                 return;
@@ -288,12 +298,14 @@ namespace GUIElementConstructor
 
         private void ElementTree_AfterSelect(object sender, TreeViewEventArgs e)
         {
+            if (e.Node == null)
+                return;
 
+            UpdateComponentInfo(e.Node.Tag as GUIObject);
         }
 
         private void Options_SelectedIndexChanged(object sender, EventArgs e)
         {
-
         }
 
         private void Options_DoubleClick(object sender, EventArgs e)
@@ -303,11 +315,68 @@ namespace GUIElementConstructor
 
         private void BGColorPanel_Click(object sender, EventArgs e)
         {
+           if (ElementTree.SelectedNode == null)
+            return;
 
+            GUIObject obj = ElementTree.SelectedNode.Tag as GUIObject;
+            if (obj == null)
+                return;
+
+            ColorDialog picker = new ColorDialog();
+            picker.AllowFullOpen = true;
+            picker.AnyColor = true;
+            picker.Color = obj.BackgroundColor;
+            if (picker.ShowDialog(this) == DialogResult.OK)
+            {
+                obj.BackgroundColor = picker.Color;
+                BGColorPanel.BackColor = picker.Color;
+            }
         }
 
         private void FGColorPanel_Click(object sender, EventArgs e)
         {
+            if (ElementTree.SelectedNode == null)
+                return;
+
+            GUIObject obj = ElementTree.SelectedNode.Tag as GUIObject;
+            if (obj == null)
+                return;
+
+            ColorDialog picker = new ColorDialog();
+            picker.AllowFullOpen = true;
+            picker.AnyColor = true;
+            picker.Color = obj.ForegroundColor;
+            if (picker.ShowDialog(this) == DialogResult.OK)
+            {
+                obj.ForegroundColor = picker.Color;
+                FGColorPanel.BackColor = picker.Color;
+            }
+        }
+
+        private void Pos_ValueChanged(object sender, EventArgs e)
+        {
+            if (LoadingInterface)
+                return;
+            
+            if (ElementTree.SelectedNode == null)
+                return;
+
+            GUIObject obj = ElementTree.SelectedNode.Tag as GUIObject;
+            obj.Poisition = new Point((int)XPos.Value, (int)YPos.Value);
+            GLView.Invalidate(true);
+        }
+
+        private void Size_ValueChanged(object sender, EventArgs e)
+        {
+            if (LoadingInterface)
+                return;
+            
+            if (ElementTree.SelectedNode == null)
+                return;
+
+            GUIObject obj = ElementTree.SelectedNode.Tag as GUIObject;
+            obj.Size = new Size((int)XSize.Value, (int)YSize.Value);
+            GLView.Invalidate(true);
 
         }
     }
