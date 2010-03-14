@@ -60,6 +60,10 @@
             this.label1 = new System.Windows.Forms.Label();
             this.ComponentList = new System.Windows.Forms.ListBox();
             this.UpdateTimer = new System.Windows.Forms.Timer(this.components);
+            this.BGAlpha = new System.Windows.Forms.NumericUpDown();
+            this.FGAlpha = new System.Windows.Forms.NumericUpDown();
+            this.AddOption = new System.Windows.Forms.Button();
+            this.RemoveOption = new System.Windows.Forms.Button();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -73,6 +77,8 @@
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.YPos)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.XPos)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.BGAlpha)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.FGAlpha)).BeginInit();
             this.SuspendLayout();
             // 
             // splitContainer1
@@ -88,8 +94,8 @@
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.splitContainer2);
-            this.splitContainer1.Size = new System.Drawing.Size(1049, 499);
-            this.splitContainer1.SplitterDistance = 661;
+            this.splitContainer1.Size = new System.Drawing.Size(1060, 580);
+            this.splitContainer1.SplitterDistance = 667;
             this.splitContainer1.TabIndex = 0;
             // 
             // GLView
@@ -100,7 +106,7 @@
             this.GLView.BackColor = System.Drawing.Color.Black;
             this.GLView.Location = new System.Drawing.Point(3, 3);
             this.GLView.Name = "GLView";
-            this.GLView.Size = new System.Drawing.Size(655, 493);
+            this.GLView.Size = new System.Drawing.Size(661, 574);
             this.GLView.TabIndex = 0;
             this.GLView.VSync = false;
             this.GLView.Load += new System.EventHandler(this.GLView_Load);
@@ -127,14 +133,14 @@
             this.splitContainer2.Panel2.Controls.Add(this.ObjectDataPannel);
             this.splitContainer2.Panel2.Controls.Add(this.label1);
             this.splitContainer2.Panel2.Controls.Add(this.ComponentList);
-            this.splitContainer2.Size = new System.Drawing.Size(381, 496);
-            this.splitContainer2.SplitterDistance = 162;
+            this.splitContainer2.Size = new System.Drawing.Size(386, 577);
+            this.splitContainer2.SplitterDistance = 188;
             this.splitContainer2.TabIndex = 4;
             // 
             // NewElement
             // 
             this.NewElement.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.NewElement.Location = new System.Drawing.Point(294, 136);
+            this.NewElement.Location = new System.Drawing.Point(299, 162);
             this.NewElement.Name = "NewElement";
             this.NewElement.Size = new System.Drawing.Size(75, 23);
             this.NewElement.TabIndex = 3;
@@ -156,7 +162,7 @@
             this.ElementTree.Location = new System.Drawing.Point(3, 5);
             this.ElementTree.Name = "ElementTree";
             this.ElementTree.SelectedImageIndex = 0;
-            this.ElementTree.Size = new System.Drawing.Size(375, 125);
+            this.ElementTree.Size = new System.Drawing.Size(380, 151);
             this.ElementTree.TabIndex = 2;
             this.ElementTree.AfterLabelEdit += new System.Windows.Forms.NodeLabelEditEventHandler(this.ElementTree_AfterLabelEdit);
             this.ElementTree.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.ElementTree_AfterSelect);
@@ -183,6 +189,10 @@
             this.ObjectDataPannel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
+            this.ObjectDataPannel.Controls.Add(this.RemoveOption);
+            this.ObjectDataPannel.Controls.Add(this.AddOption);
+            this.ObjectDataPannel.Controls.Add(this.FGAlpha);
+            this.ObjectDataPannel.Controls.Add(this.BGAlpha);
             this.ObjectDataPannel.Controls.Add(this.ValueName);
             this.ObjectDataPannel.Controls.Add(this.label7);
             this.ObjectDataPannel.Controls.Add(this.FGColorPanel);
@@ -194,7 +204,7 @@
             this.ObjectDataPannel.Controls.Add(this.groupBox1);
             this.ObjectDataPannel.Location = new System.Drawing.Point(3, 3);
             this.ObjectDataPannel.Name = "ObjectDataPannel";
-            this.ObjectDataPannel.Size = new System.Drawing.Size(218, 324);
+            this.ObjectDataPannel.Size = new System.Drawing.Size(223, 379);
             this.ObjectDataPannel.TabIndex = 2;
             this.ObjectDataPannel.TabStop = false;
             this.ObjectDataPannel.Text = "Info";
@@ -205,6 +215,7 @@
             this.ValueName.Name = "ValueName";
             this.ValueName.Size = new System.Drawing.Size(166, 20);
             this.ValueName.TabIndex = 12;
+            this.ValueName.TextChanged += new System.EventHandler(this.ValueName_TextChanged);
             // 
             // label7
             // 
@@ -217,6 +228,7 @@
             // 
             // FGColorPanel
             // 
+            this.FGColorPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.FGColorPanel.Location = new System.Drawing.Point(99, 149);
             this.FGColorPanel.Name = "FGColorPanel";
             this.FGColorPanel.Size = new System.Drawing.Size(28, 24);
@@ -234,6 +246,7 @@
             // 
             // BGColorPanel
             // 
+            this.BGColorPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.BGColorPanel.Location = new System.Drawing.Point(99, 119);
             this.BGColorPanel.Name = "BGColorPanel";
             this.BGColorPanel.Size = new System.Drawing.Size(28, 24);
@@ -257,13 +270,18 @@
             this.Options.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.OptionName,
             this.OptionValue});
+            this.Options.FullRowSelect = true;
             this.Options.GridLines = true;
+            this.Options.HideSelection = false;
+            this.Options.LabelEdit = true;
             this.Options.Location = new System.Drawing.Point(6, 211);
+            this.Options.MultiSelect = false;
             this.Options.Name = "Options";
-            this.Options.Size = new System.Drawing.Size(206, 104);
+            this.Options.Size = new System.Drawing.Size(190, 159);
             this.Options.TabIndex = 6;
             this.Options.UseCompatibleStateImageBehavior = false;
             this.Options.View = System.Windows.Forms.View.Details;
+            this.Options.AfterLabelEdit += new System.Windows.Forms.LabelEditEventHandler(this.Options_AfterLabelEdit);
             this.Options.SelectedIndexChanged += new System.EventHandler(this.Options_SelectedIndexChanged);
             this.Options.DoubleClick += new System.EventHandler(this.Options_DoubleClick);
             // 
@@ -307,11 +325,6 @@
             0,
             0,
             0});
-            this.YSize.Minimum = new decimal(new int[] {
-            2000,
-            0,
-            0,
-            -2147483648});
             this.YSize.Name = "YSize";
             this.YSize.Size = new System.Drawing.Size(56, 20);
             this.YSize.TabIndex = 3;
@@ -325,11 +338,6 @@
             0,
             0,
             0});
-            this.XSize.Minimum = new decimal(new int[] {
-            2000,
-            0,
-            0,
-            -2147483648});
             this.XSize.Name = "XSize";
             this.XSize.Size = new System.Drawing.Size(56, 20);
             this.XSize.TabIndex = 1;
@@ -416,7 +424,7 @@
             this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(227, 96);
+            this.label1.Location = new System.Drawing.Point(232, 96);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(66, 13);
             this.label1.TabIndex = 1;
@@ -427,21 +435,72 @@
             this.ComponentList.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.ComponentList.FormattingEnabled = true;
-            this.ComponentList.Location = new System.Drawing.Point(227, 116);
+            this.ComponentList.Location = new System.Drawing.Point(232, 116);
             this.ComponentList.Name = "ComponentList";
-            this.ComponentList.Size = new System.Drawing.Size(151, 212);
+            this.ComponentList.Size = new System.Drawing.Size(151, 251);
             this.ComponentList.TabIndex = 0;
+            this.ComponentList.SelectedIndexChanged += new System.EventHandler(this.ComponentList_SelectedIndexChanged);
             // 
             // UpdateTimer
             // 
             this.UpdateTimer.Interval = 10;
             this.UpdateTimer.Tick += new System.EventHandler(this.UpdateTimer_Tick);
             // 
+            // BGAlpha
+            // 
+            this.BGAlpha.DecimalPlaces = 2;
+            this.BGAlpha.Increment = new decimal(new int[] {
+            4,
+            0,
+            0,
+            65536});
+            this.BGAlpha.Location = new System.Drawing.Point(133, 121);
+            this.BGAlpha.Name = "BGAlpha";
+            this.BGAlpha.Size = new System.Drawing.Size(49, 20);
+            this.BGAlpha.TabIndex = 13;
+            this.BGAlpha.ValueChanged += new System.EventHandler(this.BGAlpha_ValueChanged);
+            // 
+            // FGAlpha
+            // 
+            this.FGAlpha.DecimalPlaces = 2;
+            this.FGAlpha.Increment = new decimal(new int[] {
+            4,
+            0,
+            0,
+            65536});
+            this.FGAlpha.Location = new System.Drawing.Point(133, 151);
+            this.FGAlpha.Name = "FGAlpha";
+            this.FGAlpha.Size = new System.Drawing.Size(49, 20);
+            this.FGAlpha.TabIndex = 14;
+            this.FGAlpha.ValueChanged += new System.EventHandler(this.FGAlpha_ValueChanged);
+            // 
+            // AddOption
+            // 
+            this.AddOption.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.AddOption.Location = new System.Drawing.Point(198, 211);
+            this.AddOption.Name = "AddOption";
+            this.AddOption.Size = new System.Drawing.Size(23, 23);
+            this.AddOption.TabIndex = 4;
+            this.AddOption.Text = "+";
+            this.AddOption.UseVisualStyleBackColor = true;
+            this.AddOption.Click += new System.EventHandler(this.AddOption_Click);
+            // 
+            // RemoveOption
+            // 
+            this.RemoveOption.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.RemoveOption.Location = new System.Drawing.Point(198, 240);
+            this.RemoveOption.Name = "RemoveOption";
+            this.RemoveOption.Size = new System.Drawing.Size(23, 23);
+            this.RemoveOption.TabIndex = 15;
+            this.RemoveOption.Text = "-";
+            this.RemoveOption.UseVisualStyleBackColor = true;
+            this.RemoveOption.Click += new System.EventHandler(this.RemoveOption_Click);
+            // 
             // Editor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1049, 499);
+            this.ClientSize = new System.Drawing.Size(1060, 580);
             this.Controls.Add(this.splitContainer1);
             this.Name = "Editor";
             this.Text = "Form1";
@@ -462,6 +521,8 @@
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.YPos)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.XPos)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.BGAlpha)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.FGAlpha)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -498,6 +559,10 @@
         private System.Windows.Forms.TextBox ValueName;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Button Add;
+        private System.Windows.Forms.NumericUpDown FGAlpha;
+        private System.Windows.Forms.NumericUpDown BGAlpha;
+        private System.Windows.Forms.Button RemoveOption;
+        private System.Windows.Forms.Button AddOption;
     }
 }
 

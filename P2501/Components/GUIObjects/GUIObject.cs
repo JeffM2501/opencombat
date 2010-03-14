@@ -262,6 +262,11 @@ namespace GUIObjects
 
         public virtual void CreateFromDefinition(ElementDefinition def)
         {
+            CreateFromDefinition(def,true);
+        }
+
+        public virtual void CreateFromDefinition(ElementDefinition def, bool children)
+        {
             ValueName = def.ValueName;
             Poisition = def.Position;
             Size = def.Size;
@@ -271,12 +276,15 @@ namespace GUIObjects
                 ForegroundColor = ParseColor(def.ForegroundColor);
             ReadExtraDefInfo(def);
 
-            foreach (ElementDefinition childDef in def.Children)
+            if (children)
             {
-                GUIObject childObject = GUIObjectManager.CreateComponent(childDef.Name);
+                foreach (ElementDefinition childDef in def.Children)
+                {
+                    GUIObject childObject = GUIObjectManager.CreateComponent(childDef.Name);
 
-                childObject.CreateFromDefinition(childDef);
-                Children.Add(childObject);
+                    childObject.CreateFromDefinition(childDef);
+                    Children.Add(childObject);
+                }
             }
         }
     }

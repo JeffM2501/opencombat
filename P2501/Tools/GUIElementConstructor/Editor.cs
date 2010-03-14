@@ -81,6 +81,9 @@ namespace GUIElementConstructor
 
             foreach (KeyValuePair<string,Type> component in GUIObjectManager.Components)
                 ComponentList.Items.Add(component.Key);
+
+            ObjectDataPannel.Enabled = false;
+            Add.Enabled = false;
         }
 
         protected void XZQuad( float width, float height)
@@ -238,8 +241,11 @@ namespace GUIElementConstructor
             XSize.Value = (decimal)obj.Size.Width;
             YSize.Value = (decimal)obj.Size.Height;
 
-            BGColorPanel.BackColor = obj.BackgroundColor;
-            FGColorPanel.BackColor = obj.ForegroundColor;
+            BGColorPanel.BackColor = Color.FromArgb(255,obj.BackgroundColor);
+            BGAlpha.Value = (decimal)(obj.BackgroundColor.A / 255f * 100);
+            FGColorPanel.BackColor = Color.FromArgb(255,obj.ForegroundColor);
+            FGAlpha.Value = (decimal)(obj.ForegroundColor.A / 255f * 100);
+
             ValueName.Text = obj.ValueName;
 
             Options.Items.Clear();
@@ -308,11 +314,6 @@ namespace GUIElementConstructor
         {
         }
 
-        private void Options_DoubleClick(object sender, EventArgs e)
-        {
-
-        }
-
         private void BGColorPanel_Click(object sender, EventArgs e)
         {
            if (ElementTree.SelectedNode == null)
@@ -328,7 +329,7 @@ namespace GUIElementConstructor
             picker.Color = obj.BackgroundColor;
             if (picker.ShowDialog(this) == DialogResult.OK)
             {
-                obj.BackgroundColor = picker.Color;
+                obj.BackgroundColor = Color.FromArgb(GetBGAlpha(),picker.Color);
                 BGColorPanel.BackColor = picker.Color;
             }
         }
@@ -348,7 +349,7 @@ namespace GUIElementConstructor
             picker.Color = obj.ForegroundColor;
             if (picker.ShowDialog(this) == DialogResult.OK)
             {
-                obj.ForegroundColor = picker.Color;
+                obj.ForegroundColor = Color.FromArgb(GetFGAlpha(),picker.Color);
                 FGColorPanel.BackColor = picker.Color;
             }
         }
@@ -377,7 +378,138 @@ namespace GUIElementConstructor
             GUIObject obj = ElementTree.SelectedNode.Tag as GUIObject;
             obj.Size = new Size((int)XSize.Value, (int)YSize.Value);
             GLView.Invalidate(true);
+        }
 
+        int GetBGAlpha ()
+        {
+            return (int)(BGAlpha.Value/100*255);
+        }
+
+        int GetFGAlpha()
+        {
+            return (int)(FGAlpha.Value / 100 * 255);
+        }
+
+        private void BGAlpha_ValueChanged(object sender, EventArgs e)
+        {
+            if (ElementTree.SelectedNode == null)
+                return;
+
+            GUIObject obj = ElementTree.SelectedNode.Tag as GUIObject;
+            if (obj == null)
+                return;
+
+            Color newColor = Color.FromArgb(GetBGAlpha(), obj.BackgroundColor.R, obj.BackgroundColor.G, obj.BackgroundColor.B);
+            obj.BackgroundColor = newColor;
+            BGColorPanel.BackColor = Color.FromArgb(255,newColor);
+        }
+
+        private void FGAlpha_ValueChanged(object sender, EventArgs e)
+        {
+            if (ElementTree.SelectedNode == null)
+                return;
+
+            GUIObject obj = ElementTree.SelectedNode.Tag as GUIObject;
+            if (obj == null)
+                return;
+
+            Color newColor = Color.FromArgb(GetFGAlpha(), obj.ForegroundColor.R, obj.ForegroundColor.G, obj.ForegroundColor.B);
+            obj.ForegroundColor = newColor;
+            FGColorPanel.BackColor = Color.FromArgb(255, newColor);
+        }
+
+        private void RebuildOptions ()
+        {
+            if (ElementTree.SelectedNode == null)
+                return;
+
+            GUIObject obj = ElementTree.SelectedNode.Tag as GUIObject;
+            if (obj == null)
+                return;
+
+            GUIObject.ElementDefinition def = obj.GetDefinition(false);
+
+            def.Options.Clear();
+            foreach(ListViewItem item in Options.Items)
+            {
+                GUIObject.ElementDefinition.OptionValue val = new GUIObject.ElementDefinition.OptionValue();
+                val.Name = item.Text;
+                val.Value = item.SubItems[1].Text;
+                def.Options.Add(val);
+            }
+
+            obj.CreateFromDefinition(def, false);
+        }
+
+        private void Options_AfterLabelEdit(object sender, LabelEditEventArgs e)
+        {
+            RebuildOptions();
+        }
+
+        private void AddOption_Click(object sender, EventArgs e)
+        {
+            string[] temp = new string[2];
+            temp[0] = "New Option";
+            temp[1] = "VALUE";
+
+            Options.Items.Add(new ListViewItem(temp));
+        }
+
+        private void RemoveOption_Click(object sender, EventArgs e)
+        {
+            ListViewItem item = GetSelectedOption();
+            if (item == null)
+                return;
+
+            Options.Items.Remove(item);
+            RebuildOptions();
+        }
+
+        private void Options_DoubleClick(object sender, EventArgs e)
+        {
+            ListViewItem item = GetSelectedOption();
+            if (item == null)
+                return;
+
+            OptionEditor dlg = new OptionEditor();
+
+            dlg.OptionName = item.Text;
+            dlg.OptionValue = item.SubItems[1].Text;
+
+            if (dlg.ShowDialog(this) == DialogResult.OK)
+            {
+                item.Text = dlg.OptionName;
+                item.SubItems[1].Text = dlg.OptionValue;
+            }
+            RebuildOptions();
+        }
+
+        ListViewItem GetSelectedOption()
+        {
+            if (Options.SelectedItems.Count == 0)
+                return null;
+
+            return Options.SelectedItems[0];
+        }
+
+        private void ComponentList_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Add.Enabled = ComponentList.SelectedItem != null;
+        }
+
+        private void ValueName_TextChanged(object sender, EventArgs e)
+        {
+            if (ElementTree.SelectedNode == null)
+                return;
+
+            GUIObject obj = ElementTree.SelectedNode.Tag as GUIObject;
+            if (obj == null)
+                return;
+
+            GUIObject.ElementDefinition def = obj.GetDefinition(false);
+
+            def.ValueName = ValueName.Text;
+            obj.CreateFromDefinition(def, false);
         }
     }
 }
