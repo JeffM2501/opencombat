@@ -176,8 +176,6 @@ namespace GUIObjects
         protected override void ReadExtraDefInfo(GUIObject.ElementDefinition def)
         {
             base.ReadExtraDefInfo(def);
-
-           
         }
 
         protected override void Render(double time)

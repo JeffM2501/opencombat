@@ -280,6 +280,7 @@ namespace GUIElementConstructor
                 return;
 
             parent.Children.Add(GUIObjectManager.CreateComponent(component));
+            parent.Bind();
 
             UpdateUIList();
         }
@@ -510,6 +511,7 @@ namespace GUIElementConstructor
 
             def.ValueName = ValueName.Text;
             obj.CreateFromDefinition(def, false);
+            obj.Bind();
         }
     }
 }
