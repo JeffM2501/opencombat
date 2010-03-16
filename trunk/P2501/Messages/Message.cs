@@ -5,6 +5,7 @@ using System.IO.Compression;
 using System.Text;
 using System.Reflection;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Diagnostics;
 
 using Lidgren.Network;
 using OpenTK;
@@ -226,6 +227,12 @@ namespace Messages
             Name = MessageClass.Pong;
         }
 
+        public Pong( UInt64 id)
+        {
+            Name = MessageClass.Pong;
+            ID = id;
+        }
+
         public override NetBuffer Pack()
         {
             NetBuffer buffer = base.Pack();
@@ -287,6 +294,15 @@ namespace Messages
         public UInt64 UID = 0;
         public UInt64 Token = 0;
         public UInt64 CID = 0;
+        public Int32 Version = MessageProtcoll.Version;
+
+        public Int32 Major = 0;
+        public Int32 Minor = 0;
+        public Int32 Revision = 0;
+        public Int32 Bin = 0;
+
+        public string OS = string.Empty;
+
 
         public Login()
         {
@@ -299,6 +315,15 @@ namespace Messages
             buffer.Write(UID);
             buffer.Write(Token);
             buffer.Write(CID);
+            buffer.Write(Version);
+            buffer.Write(Major);
+            buffer.Write(Minor);
+            buffer.Write(Revision);
+            buffer.Write(Bin);
+
+            OS = Environment.OSVersion.ToString();
+
+            buffer.Write(OS);
             return buffer;
         }
 
@@ -310,6 +335,12 @@ namespace Messages
             UID = buffer.ReadUInt64();
             Token = buffer.ReadUInt64();
             CID = buffer.ReadUInt64();
+            Version = buffer.ReadInt32();
+            Major = buffer.ReadInt32();
+            Minor = buffer.ReadInt32();
+            Revision = buffer.ReadInt32();
+            Bin = buffer.ReadInt32();
+            OS = buffer.ReadString();
             return true;
         }
     }

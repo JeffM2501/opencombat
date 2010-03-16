@@ -5,6 +5,7 @@ using System.Text;
 
 using Messages;
 using Simulation;
+using Lidgren.Network;
 
 namespace P2501GameClient
 {
@@ -17,6 +18,8 @@ namespace P2501GameClient
             messageHandlers.Add(typeof(Ping), new MessageHandler(PingHandler));
             messageHandlers.Add(typeof(Pong), new MessageHandler(PongHandler));
             messageHandlers.Add(typeof(Hail), new MessageHandler(HailHandler));
+            messageHandlers.Add(typeof(LoginAccept), new MessageHandler(LoginAcceptHandler));
+            messageHandlers.Add(typeof(InstanceList), new MessageHandler(InstanceListHandler));
             messageHandlers.Add(typeof(ServerVersInfo), new MessageHandler(ServerVersHandler));
             messageHandlers.Add(typeof(PlayerInfo), new MessageHandler(PlayerInfoHandler));
             messageHandlers.Add(typeof(PlayerListDone), new MessageHandler(PlayerListDoneHandler));
@@ -28,15 +31,25 @@ namespace P2501GameClient
             messageHandlers.Add(typeof(TheTimeIsNow), new MessageHandler(TheTimeIsNowHandler));
         }
 
+        protected void Send ( MessageClass message )
+        {
+            client.SendMessage(message.Pack(), message.Channel());
+        }
+
+        protected void Send ( Int32 code )
+        {
+            NetBuffer buffer = new NetBuffer();
+            buffer.Write(code);
+            client.SendMessage(buffer, NetChannel.ReliableInOrder9);
+        }
+
         protected void PingHandler(MessageClass message)
         {
             Ping msg = message as Ping;
             if (msg == null)
                 return;
 
-            Pong pong = new Pong();
-            pong.ID = msg.ID;
-            client.SendMessage(pong.Pack(), pong.Channel());
+            Send(new Pong(msg.ID));
         }
 
         protected void AddLatencyUpdate ( double latency )
@@ -104,10 +117,28 @@ namespace P2501GameClient
             login.UID = 0;
             login.CID = 0;
             login.Token = 0;
+            login.Major = ClientVersion.Major;
+            login.Minor = ClientVersion.Minor;
+            login.Revision = ClientVersion.Revision;
+            login.Bin = ClientVersion.Bin;
+
             if (GetAuthentication != null)
                 GetAuthentication(ref login.UID, ref login.CID, ref login.Token);
 
-            client.SendMessage(login.Pack(), login.Channel());
+            Send(login);
+        }
+
+        protected void LoginAcceptHandler(MessageClass message)
+        {
+            LoginAccept accept = message as LoginAccept;
+            if (accept == null)
+                return;
+
+            MyPlayer = new Player();
+            MyPlayer.ID = accept.PlayerID;
+            MyPlayer.Callsign = accept.Callsign;
+
+            Send(MessageClass.RequestInstanceList);
         }
 
         protected void ServerVersHandler(MessageClass message)
@@ -124,6 +155,17 @@ namespace P2501GameClient
 
             if (ServerVersionEvent != null)
                 ServerVersionEvent(this, info.Major, info.Minor, info.Rev);
+        }
+
+        protected void InstanceListHandler(MessageClass message)
+        {
+            if (InstanceListEvent == null)
+                return;
+        }
+
+        public void SelectInstance ( int instance )
+        {
+
         }
 
         protected void PlayerInfoHandler(MessageClass message)
