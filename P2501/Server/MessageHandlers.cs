@@ -18,14 +18,18 @@ namespace Project2501Server
         Dictionary<Type, MessageHandler> messageHandlers = new Dictionary<Type, MessageHandler>();
         Dictionary<int, MessageHandler> messageCodeHandlers = new Dictionary<int, MessageHandler>();
 
+        Dictionary<Type, InstanceMessageHandler> instanceMessageHandlers = new Dictionary<Type, InstanceMessageHandler>();
+        Dictionary<int, InstanceMessageHandler> instanceMessageCodeHandlers = new Dictionary<int, InstanceMessageHandler>();
+
         protected void InitMessageHandlers()
         {
             messageHandlers.Add(typeof(Login), new MessageHandler(LoginHandler));
-            messageHandlers.Add(typeof(PlayerJoin), new MessageHandler(PlayerJoinHandler));
-            messageHandlers.Add(typeof(ChatMessage), new MessageHandler(ChatMessageHandler));
-            messageHandlers.Add(typeof(RequestSpawn), new MessageHandler(RequestSpawnHandler));
             messageHandlers.Add(typeof(Ping), new MessageHandler(PingHandler));
             messageHandlers.Add(typeof(WhatTimeIsIt), new MessageHandler(WhatTimeIsItHandler));
+
+            instanceMessageCodeHandlers.Add(MessageClass.PlayerJoin, new InstanceMessageHandler(PlayerJoinHandler));
+            instanceMessageCodeHandlers.Add(MessageClass.RequestSpawn, new InstanceMessageHandler(RequestSpawnHandler));
+            instanceMessageHandlers.Add(typeof(ChatMessage), new InstanceMessageHandler(ChatMessageHandler));
         }
 
         protected void ProcessMessage(Message msg)
@@ -41,26 +45,81 @@ namespace Project2501Server
                     return;
             }
 
-            MessageClass message = messageMapper.MessageFromID(msg.Name);
-            if (message != null)
-            {
-                message.Unpack(ref msg.Data);
+            MessageClass message = null;
 
-                if (messageHandlers.ContainsKey(message.GetType()))
-                    messageHandlers[message.GetType()](client, message);
-                else if (messageCodeHandlers.ContainsKey(msg.Name))
-                    messageCodeHandlers[msg.Name](client, message);
-            }
-            else
+            if (client.Instance != null) // see if an instance wants it
             {
-                if (messageCodeHandlers.ContainsKey(msg.Name))
-                    messageCodeHandlers[msg.Name](client, MessageClass.NoDataMessage(msg.Name));
+                lock(instanceMessageHandlers)
+                {
+                    message = messageMapper.MessageFromID(msg.Name);
+                    if (message != null)
+                    {
+                        message.Unpack(ref msg.Data);
+
+                        if (instanceMessageHandlers.ContainsKey(message.GetType()) || instanceMessageCodeHandlers.ContainsKey(msg.Name))
+                        {
+                            client.Instance.AddMessage(client, message);
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        if (instanceMessageCodeHandlers.ContainsKey(msg.Name))
+                        {
+                            client.Instance.AddMessage(client, MessageClass.NoDataMessage(msg.Name));
+                            return;
+                        }
+                    }
+                }
+            }
+
+            lock(client)
+            {
+                message = messageMapper.MessageFromID(msg.Name);
+                if (message != null)
+                {
+                    message.Unpack(ref msg.Data);
+
+                    if (messageHandlers.ContainsKey(message.GetType()))
+                        messageHandlers[message.GetType()](client, message);
+                    else if (messageCodeHandlers.ContainsKey(msg.Name))
+                        messageCodeHandlers[msg.Name](client, message);
+                }
+                else
+                {
+                    if (messageCodeHandlers.ContainsKey(msg.Name))
+                        messageCodeHandlers[msg.Name](client, MessageClass.NoDataMessage(msg.Name));
+                }
             }
         }
 
-        protected void Send (Client client, MessageClass message)
+        public void ProcessInstanceMessage ( Client client, MessageClass message, ServerInstance instance )
+        {
+            lock (instanceMessageHandlers)
+            {
+                lock (client)
+                {
+                    if (instanceMessageHandlers.ContainsKey(message.GetType()))
+                        instanceMessageHandlers[message.GetType()](client, message, instance);
+                    else if (instanceMessageCodeHandlers.ContainsKey(message.Name))
+                        instanceMessageCodeHandlers[message.Name](client, message, instance);
+                }
+            }
+        }
+
+        public void Send(Client client, Int32 message)
+        {
+            Send(client, MessageClass.NoDataMessage(message));
+        }
+
+        public void Send (Client client, MessageClass message)
         {
             host.SendMessage(client.Connection, message.Pack(), message.Channel());
+        }
+
+        public void Send(MessageClass message)
+        {
+            host.Broadcast(message.Pack(), message.Channel());
         }
 
         protected void PingHandler(Client client, MessageClass message)
@@ -102,52 +161,31 @@ namespace Project2501Server
             Send(client, accept);
         }
 
-        protected void PlayerJoinHandler(Client client, MessageClass message)
+        protected void PlayerJoinHandler(Client client, MessageClass message, ServerInstance instance)
         {
-            PlayerJoin join = message as PlayerJoin;
-            if (join == null)
-                return;
+            client.Player = instance.AddPlayer(client);
 
-            client.Player = sim.NewPlayer();
-            client.Player.Tag = client;
-
-            client.Player.ID = GUIDManager.NewGUID();
-            client.Player.Pilot = join.Pilot;
-
-            while (!sim.PlayerNameValid(join.Callsign))
-                join.Callsign += "X";
-
-            client.Player.Callsign = join.Callsign;
-
-            sim.AddPlayer(client.Player);
-
-            PlayerJoinAccept accept = new PlayerJoinAccept();
-            accept.Callsign = client.Player.Callsign;
-            accept.PlayerID = client.Player.ID;
-
-            Send(client, accept);
-
-            AllowSpawn spawn = new AllowSpawn();
-            Send(client, spawn);
+            Send(client, MessageClass.PlayerJoinAccept);
+            Send(client, MessageClass.AllowSpawn);
         }
 
-        protected void ChatMessageHandler(Client client, MessageClass message)
+        protected void ChatMessageHandler(Client client, MessageClass message, ServerInstance instance)
         {
             ChatMessage msg = message as ChatMessage;
             if (msg == null || client.Player == null)
                 return;
 
             msg.From = client.Player.Callsign;
-            host.Broadcast(msg.Pack(), msg.Channel());
+            instance.Broadcast(msg);
         }
         
-        protected void RequestSpawnHandler(Client client, MessageClass message)
+        protected void RequestSpawnHandler(Client client, MessageClass message, ServerInstance instance)
         {
             RequestSpawn msg = message as RequestSpawn;
             if (msg == null || client.Player == null)
                 return;
 
-            sim.SpawnPlayer(client.Player, lastUpdateTime);
+            instance.Spawn(client.Player);
         }
 
         protected void WhatTimeIsItHandler(Client client, MessageClass message)

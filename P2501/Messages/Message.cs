@@ -477,74 +477,6 @@ namespace Messages
         }
     }
 
-    public class PlayerJoin : MessageClass
-    {
-        public string Callsign = string.Empty;
-        public string Pilot = string.Empty;
-
-        public PlayerJoin()
-        {
-            Name = MessageClass.PlayerJoin;
-        }
-
-        public override NetChannel Channel()
-        {
-            return NetChannel.UnreliableInOrder3;
-        }
-
-        public override NetBuffer Pack()
-        {
-            NetBuffer buffer = base.Pack();
-            buffer.Write(Callsign);
-            buffer.Write(Pilot);
-            return buffer;
-        }
-
-        public override bool Unpack(ref NetBuffer buffer)
-        {
-            if (!base.Unpack(ref buffer))
-                return false;
-
-            Callsign = buffer.ReadString();
-            Pilot = buffer.ReadString();
-            return true;
-        }
-    }
-
-    public class PlayerJoinAccept : MessageClass
-    {
-        public UInt64 PlayerID = 0;
-        public string Callsign = string.Empty;
-
-        public PlayerJoinAccept()
-        {
-            Name = MessageClass.PlayerJoinAccept;
-        }
-
-        public override NetChannel Channel()
-        {
-            return NetChannel.UnreliableInOrder3;
-        }
-
-        public override NetBuffer Pack()
-        {
-            NetBuffer buffer = base.Pack();
-            buffer.Write(PlayerID);
-            buffer.Write(Callsign);
-            return buffer;
-        }
-
-        public override bool Unpack(ref NetBuffer buffer)
-        {
-            if (!base.Unpack(ref buffer))
-                return false;
-
-            PlayerID = buffer.ReadUInt64();
-            Callsign = buffer.ReadString();
-            return true;
-        }
-    }
-
     public class RequestMapInfo : MessageClass
     {
         public RequestMapInfo()
@@ -608,19 +540,6 @@ namespace Messages
             From = buffer.ReadString();
             Message = buffer.ReadString();
            return true;
-        }
-    }
-
-    public class AllowSpawn : MessageClass
-    {
-        public AllowSpawn()
-        {
-            Name = MessageClass.AllowSpawn;
-        }
-
-        public override NetChannel Channel()
-        {
-            return NetChannel.UnreliableInOrder3;
         }
     }
 
