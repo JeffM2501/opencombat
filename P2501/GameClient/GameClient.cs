@@ -22,6 +22,8 @@ namespace P2501GameClient
 
     public delegate void HostConnectionHandler ( object sender, string error );
 
+    public delegate void GeneralEventHandler(object sender, EventArgs args);
+
     public partial class GameClient
     {
         public Sim sim = new Sim();
@@ -34,6 +36,10 @@ namespace P2501GameClient
 
         public event HostConnectionHandler HostConnectionEvent;
         public event HostConnectionHandler HostDisconnectionEvent;
+
+        public event GeneralEventHandler InstanceListEvent;
+
+        protected Player MyPlayer = null;
 
         public double Time
         {

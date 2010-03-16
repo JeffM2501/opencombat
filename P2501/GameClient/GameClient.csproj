@@ -8,7 +8,7 @@
     <ProjectGuid>{1F5E5A59-5A45-4646-9D17-D3603CF7061B}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Project24Client</RootNamespace>
+    <RootNamespace>P2501GameClient</RootNamespace>
     <AssemblyName>GameClient</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ClientVersion.cs" />
     <Compile Include="GameClient.cs" />
     <Compile Include="MessageHandlers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

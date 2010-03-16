@@ -5,9 +5,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server", "Server.csproj", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lidgren.Network", "..\lidgren-network\Lidgren.Network\Lidgren.Network.csproj", "{BA202214-F6F8-4853-BCC9-CA4F13C5F479}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Host", "..\..\Common\Host\Host.csproj", "{2EE0E321-3FC6-4B3A-9F13-C34B8B49D7B5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Host", "..\..\graphicslib\Common\Host\Host.csproj", "{2EE0E321-3FC6-4B3A-9F13-C34B8B49D7B5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServerConfigurator", "..\..\Common\ServerConfigurator\ServerConfigurator.csproj", "{CA9368CE-BC6D-4028-9FF8-99F012201DC6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServerConfigurator", "..\..\graphicslib\Common\ServerConfigurator\ServerConfigurator.csproj", "{CA9368CE-BC6D-4028-9FF8-99F012201DC6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Simulation", "..\Simulation\Simulation.csproj", "{55D7275D-C279-455E-8505-9E9C6A3BA1D1}"
 EndProject

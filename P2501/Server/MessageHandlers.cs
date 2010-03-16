@@ -80,6 +80,12 @@ namespace Project2501Server
             if (login == null)
                 return;
 
+            if (login.Version != MessageProtcoll.Version)
+            {
+                host.DisconnectUser(client.Connection);
+                return;
+            }
+
             client.UID = login.UID;
             client.CID = login.CID;
             client.Token = login.Token;
