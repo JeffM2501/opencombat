@@ -23,6 +23,8 @@ namespace Project2501Server
         public UInt64 CID = 0;
         public UInt64 Token = 0;
 
+        public ServerInstance Instance = null;
+
         public bool Checked = false;
         public bool Verified = false;
 
@@ -39,11 +41,11 @@ namespace Project2501Server
     }
 
     public delegate void MessageHandler ( Client client, MessageClass message );
+    public delegate void InstanceMessageHandler(Client client, MessageClass message, ServerInstance instance);
     public delegate bool PublicListCallback(ref string host, ref string name, ref string description, ref string key, ref string type);
 
     public partial class Server
     {
-        Sim sim = new Sim();
         Host host;
 
         protected TokenChecker tokenChecker = null;
@@ -77,7 +79,9 @@ namespace Project2501Server
             timer = new Stopwatch();
             timer.Start();
             host = new Host(port);
-            sim.Init();
+
+            // add the root instance
+            ServerInstanceManger.AddInstnace(this, string.Empty, false);
 
             tokenChecker = new TokenChecker();
             serverLister = new ServerLister();
@@ -85,10 +89,6 @@ namespace Project2501Server
             host.Connect += new MonitoringEvent(host_Message);
             host.Disconnect += new MonitoringEvent(host_Message);
             host.DebugMessage += new MonitoringEvent(host_Message);
-
-            sim.PlayerJoined += new PlayerJoinedHandler(sim_PlayerJoined);
-            sim.PlayerRemoved += new PlayerRemovedHandler(sim_PlayerRemoved);
-            sim.PlayerStatusChanged += new PlayerStatusChangeHandler(sim_PlayerStatusChanged);
 
             InitMessageHandlers();
 
@@ -135,6 +135,8 @@ namespace Project2501Server
 
         public void Kill()
         {
+            ServerInstanceManger.StopAll();
+
             if (ServerThread != null)
                 ServerThread.Abort();
             ServerThread = null;
@@ -152,32 +154,6 @@ namespace Project2501Server
             serverLister = null;
         }
 
-        void sim_PlayerStatusChanged(object sender, PlayerEventArgs args)
-        {
-            if (args.player.Status == PlayerStatus.Alive)
-            {
-                PlayerSpawn spawn = new PlayerSpawn(args.player);
-                host.Broadcast(spawn.Pack(), spawn.Channel());
-            }
-        }
-
-        protected void sim_PlayerJoined ( object sender, PlayerEventArgs args )
-        {           
-            PlayerInfo info = new PlayerInfo(args.player);
-            host.Broadcast(info.Pack(), info.Channel());
-        }
-
-        protected void sim_PlayerRemoved(object sender, PlayerEventArgs args)
-        {
-            Client client = args.player.Tag as Client;
-            if (client != null)
-            {
-                Messages.Disconnect disconnect = new Messages.Disconnect();
-                disconnect.ID = client.Player.ID;
-                host.Broadcast(disconnect.Pack(), disconnect.Channel());
-            }
-        }
-
         protected void DisconnectPlayer ( NetConnection player )
         {
             if (Clients.ContainsKey(player))
@@ -185,8 +161,8 @@ namespace Project2501Server
                 Client client = Clients[player];
                 Clients.Remove(player);
 
-                if (client.Player != null)
-                    sim.RemovePlayer(client.Player);
+                if (client.Instance != null)
+                    client.Instance.RemoveClient(client);
             }
         }     
    
@@ -236,8 +212,6 @@ namespace Project2501Server
                 ProcessTokenJob(job);
                 job = tokenChecker.GetFinishedJob();
             }
-
-            sim.Update(lastUpdateTime);
         }
 
         protected void ProcessTokenJob ( TokenChecker.Job job )
