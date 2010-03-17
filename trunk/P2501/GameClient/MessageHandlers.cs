@@ -12,6 +12,7 @@ namespace P2501GameClient
     public partial class GameClient
     {
         Dictionary<Type, MessageHandler> messageHandlers = new Dictionary<Type, MessageHandler>();
+        Dictionary<int, MessageHandler> messageCodeHandlers = new Dictionary<int, MessageHandler>();
 
         protected void InitMessageHandlers()
         {
@@ -19,14 +20,14 @@ namespace P2501GameClient
             messageHandlers.Add(typeof(Pong), new MessageHandler(PongHandler));
             messageHandlers.Add(typeof(Hail), new MessageHandler(HailHandler));
             messageHandlers.Add(typeof(LoginAccept), new MessageHandler(LoginAcceptHandler));
-            messageHandlers.Add(typeof(InstanceList), new MessageHandler(InstanceListHandler));
+            messageCodeHandlers.Add(MessageClass.InstanceList, new MessageHandler(InstanceListHandler));
             messageHandlers.Add(typeof(ServerVersInfo), new MessageHandler(ServerVersHandler));
             messageHandlers.Add(typeof(PlayerInfo), new MessageHandler(PlayerInfoHandler));
             messageHandlers.Add(typeof(PlayerListDone), new MessageHandler(PlayerListDoneHandler));
             messageHandlers.Add(typeof(MapInfo), new MessageHandler(MapInfoHandler));
-            messageHandlers.Add(typeof(PlayerJoinAccept), new MessageHandler(PlayerJoinAcceptHandler));
+            messageCodeHandlers.Add(MessageClass.PlayerJoinAccept, new MessageHandler(PlayerJoinAcceptHandler));
             messageHandlers.Add(typeof(ChatMessage), new MessageHandler(ChatMessageHandler));
-            messageHandlers.Add(typeof(AllowSpawn), new MessageHandler(AllowSpawnHandler));
+            messageCodeHandlers.Add(MessageClass.AllowSpawn, new MessageHandler(AllowSpawnHandler));
             messageHandlers.Add(typeof(PlayerSpawn), new MessageHandler(PlayerSpawnHandler));
             messageHandlers.Add(typeof(TheTimeIsNow), new MessageHandler(TheTimeIsNowHandler));
         }
@@ -134,9 +135,9 @@ namespace P2501GameClient
             if (accept == null)
                 return;
 
-            MyPlayer = new Player();
-            MyPlayer.ID = accept.PlayerID;
-            MyPlayer.Callsign = accept.Callsign;
+            ThisPlayer = sim.NewPlayer();
+            ThisPlayer.ID = accept.PlayerID;
+            ThisPlayer.Callsign = accept.Callsign;
 
             Send(MessageClass.RequestInstanceList);
         }
@@ -154,7 +155,7 @@ namespace P2501GameClient
             }
 
             if (ServerVersionEvent != null)
-                ServerVersionEvent(this, info.Major, info.Minor, info.Rev);
+                ServerVersionEvent(this, new ServerVersionEventArgs(info.Major, info.Minor, info.Rev));
         }
 
         protected void InstanceListHandler(MessageClass message)
@@ -195,33 +196,13 @@ namespace P2501GameClient
 
         protected void PlayerListDoneHandler ( MessageClass message )
         {
-            PlayerJoin join = new PlayerJoin();
-            join.Callsign = "Player";
-            join.Pilot = "Pilot0u";
-
-            if (GetJoinInfo != null)
-                GetJoinInfo(ref join.Callsign, ref join.Pilot);
-
-            client.SendMessage(join.Pack(), join.Channel());
+            Send(MessageClass.PlayerJoin);
             SendPing();
         }
 
         protected void PlayerJoinAcceptHandler ( MessageClass message )
         {
-            PlayerJoinAccept msg = message as PlayerJoinAccept;
-            if (msg == null)
-                return;
-
-            Player player = sim.FindPlayer(msg.PlayerID);
-            if (player == null)
-            {
-                player = sim.NewPlayer();
-                player.ID = msg.PlayerID;
-                sim.AddPlayer(player);
-            }
-
-            player.Callsign = msg.Callsign;
-            ThisPlayer = player;
+            // just fire off a callback or something
             SendPing();
         }
 
@@ -232,7 +213,7 @@ namespace P2501GameClient
                 return;
 
             if (ChatReceivedEvent != null)
-                ChatReceivedEvent(this, msg.ChatChannel, msg.From, msg.Message);
+                ChatReceivedEvent(this, new ChatEventArgs(msg.ChatChannel, msg.From, msg.Message));
         }
 
         protected void CallAllowSpawn ()
@@ -240,15 +221,11 @@ namespace P2501GameClient
             requestedSpawn = false;
             ThisPlayer.Status = PlayerStatus.Despawned;
             if (AllowSpawnEvent != null)
-                AllowSpawnEvent(this, ThisPlayer);
+                AllowSpawnEvent(this, new  PlayerEventArgs(ThisPlayer));
         }
 
         protected void AllowSpawnHandler(MessageClass message)
         {
-            AllowSpawn msg = message as AllowSpawn;
-            if (msg == null)
-                return;
-
             gotAllowSpawn = true;
 
             if (haveSyncedTime)
