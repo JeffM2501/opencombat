@@ -168,6 +168,8 @@ namespace Messages
         public static int Login = 200;
         public static int LoginAccept = 210;
         public static int InstanceSelect = 220;
+        public static int InstanceSelectFailed = 222;
+        public static int InstanceJoined = 223;
 
         public static int RequestServerVersInfo = 300;
         public static int ServerVersInfo = 305;
@@ -348,7 +350,7 @@ namespace Messages
     public class LoginAccept : MessageClass
     {
         public UInt64 PlayerID = 0;
-        public String Callsign = string.Empty;
+        public string Callsign = string.Empty;
 
         public LoginAccept()
         {
@@ -410,6 +412,113 @@ namespace Messages
         }
     }
 
+    public class InstanceList : MessageClass
+    {
+        public class InstanceDescription
+        {
+            public Int32 ID = -1;
+            public string Description = string.Empty;
+        }
+
+        public List<InstanceDescription> Instances = new List<InstanceDescription>();
+
+        public InstanceList()
+        {
+            Name = MessageClass.InstanceList;
+        }
+
+        public void Add ( int id, string desc )
+        {
+            InstanceDescription d = new InstanceDescription();
+            d.ID = id;
+            d.Description = desc;
+            Instances.Add(d);
+        }
+
+        public override NetBuffer Pack()
+        {
+            NetBuffer buffer = base.Pack();
+            buffer.Write(Instances.Count);
+
+            foreach(InstanceDescription i in Instances)
+            {
+                buffer.Write(i.ID);
+                buffer.Write(i.Description);
+            }
+            return buffer;
+        }
+
+        public override bool Unpack(ref NetBuffer buffer)
+        {
+            if (!base.Unpack(ref buffer))
+                return false;
+
+            Instances.Clear();
+            Int32 count = buffer.ReadInt32();
+            for (Int32 i = 0; i < count; i++)
+            {
+                InstanceDescription desc = new InstanceDescription();
+                int id = buffer.ReadInt32();
+                string d = buffer.ReadString();
+                Add(id, d);
+            }
+            return true;
+        }
+    }
+
+    public class InstanceSelect : MessageClass
+    {
+        public int ID = -1;
+
+        public InstanceSelect()
+        {
+            Name = MessageClass.InstanceSelect;
+        }
+
+        public override NetBuffer Pack()
+        {
+            NetBuffer buffer = base.Pack();
+            buffer.Write(ID);
+            return buffer;
+        }
+
+        public override bool Unpack(ref NetBuffer buffer)
+        {
+            if (!base.Unpack(ref buffer))
+                return false;
+
+            ID = buffer.ReadInt32();
+
+            return true;
+        }
+    }
+
+    public class InstanceJoined : MessageClass
+    {
+        public int ID = -1;
+
+        public InstanceJoined()
+        {
+            Name = MessageClass.InstanceJoined;
+        }
+
+        public override NetBuffer Pack()
+        {
+            NetBuffer buffer = base.Pack();
+            buffer.Write(ID);
+            return buffer;
+        }
+
+        public override bool Unpack(ref NetBuffer buffer)
+        {
+            if (!base.Unpack(ref buffer))
+                return false;
+
+            ID = buffer.ReadInt32();
+
+            return true;
+        }
+    }
     public class PlayerInfo : MessageClass
     {
         public UInt64 PlayerID = 0;
@@ -460,7 +569,7 @@ namespace Messages
 
         public override NetChannel Channel()
         {
-            return NetChannel.UnreliableInOrder2;
+            return NetChannel.ReliableInOrder2;
         }
     }
 

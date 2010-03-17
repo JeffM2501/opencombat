@@ -26,6 +26,8 @@ namespace Project2501Server
             messageHandlers.Add(typeof(Login), new MessageHandler(LoginHandler));
             messageHandlers.Add(typeof(Ping), new MessageHandler(PingHandler));
             messageHandlers.Add(typeof(WhatTimeIsIt), new MessageHandler(WhatTimeIsItHandler));
+            messageCodeHandlers.Add(MessageClass.RequestInstanceList, new MessageHandler(RequestInstanceListHandler));
+            messageHandlers.Add(typeof(InstanceSelect), new MessageHandler(InstanceSelectHandler));
 
             instanceMessageCodeHandlers.Add(MessageClass.PlayerJoin, new InstanceMessageHandler(PlayerJoinHandler));
             instanceMessageCodeHandlers.Add(MessageClass.RequestSpawn, new InstanceMessageHandler(RequestSpawnHandler));
@@ -159,6 +161,41 @@ namespace Project2501Server
             accept.PlayerID = client.Player.ID;
 
             Send(client, accept);
+        }
+
+        protected void RequestInstanceListHandler(Client client, MessageClass message)
+        {
+            InstanceList instances = new InstanceList();
+            foreach (KeyValuePair<int,string> item in ServerInstanceManger.GetInstanceList())
+                instances.Add(item.Key, item.Value);
+
+            Send(client, instances);
+        }
+
+        protected void InstanceSelectHandler(Client client, MessageClass message)
+        {
+            InstanceSelect select = message as InstanceSelect;
+            if (select == null)
+                return;
+
+            ServerInstance instance = ServerInstanceManger.GetInstance(select.ID);
+            if (instance == null)
+            {
+                Send(client, MessageClass.InstanceSelectFailed);
+                return;
+            }
+
+            lock (client)
+            {
+                client.Instance = instance;
+                instance.AddClient(client);
+            }
+
+            InstanceJoined joined = new InstanceJoined();
+
+            joined.ID = instance.ID;
+
+            Send(client, joined);
         }
 
         protected void PlayerJoinHandler(Client client, MessageClass message, ServerInstance instance)
