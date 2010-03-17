@@ -97,6 +97,9 @@ namespace Project2501Server
 
         protected void listServer()
         {
+            if (NoTokenCheck)
+                return;
+
             if (serverLister == null)
                 return;
 
@@ -120,6 +123,8 @@ namespace Project2501Server
 
         public void Run ()
         {
+            if (host == null)
+                Init();
             ServerThread = new Thread(new ThreadStart(PrivateRun));
             ServerThread.Start();
         }

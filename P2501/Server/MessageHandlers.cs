@@ -15,6 +15,8 @@ namespace Project2501Server
 {
     public partial class Server
     {
+        public bool NoTokenCheck = false;
+
         Dictionary<Type, MessageHandler> messageHandlers = new Dictionary<Type, MessageHandler>();
         Dictionary<int, MessageHandler> messageCodeHandlers = new Dictionary<int, MessageHandler>();
 
@@ -150,8 +152,17 @@ namespace Project2501Server
             client.UID = login.UID;
             client.CID = login.CID;
             client.Token = login.Token;
+            client.Player = Sim.NewPlayer();
 
-            tokenChecker.AddJob(login.UID, login.Token, login.CID,client.Connection.RemoteEndpoint.Address.ToString(), client);
+            if (NoTokenCheck)
+            {
+                client.Checked = true;
+                client.Verified = true;
+                client.Player.Callsign = "TestUser";
+                FinishLogin(client);
+            }
+            else
+                tokenChecker.AddJob(login.UID, login.Token, login.CID,client.Connection.RemoteEndpoint.Address.ToString(), client);
         }
 
         protected void FinishLogin ( Client client )
@@ -200,8 +211,7 @@ namespace Project2501Server
 
         protected void PlayerJoinHandler(Client client, MessageClass message, ServerInstance instance)
         {
-            client.Player = instance.AddPlayer(client);
-
+            instance.AddPlayer(client);
             Send(client, MessageClass.PlayerJoinAccept);
             Send(client, MessageClass.AllowSpawn);
         }

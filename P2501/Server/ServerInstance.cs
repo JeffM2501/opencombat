@@ -13,6 +13,8 @@ namespace Project2501Server
     {
         public static List<ServerInstance> Instances = new List<ServerInstance>();
 
+        static int lastInstID = 0;
+
         public static ServerInstance GetInstance ( int ID )
         {
             foreach(ServerInstance inst in Instances)
@@ -28,6 +30,8 @@ namespace Project2501Server
             CheckDeads();
 
             ServerInstance inst = new ServerInstance(server);
+            lastInstID ++;
+            inst.ID = lastInstID;
             Instances.Add(inst);
             inst.Description = desc;
             inst.destroyOnEmpty = dieWhenEmpty;
@@ -131,7 +135,6 @@ namespace Project2501Server
 
         public Player AddPlayer ( Client client )
         {
-            client.Player = sim.NewPlayer();
             client.Player.ID = client.UID;
             client.Player.Tag = client;
             sim.AddPlayer(client.Player);
