@@ -15,13 +15,58 @@ namespace P2501GameClient
     public delegate void AuthenticationCallback(ref UInt64 UID, ref UInt64 CID, ref UInt64 Token);
     public delegate void JoinInfoCallback(ref string callsign, ref string pilot);
 
-    public delegate void ServerVersionHandler ( object sender, int major, int minor, int rev );
-    public delegate void PlayerEventHandler(object sender, Player player);
+    public class ServerVersionEventArgs : EventArgs
+    {
+        public int Major;
+        public int Minor;
+        public int Rev;
 
-    public delegate void ChatEventHandler ( object sender, string channel, string from, string message );
+        public ServerVersionEventArgs (int major, int minor, int rev)
+        {
+            Major = major;
+            Minor = minor;
+            Rev = rev;
+        }
+    }
 
-    public delegate void HostConnectionHandler ( object sender, string error );
+    public class PlayerEventArgs : EventArgs
+    {
+        public Player ThePlayer;
 
+        public PlayerEventArgs(Player player)
+        {
+            ThePlayer = player;
+        }
+    }
+
+    public class ChatEventArgs : EventArgs
+    {
+        public string Channel = string.Empty;
+        public string From = string.Empty;
+        public string Text = string.Empty;
+
+        public ChatEventArgs(string channel, string from, string message)
+        {
+            Channel = channel;
+            From = from;
+            Text = message;
+        }
+    }
+
+    public class HostConnectionEventArgs : EventArgs
+    {
+        public string Message = string.Empty;
+
+        public HostConnectionEventArgs(string e)
+        {
+            Message = e;
+        }
+    }
+
+    public delegate void ServerVersionHandler ( object sender, ServerVersionEventArgs args );
+    public delegate void PlayerEventHandler(object sender, PlayerEventArgs args);
+    public delegate void ChatEventHandler ( object sender, ChatEventArgs args );
+    public delegate void HostConnectionHandler(object sender, HostConnectionEventArgs args);
     public delegate void GeneralEventHandler(object sender, EventArgs args);
 
     public partial class GameClient
@@ -39,8 +84,6 @@ namespace P2501GameClient
 
         public event GeneralEventHandler InstanceListEvent;
 
-        protected Player MyPlayer = null;
-
         public double Time
         {
             get { return lastUpdateTime; }
@@ -57,7 +100,6 @@ namespace P2501GameClient
         }
 
         public AuthenticationCallback GetAuthentication;
-        public JoinInfoCallback GetJoinInfo;
 
         MessageMapper messageMapper = new MessageMapper();
 
@@ -121,7 +163,7 @@ namespace P2501GameClient
             if (!connected && client.IsConnected)
             {
                 if (HostConnectionEvent != null)
-                    HostConnectionEvent(this, "Connected");
+                    HostConnectionEvent(this, new HostConnectionEventArgs("Connected"));
             }
 
             if (connected)
@@ -129,7 +171,7 @@ namespace P2501GameClient
                 if (!client.IsConnected)
                 {
                     if (HostDisconnectionEvent != null)
-                        HostDisconnectionEvent(this, "Disconnected");
+                        HostDisconnectionEvent(this, new HostConnectionEventArgs("Disconnected"));
                     return false;
                 }
 
@@ -204,7 +246,7 @@ namespace P2501GameClient
                 return;
 
             if (ChatSentEvent != null)
-                ChatSentEvent(this, channel, ThisPlayer.Callsign, message);
+                ChatSentEvent(this, new ChatEventArgs(channel, ThisPlayer.Callsign, message));
 
             ChatMessage msg = new ChatMessage();
             msg.ChatChannel = channel;
