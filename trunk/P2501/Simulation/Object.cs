@@ -49,6 +49,16 @@ namespace Simulation
             sim = s;
         }
 
+        internal SimObject()
+        {
+            sim = null;
+        }
+
+        internal void SetSim(Sim s)
+        {
+            sim = s;
+        }
+
         public virtual void CopyFrom ( SimObject obj)
         {
             Tag = obj.Tag;

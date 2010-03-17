@@ -77,6 +77,12 @@ namespace Simulation
 
         }
 
+        internal Player()
+            : base()
+        {
+
+        }
+
         public virtual void CopyFrom ( Player player )
         {
             base.CopyFrom(player);

@@ -101,13 +101,14 @@ namespace Simulation
             return null;
         }
 
-        public Player NewPlayer()
+        public static Player NewPlayer()
         {
-            return new Player(this);
+            return new Player();
         }
 
         public void AddPlayer ( Player player )
         {
+            player.SetSim(this);
             Player existing = FindPlayer(player.ID);
             if (existing != null)
                 existing.CopyFrom(player);

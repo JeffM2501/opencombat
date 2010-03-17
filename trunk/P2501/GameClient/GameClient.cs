@@ -13,7 +13,6 @@ namespace P2501GameClient
     public delegate void MessageHandler(MessageClass message);
 
     public delegate void AuthenticationCallback(ref UInt64 UID, ref UInt64 CID, ref UInt64 Token);
-    public delegate void JoinInfoCallback(ref string callsign, ref string pilot);
 
     public class ServerVersionEventArgs : EventArgs
     {
@@ -82,7 +81,24 @@ namespace P2501GameClient
         public event HostConnectionHandler HostConnectionEvent;
         public event HostConnectionHandler HostDisconnectionEvent;
 
+        public event GeneralEventHandler LoginAcceptEvent;
+
         public event GeneralEventHandler InstanceListEvent;
+        public event GeneralEventHandler InstanceJoinedEvent;
+        public event GeneralEventHandler InstanceJoinFailedEvent;
+
+        public class InstanceDefinition
+        {
+            public int ID = -1;
+            public string Description = string.Empty;
+        }
+
+        protected List<InstanceDefinition> AvailableInstances = new List<InstanceDefinition>();
+
+        public InstanceDefinition[] ServerInstances
+        {
+            get { return AvailableInstances.ToArray(); }
+        }
 
         public double Time
         {
@@ -121,6 +137,12 @@ namespace P2501GameClient
         double packetloss = 0;
         public static int LatencySamples = 5;
         public static double PingTime = 60;
+
+        protected int ConnectedInstance = -1;
+        public int Instance
+        {
+            get { return ConnectedInstance; }
+        }
 
         public double AverageLatency
         {

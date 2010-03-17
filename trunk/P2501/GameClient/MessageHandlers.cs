@@ -20,7 +20,9 @@ namespace P2501GameClient
             messageHandlers.Add(typeof(Pong), new MessageHandler(PongHandler));
             messageHandlers.Add(typeof(Hail), new MessageHandler(HailHandler));
             messageHandlers.Add(typeof(LoginAccept), new MessageHandler(LoginAcceptHandler));
-            messageCodeHandlers.Add(MessageClass.InstanceList, new MessageHandler(InstanceListHandler));
+            messageHandlers.Add(typeof(InstanceList), new MessageHandler(InstanceListHandler));
+            messageHandlers.Add(typeof(InstanceJoined), new MessageHandler(InstanceJoinedHandler));
+            messageCodeHandlers.Add(MessageClass.InstanceSelectFailed, new MessageHandler(InstanceSelectFailedHandler));
             messageHandlers.Add(typeof(ServerVersInfo), new MessageHandler(ServerVersHandler));
             messageHandlers.Add(typeof(PlayerInfo), new MessageHandler(PlayerInfoHandler));
             messageHandlers.Add(typeof(PlayerListDone), new MessageHandler(PlayerListDoneHandler));
@@ -135,10 +137,18 @@ namespace P2501GameClient
             if (accept == null)
                 return;
 
-            ThisPlayer = sim.NewPlayer();
+            ThisPlayer = Sim.NewPlayer();
             ThisPlayer.ID = accept.PlayerID;
             ThisPlayer.Callsign = accept.Callsign;
 
+            RequestInstanceList();
+
+            if (LoginAcceptEvent != null)
+                LoginAcceptEvent(this, EventArgs.Empty);
+        }
+
+        public void RequestInstanceList ()
+        {
             Send(MessageClass.RequestInstanceList);
         }
 
@@ -160,13 +170,64 @@ namespace P2501GameClient
 
         protected void InstanceListHandler(MessageClass message)
         {
-            if (InstanceListEvent == null)
+            InstanceList info = message as InstanceList;
+            if (info == null)
                 return;
+
+            AvailableInstances.Clear();
+            foreach(InstanceList.InstanceDescription d in info.Instances)
+            {
+                InstanceDefinition def = new InstanceDefinition();
+                def.ID = d.ID;
+                def.Description = d.Description;
+                AvailableInstances.Add(def);
+            }
+
+            if (InstanceListEvent != null)
+                InstanceListEvent(this, EventArgs.Empty);
         }
 
-        public void SelectInstance ( int instance )
+        protected bool InstanceExists ( int id )
         {
+            foreach (InstanceDefinition def in AvailableInstances)
+            {
+                if (def.ID == id)
+                    return true;
+            }
+            return false;
+        }
 
+        public bool SelectInstance ( int instance )
+        {
+            if (!InstanceExists(instance))
+                return false;
+
+            InstanceSelect sel = new InstanceSelect();
+            sel.ID = instance;
+            Send(sel);
+            return true;
+        }
+
+        protected void InstanceJoinedHandler(MessageClass message)
+        {
+            InstanceJoined info = message as InstanceJoined;
+            if (info == null)
+            {
+                if (InstanceJoinFailedEvent != null)
+                    InstanceJoinFailedEvent(this, EventArgs.Empty);
+                return;
+            }
+            ConnectedInstance = info.ID;
+            if (InstanceJoinedEvent != null)
+                InstanceJoinedEvent(this, EventArgs.Empty);
+        }
+
+        protected void InstanceSelectFailedHandler(MessageClass message)
+        {
+            ConnectedInstance = -1;
+
+            if (InstanceJoinFailedEvent != null)
+                InstanceJoinFailedEvent(this, EventArgs.Empty);
         }
 
         protected void PlayerInfoHandler(MessageClass message)
@@ -175,7 +236,7 @@ namespace P2501GameClient
             if (info == null)
                 return;
 
-            Player player = sim.NewPlayer();
+            Player player = Sim.NewPlayer();
             player.ID = info.PlayerID;
             player.Callsign = info.Callsign;
             player.Score = info.Score;
@@ -203,6 +264,7 @@ namespace P2501GameClient
         protected void PlayerJoinAcceptHandler ( MessageClass message )
         {
             // just fire off a callback or something
+            sim.AddPlayer(ThisPlayer);
             SendPing();
         }
 
