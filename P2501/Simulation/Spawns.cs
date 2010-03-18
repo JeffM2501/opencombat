@@ -12,7 +12,7 @@ namespace Simulation
     {
         public static bool SpawnPlayer ( Player player, Sim sim )
         {
-            player.LastUpdateState.Position = new Vector3(FloatHelper.Random(-sim.Map.Bounds.X, sim.Map.Bounds.X), FloatHelper.Random(-sim.Map.Bounds.Y, sim.Map.Bounds.Y), 0);
+            player.LastUpdateState.Position = new Vector3(FloatHelper.Random(-sim.MapInfo.Bounds.X, sim.MapInfo.Bounds.X), FloatHelper.Random(-sim.MapInfo.Bounds.Y, sim.MapInfo.Bounds.Y), 0);
             player.LastUpdateState.Movement = Vector3.Zero;
             player.LastUpdateState.Rotation = FloatHelper.Random(-180f, 180f);
             player.LastUpdateState.Spin = 0;

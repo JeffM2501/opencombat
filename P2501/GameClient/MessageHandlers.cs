@@ -32,6 +32,7 @@ namespace P2501GameClient
             messageCodeHandlers.Add(MessageClass.AllowSpawn, new MessageHandler(AllowSpawnHandler));
             messageHandlers.Add(typeof(PlayerSpawn), new MessageHandler(PlayerSpawnHandler));
             messageHandlers.Add(typeof(TheTimeIsNow), new MessageHandler(TheTimeIsNowHandler));
+            messageHandlers.Add(typeof(InstanceSettings), new MessageHandler(InstanceSettingsHandler));
         }
 
         protected void Send ( MessageClass message )
@@ -230,6 +231,16 @@ namespace P2501GameClient
                 InstanceJoinFailedEvent(this, EventArgs.Empty);
         }
 
+        protected void InstanceSettingsHandler(MessageClass message)
+        {
+            InstanceSettings info = message as InstanceSettings;
+            if (info == null)
+                return;
+
+            sim.Settings = info.Settings;
+
+        }
+
         protected void PlayerInfoHandler(MessageClass message)
         {
             PlayerInfo info = message as PlayerInfo;
@@ -252,7 +263,7 @@ namespace P2501GameClient
             if (info == null)
                 return;
 
-            sim.Map = info.Map;
+           // sim.Map = info.Map;
         }
 
         protected void PlayerListDoneHandler ( MessageClass message )

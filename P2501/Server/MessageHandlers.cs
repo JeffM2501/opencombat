@@ -207,6 +207,10 @@ namespace Project2501Server
             joined.ID = instance.ID;
 
             Send(client, joined);
+
+            InstanceSettings settings = new InstanceSettings();
+            settings.Settings = instance.Settings.Settings;
+            Send(client, settings);
         }
 
         protected void PlayerJoinHandler(Client client, MessageClass message, ServerInstance instance)

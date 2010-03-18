@@ -3,12 +3,21 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Text;
 using System.Diagnostics;
+using System.IO;
 
 using Messages;
 using Simulation;
 
 namespace Project2501Server
 {
+    public class ServerInstanceSettings
+    {
+        public FileInfo MapFile;
+        public bool DieWhenEmpty= false;
+        public Simulation.SimSettings Settings;
+        public String Description = string.Empty;
+    }
+
     public class ServerInstanceManger
     {
         public static List<ServerInstance> Instances = new List<ServerInstance>();
@@ -25,51 +34,73 @@ namespace Project2501Server
             return null;
         }
 
-        public static void AddInstnace ( Server server, string desc, bool dieWhenEmpty )
+        public static int Count
+        {
+            get
+            {
+                lock (Instances)
+                {
+                    return Instances.Count;
+                }
+            }
+        }
+
+        public static void AddInstnace ( Server server, ServerInstanceSettings settings )
         {
             CheckDeads();
 
-            ServerInstance inst = new ServerInstance(server);
-            lastInstID ++;
-            inst.ID = lastInstID;
-            Instances.Add(inst);
-            inst.Description = desc;
-            inst.destroyOnEmpty = dieWhenEmpty;
-            inst.Start();
+            lock(Instances)
+            {
+                ServerInstance inst = new ServerInstance(server, settings);
+                lastInstID++;
+                inst.ID = lastInstID;
+                Instances.Add(inst);
+                inst.Description = settings.Description;
+                inst.Start();
+            }
         }
 
         protected static void CheckDeads()
         {
             List<ServerInstance> corpses = new List<ServerInstance>();
 
-            foreach(ServerInstance inst in Instances)
+            lock (Instances)
             {
-                if (inst.Dead)
-                    corpses.Add(inst);
-            }
+                foreach (ServerInstance inst in Instances)
+                {
+                    if (inst.Dead)
+                        corpses.Add(inst);
+                }
 
-            foreach (ServerInstance inst in corpses)
-                Instances.Remove(inst);
+                foreach (ServerInstance inst in corpses)
+                    Instances.Remove(inst);
+            }
         }
 
         public static KeyValuePair<int,string>[] GetInstanceList ()
         {
             CheckDeads();
-
+           
             List<KeyValuePair<int, string>> l = new List<KeyValuePair<int, string>>();
-            foreach (ServerInstance inst in Instances)
-                l.Add(new KeyValuePair<int, string>(inst.ID, inst.Description));
+            lock (Instances)
+            {
+                foreach (ServerInstance inst in Instances)
+                    l.Add(new KeyValuePair<int, string>(inst.ID, inst.Description));
+            }
 
             return l.ToArray();
         }
 
         public static void StopAll()
         {
-            CheckDeads();
-            foreach (ServerInstance inst in Instances)
-                inst.Kill();
+            lock (Instances)
+            {
+                CheckDeads();
+                foreach (ServerInstance inst in Instances)
+                    inst.Kill();
 
-            Instances.Clear();
+                Instances.Clear();
+            }
         }
     }
 
@@ -77,6 +108,12 @@ namespace Project2501Server
     {
         public int ID = -1;
         public string Description = string.Empty;
+
+        ServerInstanceSettings settings = null;
+        public ServerInstanceSettings Settings
+        {
+            get { return settings; }
+        }
 
         List<KeyValuePair<Client, MessageClass>> PendingMessages = new List<KeyValuePair<Client, MessageClass>>();
 
@@ -88,9 +125,13 @@ namespace Project2501Server
         protected Server server = null;
         protected Thread worker = null;
 
-        Sim sim = new Sim();
+        Sim sim = null;
 
-        public bool destroyOnEmpty = false;
+        public bool Valid 
+        {
+            get { return sim != null; }
+        }
+
         bool hadAJoin = false;
 
         Stopwatch stopwatch = new Stopwatch();
@@ -104,11 +145,16 @@ namespace Project2501Server
             get { return worker == null; }
         }
 
-        public ServerInstance ( Server s )
+        public ServerInstance ( Server s, ServerInstanceSettings serverSettings )
         {
+            settings = serverSettings;
             server = s;
             stopwatch.Start();
 
+            if (!settings.MapFile.Exists)
+                return;
+
+            sim = new Sim();
             sim.PlayerJoined += new PlayerJoinedHandler(sim_PlayerJoined);
             sim.PlayerRemoved += new PlayerRemovedHandler(sim_PlayerRemoved);
             sim.PlayerStatusChanged += new PlayerStatusChangeHandler(sim_PlayerStatusChanged);
@@ -162,7 +208,7 @@ namespace Project2501Server
                 ProcessMessages();
                 Thread.Sleep(100);
 
-                if (destroyOnEmpty && PlayingClients.Count == 0 && hadAJoin)
+                if (ServerInstanceManger.Count > 1 && settings.DieWhenEmpty && PlayingClients.Count == 0 && hadAJoin)
                     die = true;
             }
 
