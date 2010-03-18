@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.IO;
 using System.Text;
+
+using World;
 
 namespace Simulation
 {
@@ -39,13 +41,26 @@ namespace Simulation
         }
     }
 
+    public enum GameType
+    {
+        DeathMatch,
+        TeamDeathMatch,
+        CaptureTheFlag,
+        CaptureTheBase,
+        KillTheChicken,
+        Domination,
+        Assult,
+    }
+
     public class SimSettings
     {
+        public GameType GameMode = GameType.TeamDeathMatch;
         public float BaseSpeed = 70.0f;
         public float BaseTurnSpeed = 180.0f;
         public float BaseAcceleration = 25f;
         public float BaseTurnAcceleration = 10f;
     }
+    public delegate void SimEventHandler(object sender, EventArgs args);
 
     public delegate void ShotEndedHandler(object sender, ShotEventArgs args );
     public delegate void ShotStartedHandler(object sender, ShotEventArgs args);
@@ -55,13 +70,15 @@ namespace Simulation
     public delegate void PlayerUpdateHandler(object sender, PlayerUpdateEventArgs args);
     public delegate void PlayerStatusChangeHandler(object sender, PlayerEventArgs args);
 
-
     public class Sim
     {
-        public MapDef Map = new MapDef();
+        public MapDef MapInfo = new MapDef();
+        public PortalWorld World = null;
 
         public List<Player> Players = new List<Player>();
         public List<Shot> Shots = new List<Shot>();
+
+        public event SimEventHandler WorldChanged;
 
         public event ShotStartedHandler ShotStarted;
         public event ShotEndedHandler ShotEnded;
@@ -78,6 +95,18 @@ namespace Simulation
 
         public void Init ()
         {
+        }
+
+        public void SetWorld ( FileInfo file )
+        {
+            SetWorld(PortalWorld.Read(file));
+        } 
+
+        public void SetWorld ( PortalWorld w )
+        {
+            World = w;
+            if (WorldChanged != null)
+                WorldChanged(this, EventArgs.Empty);
         }
 
         public bool PlayerNameValid ( string name )

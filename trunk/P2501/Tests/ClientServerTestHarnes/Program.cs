@@ -15,7 +15,11 @@ namespace ClientServerTestHarnes
         {
             Server server = new Server(2501);
             server.NoTokenCheck = true;
-            server.Run();
+            if (!server.Run())
+            {
+                Console.WriteLine("Server failed to start");
+                return;
+            }
 
             GameClient client = new GameClient("localhost", 2501);
 

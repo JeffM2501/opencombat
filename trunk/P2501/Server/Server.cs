@@ -43,6 +43,7 @@ namespace Project2501Server
     public delegate void MessageHandler ( Client client, MessageClass message );
     public delegate void InstanceMessageHandler(Client client, MessageClass message, ServerInstance instance);
     public delegate bool PublicListCallback(ref string host, ref string name, ref string description, ref string key, ref string type);
+    public delegate void DefaultInstanceSetupCallback(ref ServerInstanceSettings settings );
 
     public partial class Server
     {
@@ -53,6 +54,7 @@ namespace Project2501Server
         public bool SaveMessages = true;
 
         public PublicListCallback PublicListInfo = null;
+        public DefaultInstanceSetupCallback DefaultInstanceSetup = null;
 
         MessageMapper messageMapper = new MessageMapper();
 
@@ -66,6 +68,8 @@ namespace Project2501Server
 
         Thread ServerThread = null;
 
+        ServerInstanceSettings defaultInstanceSettings = new ServerInstanceSettings();
+
         public int ServerSleepTime = 10;
         protected int port = 2501;
 
@@ -74,14 +78,22 @@ namespace Project2501Server
             port = p;
         }
 
-        public void Init ()
+        public bool Init ()
         {
+            defaultInstanceSettings.Description = "Root";
+            // setup the default settings
+            if (DefaultInstanceSetup != null)
+                DefaultInstanceSetup(ref defaultInstanceSettings);
+
+            if (!defaultInstanceSettings.MapFile.Exists)
+                return false;
+
             timer = new Stopwatch();
             timer.Start();
             host = new Host(port);
 
             // add the root instance
-            ServerInstanceManger.AddInstnace(this, string.Empty, false);
+            ServerInstanceManger.AddInstnace(this, defaultInstanceSettings);
 
             tokenChecker = new TokenChecker();
             serverLister = new ServerLister();
@@ -93,6 +105,7 @@ namespace Project2501Server
             InitMessageHandlers();
 
             listServer();
+            return true;
         }
 
         protected void listServer()
@@ -121,12 +134,17 @@ namespace Project2501Server
             serverLister.AddHost(job);
         }
 
-        public void Run ()
+        public bool Run ()
         {
             if (host == null)
-                Init();
+            {
+                if (!Init())
+                    return false;
+            }
             ServerThread = new Thread(new ThreadStart(PrivateRun));
             ServerThread.Start();
+
+            return true;
         }
 
         protected void PrivateRun()

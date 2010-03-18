@@ -46,7 +46,43 @@ namespace Messages
 
     public class MessageClass
     {
-        public Int32 Name = -1;
+        public Int32 Name = InvalidMessage;
+
+        public static int InvalidMessage = -1;
+
+        public static int Ping = 10;
+        public static int Pong = 20;
+
+        public static int Hail = 100;
+        public static int Disconnect = 110;
+        public static int WhatTimeIsIt = 180;
+        public static int TheTimeIsNow = 185;
+
+        public static int Login = 200;
+        public static int LoginAccept = 210;
+        public static int InstanceSelect = 220;
+        public static int InstanceSelectFailed = 222;
+        public static int InstanceJoined = 223;
+        public static int InstanceSettings = 225;
+
+        public static int RequestServerVersInfo = 300;
+        public static int ServerVersInfo = 305;
+        public static int RequestInstanceList = 350;
+        public static int InstanceList = 355;
+
+        public static int PlayerInfo = 400;
+        public static int PlayerListDone = 410;
+        public static int PlayerJoin = 420;
+        public static int PlayerJoinAccept = 430;
+
+        public static int RequestMapInfo = 500;
+        public static int MapInfo = 510;
+
+        public static int ChatMessage = 600;
+
+        public static int AllowSpawn = 700;
+        public static int RequestSpawn = 710;
+        public static int PlayerSpawn = 720;
 
         static int GetName ( ref NetBuffer  buffer )
         {
@@ -156,39 +192,6 @@ namespace Messages
 
             return state;
         }
-
-        public static int Ping = 10;
-        public static int Pong = 20;
-
-        public static int Hail = 100;
-        public static int Disconnect = 110;
-        public static int WhatTimeIsIt = 180;
-        public static int TheTimeIsNow = 185;
-
-        public static int Login = 200;
-        public static int LoginAccept = 210;
-        public static int InstanceSelect = 220;
-        public static int InstanceSelectFailed = 222;
-        public static int InstanceJoined = 223;
-
-        public static int RequestServerVersInfo = 300;
-        public static int ServerVersInfo = 305;
-        public static int RequestInstanceList = 350;
-        public static int InstanceList = 355;
-
-        public static int PlayerInfo = 400;
-        public static int PlayerListDone = 410;
-        public static int PlayerJoin = 420;
-        public static int PlayerJoinAccept = 430;
-
-        public static int RequestMapInfo = 500;
-        public static int MapInfo = 510;
-
-        public static int ChatMessage = 600;
-
-        public static int AllowSpawn = 700;
-        public static int RequestSpawn = 710;
-        public static int PlayerSpawn = 720;
     }
 
     public class Ping : MessageClass
@@ -519,6 +522,34 @@ namespace Messages
             return true;
         }
     }
+
+    public class InstanceSettings : MessageClass
+    {
+        public SimSettings Settings = new SimSettings();
+
+        public InstanceSettings()
+        {
+            Name = MessageClass.InstanceSettings;
+        }
+
+        public override NetBuffer Pack()
+        {
+            NetBuffer buffer = base.Pack();
+            PackClass(ref buffer, Settings);
+            return buffer;
+        }
+
+        public override bool Unpack(ref NetBuffer buffer)
+        {
+            if (!base.Unpack(ref buffer))
+                return false;
+
+            Settings = (SimSettings)UnpackClass(ref buffer);
+
+            return true;
+        }
+    }
+
     public class PlayerInfo : MessageClass
     {
         public UInt64 PlayerID = 0;
