@@ -1,19 +1,41 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.IO;
 using System.Text;
-
 
 using Project2501Server;
 using P2501GameClient;
+using Simulation;
 
 namespace ClientServerTestHarnes
 {
     class Program
     {
+        static FileInfo map;
+
         static void Main(string[] args)
         {
+            map = new FileInfo("./map.PortalMap");
+            if (!map.Exists)
+            {
+                map = new FileInfo("../map.PortalMap");
+                if (!map.Exists)
+                {
+                    map = new FileInfo("../../map.PortalMap");
+                    if (!map.Exists)
+                    {
+                        map = new FileInfo("../../../map.PortalMap");
+                        if (!map.Exists)
+                        {
+                            Console.WriteLine("Map not found");
+                            return;
+                        }
+                    }
+                }
+            }
+
             Server server = new Server(2501);
+            server.DefaultInstanceSetup = new DefaultInstanceSetupCallback(defaultInstCB);
             server.NoTokenCheck = true;
             if (!server.Run())
             {
@@ -63,6 +85,12 @@ namespace ClientServerTestHarnes
             UID = 1;
             CID = 1;
             Token = 1;
+        }
+
+        static void defaultInstCB(ref ServerInstanceSettings settings)
+        {
+            settings.MapFile = map;
+            settings.Settings.GameMode = GameType.TeamDeathMatch;
         }
     }
 }
