@@ -52,6 +52,7 @@ namespace Simulation
         Assult,
     }
 
+    [Serializable]
     public class SimSettings
     {
         public GameType GameMode = GameType.TeamDeathMatch;

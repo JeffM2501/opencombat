@@ -57,6 +57,10 @@
       <Project>{1A9B8887-1292-4F4A-BFFC-5290F794A898}</Project>
       <Name>Server</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Simulation\Simulation.csproj">
+      <Project>{55D7275D-C279-455E-8505-9E9C6A3BA1D1}</Project>
+      <Name>Simulation</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

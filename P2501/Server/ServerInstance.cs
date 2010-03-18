@@ -14,7 +14,7 @@ namespace Project2501Server
     {
         public FileInfo MapFile;
         public bool DieWhenEmpty= false;
-        public Simulation.SimSettings Settings;
+        public Simulation.SimSettings Settings = new Simulation.SimSettings();
         public String Description = string.Empty;
     }
 
