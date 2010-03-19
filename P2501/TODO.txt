@@ -1,0 +1,2 @@
+Make URL managers start and stop threads as needed, and use pools
+Make FileDownloadManager that can prepack and send files with hashes.
