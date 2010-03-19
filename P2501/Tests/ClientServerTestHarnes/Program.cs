@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Threading;
 
 using Project2501Server;
 using P2501GameClient;
@@ -12,6 +13,9 @@ namespace ClientServerTestHarnes
     class Program
     {
         static FileInfo map;
+
+        static object locker = new object();
+        static bool serverUp = false;
 
         static void Main(string[] args)
         {
@@ -37,11 +41,23 @@ namespace ClientServerTestHarnes
             Server server = new Server(2501);
             server.DefaultInstanceSetup = new DefaultInstanceSetupCallback(defaultInstCB);
             server.NoTokenCheck = true;
+            server.InstanceStarted +=new InstanceNotifiactionEventHandler(server_InstanceStarted);
             if (!server.Run())
             {
                 Console.WriteLine("Server failed to start");
                 return;
             }
+
+            while (true)
+            {
+                lock(locker)
+                {
+                    if (serverUp)
+                        break;
+                }
+                Thread.Sleep(100);
+            }
+            Console.WriteLine("Server Started");
 
             GameClient client = new GameClient("localhost", 2501);
 
@@ -49,13 +65,23 @@ namespace ClientServerTestHarnes
             client.InstanceListEvent += new GeneralEventHandler(client_InstanceListEvent);
             client.LoginAcceptEvent += new GeneralEventHandler(client_LoginAcceptEvent);
             client.HostConnectionEvent += new HostConnectionHandler(client_HostConnectionEvent);
+            
             while ( true )
             {
-                client.Update();
+                if (!client.Update())
+                    break;
             }
 
             client.Kill();
             server.Kill();
+        }
+
+        static void server_InstanceStarted(object sender, InstanceEventArgs args)
+        {
+            lock(locker)
+            {
+                serverUp = true;
+            }
         }
 
         static void client_HostConnectionEvent(object sender, HostConnectionEventArgs args)

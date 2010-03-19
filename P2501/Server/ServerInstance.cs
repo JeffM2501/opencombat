@@ -4,6 +4,9 @@ using System.Threading;
 using System.Text;
 using System.Diagnostics;
 using System.IO;
+using System.IO.Compression;
+using System.Xml;
+using System.Xml.Serialization;
 
 using Messages;
 using Simulation;
@@ -22,7 +25,22 @@ namespace Project2501Server
     {
         public static List<ServerInstance> Instances = new List<ServerInstance>();
 
+        static List<int> MournedInstances = new List<int>();
+
         static int lastInstID = 0;
+
+        public static int GetMournedInstance()
+        {
+            CheckDeads();
+            if (MournedInstances.Count > 0)
+            {
+                int id = MournedInstances[0];
+                MournedInstances.Remove(id);
+                return id;
+            }
+
+            return -1;
+        }
 
         public static ServerInstance GetInstance ( int ID )
         {
@@ -38,34 +56,27 @@ namespace Project2501Server
         {
             get
             {
-                lock (Instances)
-                {
-                    return Instances.Count;
-                }
+                return Instances.Count;
             }
         }
 
-        public static void AddInstnace ( Server server, ServerInstanceSettings settings )
+        public static int AddInstnace ( Server server, ServerInstanceSettings settings )
         {
             CheckDeads();
 
-            lock(Instances)
-            {
-                ServerInstance inst = new ServerInstance(server, settings);
-                lastInstID++;
-                inst.ID = lastInstID;
-                Instances.Add(inst);
-                inst.Description = settings.Description;
-                inst.Start();
-            }
+            ServerInstance inst = new ServerInstance(server, settings);
+            lastInstID++;
+            inst.ID = lastInstID;
+            Instances.Add(inst);
+            inst.Description = settings.Description;
+            inst.Start();
+            return inst.ID;
         }
 
         protected static void CheckDeads()
         {
             List<ServerInstance> corpses = new List<ServerInstance>();
 
-            lock (Instances)
-            {
                 foreach (ServerInstance inst in Instances)
                 {
                     if (inst.Dead)
@@ -73,8 +84,11 @@ namespace Project2501Server
                 }
 
                 foreach (ServerInstance inst in corpses)
+                {
+                    MournedInstances.Add(inst.ID);
                     Instances.Remove(inst);
-            }
+                }
+
         }
 
         public static KeyValuePair<int,string>[] GetInstanceList ()
@@ -82,25 +96,19 @@ namespace Project2501Server
             CheckDeads();
            
             List<KeyValuePair<int, string>> l = new List<KeyValuePair<int, string>>();
-            lock (Instances)
-            {
-                foreach (ServerInstance inst in Instances)
-                    l.Add(new KeyValuePair<int, string>(inst.ID, inst.Description));
-            }
+            foreach (ServerInstance inst in Instances)
+                l.Add(new KeyValuePair<int, string>(inst.ID, inst.Description));
 
             return l.ToArray();
         }
 
         public static void StopAll()
         {
-            lock (Instances)
-            {
-                CheckDeads();
-                foreach (ServerInstance inst in Instances)
-                    inst.Kill();
+            CheckDeads();
+            foreach (ServerInstance inst in Instances)
+                inst.Kill();
 
-                Instances.Clear();
-            }
+            Instances.Clear();
         }
     }
 
@@ -121,6 +129,10 @@ namespace Project2501Server
         List<Client> NewbornCients = new List<Client>();
 
         List<Client> PlayingClients = new List<Client>();
+
+        List<byte[]> worldMessages = new List<byte[]>();
+
+        int WorldMessageDataSize = 2048;
 
         protected Server server = null;
         protected Thread worker = null;
@@ -160,6 +172,38 @@ namespace Project2501Server
             sim.PlayerStatusChanged += new PlayerStatusChangeHandler(sim_PlayerStatusChanged);
 
             sim.Init();
+            sim.SetWorld(settings.MapFile);
+
+            // build a set of world buffers
+            byte[] buffer;
+            MemoryStream memStream = new MemoryStream();
+            sim.World.Write(memStream, true);
+            buffer = memStream.ToArray();
+            memStream.Close();
+
+            int pos = 0;
+            while ( pos < buffer.Length )
+            {
+                int size = WorldMessageDataSize;
+                if (buffer.Length - pos < size)
+                    size = buffer.Length - pos;
+
+                byte[] b = new byte[size];
+                for (int i = pos; i < pos + size; i++)
+                    b[i-pos] = buffer[i];
+
+                worldMessages.Add(b);
+                pos += size;
+            }
+        }
+
+        public void SendMap ( Client client )
+        {
+            if (!PlayingClients.Contains(client))
+                return;
+
+            for (int i = 0; i < worldMessages.Count; i++ )
+                server.Send(client, new MapInfo(worldMessages[i], worldMessages.Count,i+1));
         }
 
         public void AddMessage ( Client client, MessageClass message )

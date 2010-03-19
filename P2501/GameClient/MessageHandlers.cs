@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.IO;
 using System.Text;
 
 using Messages;
 using Simulation;
 using Lidgren.Network;
+
+using World;
 
 namespace P2501GameClient
 {
@@ -14,18 +16,20 @@ namespace P2501GameClient
         Dictionary<Type, MessageHandler> messageHandlers = new Dictionary<Type, MessageHandler>();
         Dictionary<int, MessageHandler> messageCodeHandlers = new Dictionary<int, MessageHandler>();
 
+        byte[][] mapBuffer = null;
+
         protected void InitMessageHandlers()
         {
             messageHandlers.Add(typeof(Ping), new MessageHandler(PingHandler));
             messageHandlers.Add(typeof(Pong), new MessageHandler(PongHandler));
-            messageHandlers.Add(typeof(Hail), new MessageHandler(HailHandler));
+            messageCodeHandlers.Add(MessageClass.Hail, new MessageHandler(HailHandler));
             messageHandlers.Add(typeof(LoginAccept), new MessageHandler(LoginAcceptHandler));
             messageHandlers.Add(typeof(InstanceList), new MessageHandler(InstanceListHandler));
             messageHandlers.Add(typeof(InstanceJoined), new MessageHandler(InstanceJoinedHandler));
             messageCodeHandlers.Add(MessageClass.InstanceSelectFailed, new MessageHandler(InstanceSelectFailedHandler));
             messageHandlers.Add(typeof(ServerVersInfo), new MessageHandler(ServerVersHandler));
             messageHandlers.Add(typeof(PlayerInfo), new MessageHandler(PlayerInfoHandler));
-            messageHandlers.Add(typeof(PlayerListDone), new MessageHandler(PlayerListDoneHandler));
+            messageCodeHandlers.Add(MessageClass.PlayerListDone, new MessageHandler(PlayerListDoneHandler));
             messageHandlers.Add(typeof(MapInfo), new MessageHandler(MapInfoHandler));
             messageCodeHandlers.Add(MessageClass.PlayerJoinAccept, new MessageHandler(PlayerJoinAcceptHandler));
             messageHandlers.Add(typeof(ChatMessage), new MessageHandler(ChatMessageHandler));
@@ -111,10 +115,6 @@ namespace P2501GameClient
 
         protected void HailHandler(MessageClass message)
         {
-            Hail hail = message as Hail;
-            if (hail == null)
-                return;
-
             SendClockUpdate();
 
             Login login = new Login();
@@ -239,6 +239,8 @@ namespace P2501GameClient
 
             sim.Settings = info.Settings;
 
+            mapBuffer = null;
+            Send(MessageClass.RequestMapInfo);
         }
 
         protected void PlayerInfoHandler(MessageClass message)
@@ -263,7 +265,40 @@ namespace P2501GameClient
             if (info == null)
                 return;
 
-           // sim.Map = info.Map;
+            if (mapBuffer == null)
+            {
+                mapBuffer = new byte[info.Total][];
+            }
+            else if ( mapBuffer.Length < info.Total)
+            {
+                byte[][] newbuf = new byte[info.Total][];
+                mapBuffer.CopyTo(newbuf,0);
+                mapBuffer = newbuf;
+            }
+            mapBuffer[info.Chunk - 1] = info.Data;
+
+            if (MapProgress != null)
+                MapProgress(this, new MapProgressEventArgs(info.Chunk, info.Total));
+
+            if (info.Chunk == info.Total)
+            {
+                int p = 0;
+                foreach( byte[] chunk in mapBuffer)
+                    p += chunk.Length;
+
+                byte[] buffer = new byte[p];
+                p = 0;
+                foreach( byte[] chunk in mapBuffer)
+                {
+                    chunk.CopyTo(buffer,p);
+                    p += chunk.Length;
+                }
+
+                sim.SetWorld(PortalWorld.Read(new MemoryStream(buffer),true));
+
+                if (MapLoaded != null)
+                    MapLoaded(this, EventArgs.Empty);
+            }
         }
 
         protected void PlayerListDoneHandler ( MessageClass message )
