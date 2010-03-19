@@ -1,2 +1,25 @@
+non graphics tasks
+
 Make URL managers start and stop threads as needed, and use pools
 Make FileDownloadManager that can prepack and send files with hashes.
+Send world using file manager
+player list
+chat
+spawn players
+player movement
+weapon/shot definition
+shot tracking
+pickups
+spawn types
+
+graphics tasks
+Draw world
+drawHud
+Better lighting
+tank drawing
+shot drawing
+pickup drawing
+
+
+
+
