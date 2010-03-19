@@ -260,14 +260,6 @@ namespace Messages
         }
     }
 
-    public class Hail : MessageClass
-    {
-        public Hail()
-        {
-            Name = MessageClass.Hail;
-        }
-    }
-
     public class Disconnect : MessageClass
     {
         public UInt64 ID = 0;
@@ -604,40 +596,35 @@ namespace Messages
         }
     }
 
-    public class PlayerListDone : MessageClass
-    {
-        public PlayerListDone()
-        {
-            Name = MessageClass.PlayerListDone;
-        }
-
-        public override NetChannel Channel()
-        {
-            return NetChannel.UnreliableInOrder2;
-        }
-    }
-
-    public class RequestMapInfo : MessageClass
-    {
-        public RequestMapInfo()
-        {
-            Name = MessageClass.RequestMapInfo;
-        }
-    }
-
     public class MapInfo : MessageClass
     {
-        public MapDef Map = null;
+        public int Size = 0;
+        public int Chunk = 0;
+        public int Total = 0;
+        public byte[] Data = null;
 
         public MapInfo()
         {
             Name = MessageClass.MapInfo;
         }
 
+        public MapInfo( byte[] b, int count, int i)
+        {
+            Name = MessageClass.MapInfo;
+            Data = b;
+            Size = b.Length;
+            Chunk = i;
+            Total = count;
+        }
+
+
         public override NetBuffer Pack()
         {
             NetBuffer buffer = base.Pack();
-            base.PackClass(ref buffer, Map);
+            buffer.Write(Chunk);
+            buffer.Write(Total);
+            buffer.Write(Size);
+            buffer.Write(Data);
             return buffer;
         }
 
@@ -646,7 +633,10 @@ namespace Messages
             if (!base.Unpack(ref buffer))
                 return false;
 
-            Map = (MapDef)base.UnpackClass(ref buffer);
+            Chunk = buffer.ReadInt32();
+            Total = buffer.ReadInt32();
+            Size = buffer.ReadInt32();
+            Data = buffer.ReadBytes(Size);
             return true;
         }
     }
@@ -680,15 +670,6 @@ namespace Messages
             From = buffer.ReadString();
             Message = buffer.ReadString();
            return true;
-        }
-    }
-
-    public class RequestSpawn : MessageClass
-    {
-        // todo, ship type goes here
-        public RequestSpawn()
-        {
-            Name = MessageClass.RequestSpawn;
         }
     }
 

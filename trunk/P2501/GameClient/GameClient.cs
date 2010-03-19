@@ -62,11 +62,24 @@ namespace P2501GameClient
         }
     }
 
+    public class MapProgressEventArgs : EventArgs
+    {
+        public int Position = 0;
+        public int Total = 0;
+
+        public MapProgressEventArgs(int p, int t)
+        {
+            Position = p;
+            Total = t;
+        }
+    }
+
     public delegate void ServerVersionHandler ( object sender, ServerVersionEventArgs args );
     public delegate void PlayerEventHandler(object sender, PlayerEventArgs args);
     public delegate void ChatEventHandler ( object sender, ChatEventArgs args );
     public delegate void HostConnectionHandler(object sender, HostConnectionEventArgs args);
     public delegate void GeneralEventHandler(object sender, EventArgs args);
+    public delegate void MapProgressEventHandler(object sender, MapProgressEventArgs args);
 
     public partial class GameClient
     {
@@ -86,6 +99,9 @@ namespace P2501GameClient
         public event GeneralEventHandler InstanceListEvent;
         public event GeneralEventHandler InstanceJoinedEvent;
         public event GeneralEventHandler InstanceJoinFailedEvent;
+
+        public event MapProgressEventHandler MapProgress;
+        public event GeneralEventHandler MapLoaded;
 
         public class InstanceDefinition
         {
@@ -204,11 +220,21 @@ namespace P2501GameClient
                     {
                         int name = buffer.ReadInt32();
                         MessageClass msg = messageMapper.MessageFromID(name);
-                        msg.Unpack(ref buffer);
+                        if (msg != null)
+                        {
+                            msg.Unpack(ref buffer);
 
-                        if (messageHandlers.ContainsKey(msg.GetType()))
-                            messageHandlers[msg.GetType()](msg);
-                    }
+                            if (messageHandlers.ContainsKey(msg.GetType()))
+                                messageHandlers[msg.GetType()](msg);
+                            if (messageCodeHandlers.ContainsKey(msg.Name))
+                                messageCodeHandlers[name](msg);
+                        }
+                        else
+                        {
+                            if (messageCodeHandlers.ContainsKey(name))
+                                messageCodeHandlers[name](MessageClass.NoDataMessage(name));
+                        }
+                   }
                     buffer = client.GetPentMessage();
                 }
 
@@ -237,9 +263,7 @@ namespace P2501GameClient
             if (requestedSpawn || ThisPlayer == null || ThisPlayer.Status != PlayerStatus.Despawned)
                 return;
 
-            requestedSpawn = true;
-            RequestSpawn msg = new RequestSpawn();
-            client.SendMessage(msg.Pack(), msg.Channel());
+            Send(MessageClass.RequestSpawn);
         }
 
         public void SendClockUpdate ( )

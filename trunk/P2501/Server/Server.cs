@@ -32,18 +32,24 @@ namespace Project2501Server
         {
             Connection = connection;
         }
-
-        public void Hail ( Host host )
-        {
-            Messages.Hail hail = new Messages.Hail();
-            host.SendMessage(Connection, hail.Pack(), hail.Channel());
-        }
     }
 
     public delegate void MessageHandler ( Client client, MessageClass message );
     public delegate void InstanceMessageHandler(Client client, MessageClass message, ServerInstance instance);
     public delegate bool PublicListCallback(ref string host, ref string name, ref string description, ref string key, ref string type);
     public delegate void DefaultInstanceSetupCallback(ref ServerInstanceSettings settings );
+    
+    public class InstanceEventArgs : EventArgs
+    {
+        public int InstanceID = 0;
+
+        public InstanceEventArgs ( int i ) : base()
+        {
+            InstanceID = i;
+        }
+    }
+
+    public delegate void InstanceNotifiactionEventHandler(object sender, InstanceEventArgs args);
 
     public partial class Server
     {
@@ -55,6 +61,9 @@ namespace Project2501Server
 
         public PublicListCallback PublicListInfo = null;
         public DefaultInstanceSetupCallback DefaultInstanceSetup = null;
+
+        public event InstanceNotifiactionEventHandler InstanceStarted;
+        public event InstanceNotifiactionEventHandler InstanceStoped;
 
         MessageMapper messageMapper = new MessageMapper();
 
@@ -88,15 +97,21 @@ namespace Project2501Server
             if (!defaultInstanceSettings.MapFile.Exists)
                 return false;
 
+            // add the root instance
+            int id = ServerInstanceManger.AddInstnace(this, defaultInstanceSettings);
+
+            if (InstanceStarted != null)
+                InstanceStarted(this, new InstanceEventArgs(id));
+
             timer = new Stopwatch();
             timer.Start();
             host = new Host(port);
 
-            // add the root instance
-            ServerInstanceManger.AddInstnace(this, defaultInstanceSettings);
-
-            tokenChecker = new TokenChecker();
-            serverLister = new ServerLister();
+            if (!NoTokenCheck)
+            {
+                tokenChecker = new TokenChecker();
+                serverLister = new ServerLister();
+            }
 
             host.Connect += new MonitoringEvent(host_Message);
             host.Disconnect += new MonitoringEvent(host_Message);
@@ -211,7 +226,7 @@ namespace Project2501Server
             {
                 Client client = new Client(newConnect);
                 Clients.Add(newConnect,client );
-                client.Hail(host);
+                Send(client, MessageClass.Hail);
                 newConnect = host.GetPentConnection();
             }
 
@@ -229,11 +244,22 @@ namespace Project2501Server
                 msg = host.GetPentMessage();
             }
 
-            TokenChecker.Job job = tokenChecker.GetFinishedJob();
-            while (job != null)
+            if (tokenChecker != null)
             {
-                ProcessTokenJob(job);
-                job = tokenChecker.GetFinishedJob();
+                TokenChecker.Job job = tokenChecker.GetFinishedJob();
+                while (job != null)
+                {
+                    ProcessTokenJob(job);
+                    job = tokenChecker.GetFinishedJob();
+                }
+            }
+
+            int deadInstance = ServerInstanceManger.GetMournedInstance();
+            while (deadInstance > 0)
+            {
+                if (InstanceStoped != null)
+                    InstanceStoped(this, new InstanceEventArgs(deadInstance));
+                deadInstance = ServerInstanceManger.GetMournedInstance();
             }
         }
 
