@@ -1,6 +1,6 @@
 {\rtf1\adeflang1025\ansi\ansicpg1252\uc1\adeff37\deff0\stshfdbch0\stshfloch0\stshfhich0\stshfbi0\deflang1033\deflangfe1033{\fonttbl{\f0\froman\fcharset0\fprq2{\*\panose 02020603050405020304}Times New Roman;}{\f1\fswiss\fcharset0\fprq2{\*\panose 020b0604020202020204}Arial;}
 {\f2\fmodern\fcharset0\fprq1{\*\panose 02070309020205020404}Courier New;}{\f3\froman\fcharset2\fprq2{\*\panose 05050102010706020507}Symbol;}{\f10\fnil\fcharset2\fprq2{\*\panose 05000000000000000000}Wingdings;}
-{\f37\froman\fcharset0\fprq2{\*\panose 02020603050405020304}Times;}{\f38\froman\fcharset238\fprq2 Times New Roman CE;}{\f39\froman\fcharset204\fprq2 Times New Roman Cyr;}{\f41\froman\fcharset161\fprq2 Times New Roman Greek;}
+{\f37\froman\fcharset0\fprq2{\*\panose 00000000000000000000}Times;}{\f38\froman\fcharset238\fprq2 Times New Roman CE;}{\f39\froman\fcharset204\fprq2 Times New Roman Cyr;}{\f41\froman\fcharset161\fprq2 Times New Roman Greek;}
 {\f42\froman\fcharset162\fprq2 Times New Roman Tur;}{\f43\fbidi \froman\fcharset177\fprq2 Times New Roman (Hebrew);}{\f44\fbidi \froman\fcharset178\fprq2 Times New Roman (Arabic);}{\f45\froman\fcharset186\fprq2 Times New Roman Baltic;}
 {\f46\froman\fcharset163\fprq2 Times New Roman (Vietnamese);}{\f48\fswiss\fcharset238\fprq2 Arial CE;}{\f49\fswiss\fcharset204\fprq2 Arial Cyr;}{\f51\fswiss\fcharset161\fprq2 Arial Greek;}{\f52\fswiss\fcharset162\fprq2 Arial Tur;}
 {\f53\fbidi \fswiss\fcharset177\fprq2 Arial (Hebrew);}{\f54\fbidi \fswiss\fcharset178\fprq2 Arial (Arabic);}{\f55\fswiss\fcharset186\fprq2 Arial Baltic;}{\f56\fswiss\fcharset163\fprq2 Arial (Vietnamese);}{\f58\fmodern\fcharset238\fprq1 Courier New CE;}
@@ -168,17 +168,17 @@ heading 2;}{\s3\ql \li0\ri0\sb240\sa240\sl-240\slmult0\widctlpar\wrapdefault\asp
 \rsid1140271\rsid1384120\rsid1515311\rsid1593215\rsid1605093\rsid1649060\rsid1655310\rsid1715131\rsid1792059\rsid1841583\rsid1969927\rsid2182728\rsid2187559\rsid2254517\rsid2373853\rsid2384809\rsid2490373\rsid2579887\rsid2623192\rsid2653142\rsid2690179
 \rsid2755765\rsid2828587\rsid2844417\rsid2960481\rsid3039012\rsid3173373\rsid3211592\rsid3277907\rsid3370782\rsid3418373\rsid3422757\rsid3548238\rsid3568085\rsid3628873\rsid3754027\rsid3810019\rsid3813299\rsid3826339\rsid3898634\rsid4140711\rsid4263897
 \rsid4289183\rsid4350367\rsid4523601\rsid4590079\rsid4615032\rsid4734378\rsid4812060\rsid4813488\rsid4863359\rsid4865219\rsid4871147\rsid4876373\rsid4925745\rsid4940435\rsid5010161\rsid5048064\rsid5053251\rsid5068188\rsid5077033\rsid5133905\rsid5201382
-\rsid5255037\rsid5272806\rsid5323016\rsid5392465\rsid5440063\rsid5581913\rsid5596449\rsid5666052\rsid5707211\rsid5851149\rsid5913119\rsid5966845\rsid5986641\rsid6050259\rsid6107434\rsid6242022\rsid6372494\rsid6437102\rsid6554890\rsid6625380\rsid6772453
-\rsid6902661\rsid6947236\rsid7015278\rsid7018033\rsid7276576\rsid7283616\rsid7424843\rsid7496515\rsid7604137\rsid7609766\rsid7610328\rsid7612436\rsid7801721\rsid7811558\rsid7941119\rsid7948205\rsid7949177\rsid8198570\rsid8325864\rsid8327695\rsid8337724
-\rsid8546763\rsid8608640\rsid8610109\rsid8617443\rsid8617629\rsid8726466\rsid8813556\rsid8860474\rsid8879086\rsid9140774\rsid9178181\rsid9379654\rsid9389417\rsid9396391\rsid9449821\rsid9468821\rsid9516288\rsid9651907\rsid9659731\rsid9715113\rsid9905943
-\rsid9985809\rsid10033085\rsid10053210\rsid10111868\rsid10250546\rsid10364659\rsid10492237\rsid10513878\rsid10564736\rsid10625191\rsid10647562\rsid10884446\rsid10908329\rsid10953848\rsid10972058\rsid11026138\rsid11079826\rsid11224589\rsid11292914
-\rsid11297192\rsid11361740\rsid11408728\rsid11409580\rsid11607017\rsid11611527\rsid11629039\rsid11683096\rsid11815375\rsid11818494\rsid11870928\rsid11874154\rsid11953443\rsid12020994\rsid12024132\rsid12125703\rsid12140963\rsid12149156\rsid12343095
-\rsid12404582\rsid12452421\rsid12533459\rsid12674375\rsid12680092\rsid12787115\rsid12792177\rsid12805214\rsid12916615\rsid12992396\rsid13000486\rsid13005892\rsid13046304\rsid13064600\rsid13194687\rsid13393072\rsid13576717\rsid13785124\rsid13837377
-\rsid13849975\rsid13852884\rsid13972010\rsid13975663\rsid13990209\rsid14095287\rsid14293521\rsid14311580\rsid14316599\rsid14377298\rsid14495065\rsid14564714\rsid14632799\rsid14639182\rsid14705685\rsid14776083\rsid14944045\rsid14971373\rsid15076994
-\rsid15082316\rsid15477123\rsid15547342\rsid15564288\rsid15676724\rsid15744370\rsid15752985\rsid15758049\rsid15826009\rsid16002536\rsid16060432\rsid16209378\rsid16275002\rsid16279574\rsid16472422\rsid16472457\rsid16475594\rsid16587535\rsid16590181
-\rsid16602184\rsid16671069\rsid16676020}{\*\generator Microsoft Word 11.0.0000;}{\info{\title Development Bible}{\author Jeffery Myers}{\operator Jeffery Myers}{\creatim\yr2010\mo3\dy5\hr15\min40}{\revtim\yr2010\mo3\dy17\hr12\min25}{\version26}
-{\edmins553}{\nofpages11}{\nofwords3465}{\nofchars19756}{\*\company Gibbs and Associates}{\nofcharsws23175}{\vern24615}{\*\password 00000000}}{\*\xmlnstbl {\xmlns1 http://schemas.microsoft.com/office/word/2003/wordml}{\xmlns2 urn:schemas-microsoft-com:off
-ice:smarttags}}\paperw12240\paperh15840\margl1440\margr1440\margt1440\margb1440\gutter0\ltrsect\rtlgutter 
+\rsid5255037\rsid5272806\rsid5323016\rsid5392465\rsid5440063\rsid5581913\rsid5596449\rsid5666052\rsid5707211\rsid5851149\rsid5913119\rsid5966845\rsid5986641\rsid6050259\rsid6107434\rsid6242022\rsid6372494\rsid6437102\rsid6554890\rsid6565276\rsid6625380
+\rsid6772453\rsid6902661\rsid6947236\rsid7015278\rsid7018033\rsid7276576\rsid7283616\rsid7424843\rsid7496515\rsid7604137\rsid7609766\rsid7610328\rsid7612436\rsid7801721\rsid7811558\rsid7941119\rsid7948205\rsid7949177\rsid8198570\rsid8325864\rsid8327695
+\rsid8337724\rsid8546763\rsid8608640\rsid8610109\rsid8617443\rsid8617629\rsid8726466\rsid8796203\rsid8813556\rsid8860474\rsid8879086\rsid8996043\rsid9140774\rsid9178181\rsid9379654\rsid9389417\rsid9396391\rsid9449821\rsid9468821\rsid9516288\rsid9651907
+\rsid9659731\rsid9715113\rsid9905943\rsid9985809\rsid10033085\rsid10053210\rsid10111868\rsid10250546\rsid10364659\rsid10492237\rsid10513878\rsid10564736\rsid10625191\rsid10647562\rsid10884446\rsid10908329\rsid10953848\rsid10972058\rsid11026138
+\rsid11079826\rsid11224589\rsid11292914\rsid11297192\rsid11361740\rsid11408728\rsid11409580\rsid11607017\rsid11611527\rsid11629039\rsid11683096\rsid11815375\rsid11818494\rsid11870928\rsid11874154\rsid11953443\rsid12020994\rsid12024132\rsid12125703
+\rsid12140963\rsid12149156\rsid12343095\rsid12404582\rsid12452421\rsid12533459\rsid12674375\rsid12680092\rsid12787115\rsid12792177\rsid12805214\rsid12916615\rsid12992396\rsid13000486\rsid13005892\rsid13046304\rsid13064600\rsid13194687\rsid13393072
+\rsid13576717\rsid13785124\rsid13837377\rsid13849975\rsid13852884\rsid13972010\rsid13975663\rsid13990209\rsid14095287\rsid14293521\rsid14311580\rsid14316599\rsid14377298\rsid14495065\rsid14564714\rsid14632799\rsid14639182\rsid14705685\rsid14776083
+\rsid14944045\rsid14971373\rsid15076994\rsid15082316\rsid15477123\rsid15547342\rsid15558013\rsid15564288\rsid15676724\rsid15744370\rsid15752985\rsid15758049\rsid15826009\rsid16002536\rsid16060432\rsid16209378\rsid16275002\rsid16279574\rsid16472422
+\rsid16472457\rsid16475594\rsid16587535\rsid16590181\rsid16602184\rsid16671069\rsid16676020}{\*\generator Microsoft Word 11.0.0000;}{\info{\title Development Bible}{\author Jeffery Myers}{\operator Jeffery Myers}{\creatim\yr2010\mo3\dy5\hr15\min40}
+{\revtim\yr2010\mo3\dy19\hr11\min37}{\version29}{\edmins641}{\nofpages11}{\nofwords3560}{\nofchars20298}{\*\company Gibbs and Associates}{\nofcharsws23811}{\vern24615}{\*\password 00000000}}{\*\xmlnstbl {\xmlns1 http://schemas.microsoft.com/office/word/20
+03/wordml}{\xmlns2 urn:schemas-microsoft-com:office:smarttags}}\paperw12240\paperh15840\margl1440\margr1440\margt1440\margb1440\gutter0\ltrsect\rtlgutter 
 \widowctrl\ftnbj\aenddoc\donotembedsysfont0\donotembedlingdata1\grfdocevents0\validatexml0\showplaceholdtext0\ignoremixedcontent0\saveinvalidxml0\showxmlerrors0\noxlattoyen\expshrtn\noultrlspc\dntblnsbdb\nospaceforul\hyphcaps0\formshade\horzdoc\dgmargin
 \dghspace180\dgvspace180\dghorigin1296\dgvorigin1440\dghshow1\dgvshow1
 \jexpand\viewkind4\viewscale100\pgbrdrhead\pgbrdrfoot\splytwnine\ftnlytwnine\htmautsp\nolnhtadjtbl\useltbaln\alntblind\lytcalctblwd\lyttblrtgr\lnbrkrule\nobrkwrptbl\snaptogridincell\allowfieldendsel\wrppunct\asianbrkrule\rsidroot3568085 \fet0
@@ -211,7 +211,7 @@ ice:smarttags}}\paperw12240\paperh15840\margl1440\margr1440\margt1440\margb1440\
 \par }\pard\plain \ltrpar\s26\qc \li0\ri0\sb60\sa60\keepn\widctlpar\wrapdefault\aspalpha\aspnum\faauto\adjustright\rin0\lin0\itap0\pararsid3568085 \rtlch\fcs1 \ab\af1\afs36\alang1025 \ltrch\fcs0 \b\f1\fs36\lang1033\langfe1033\cgrid\langnp1033\langfenp1033 {
 \rtlch\fcs1 \af1\afs32 \ltrch\fcs0 \fs32\insrsid3568085 \sect }\sectd \ltrsect\psz1\pgnlcrm\linex0\endnhere\sectdefaultcl\sftnbj {\headerr \ltrpar \pard\plain \ltrpar\s16\ql \li0\ri0\sl-240\slmult0\widctlpar
 \tqc\tx4680\tqr\tx9360\wrapdefault\aspalpha\aspnum\faauto\adjustright\rin0\lin0\itap0 \rtlch\fcs1 \ab\ai\af37\afs20\alang1025 \ltrch\fcs0 \b\i\f37\fs20\lang1033\langfe1033\cgrid\langnp1033\langfenp1033 {\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid12343095 
-Development Bible for Projekt 2501\tab \tab Page }{\field{\*\fldinst {\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid12343095  PAGE  \\* MERGEFORMAT }}{\fldrslt {\rtlch\fcs1 \af37 \ltrch\fcs0 \lang1024\langfe1024\noproof\insrsid15826009 ii}}}\sectd 
+Development Bible for Projekt 2501\tab \tab Page }{\field{\*\fldinst {\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid12343095  PAGE  \\* MERGEFORMAT }}{\fldrslt {\rtlch\fcs1 \af37 \ltrch\fcs0 \lang1024\langfe1024\noproof\insrsid8996043 ii}}}\sectd 
 \pgnlcrm\linex0\endnhere\sectdefaultcl\sftnbj {\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid12343095 
 \par }}{\footerr \ltrpar \pard\plain \ltrpar\s15\ql \li0\ri0\sl-240\slmult0\widctlpar\tqc\tx4680\tqr\tx9360\wrapdefault\aspalpha\aspnum\faauto\adjustright\rin0\lin0\itap0 \rtlch\fcs1 \ab\ai\af37\afs20\alang1025 \ltrch\fcs0 
 \b\i\f37\fs20\lang1033\langfe1033\cgrid\langnp1033\langfenp1033 {\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid12343095 
@@ -261,7 +261,7 @@ Development Bible for Projekt 2501\tab \tab Page }{\field{\*\fldinst {\rtlch\fcs
 \par \sect }\sectd \ltrsect\marglsxn1296\margrsxn1296\psz1\pgnrestart\linex0\sectdefaultcl\sectrsid3173373\sftnbj {\headerr \ltrpar \pard\plain \ltrpar\s16\ql \li0\ri0\sl-240\slmult0\widctlpar
 \tqc\tx4680\tqr\tx9630\wrapdefault\aspalpha\aspnum\faauto\adjustright\rin0\lin0\itap0 \rtlch\fcs1 \ab\ai\af37\afs20\alang1025 \ltrch\fcs0 \b\i\f37\fs20\lang1033\langfe1033\cgrid\langnp1033\langfenp1033 {\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid12343095 
 Software}{\rtlch\fcs1 \af37\afs24 \ltrch\fcs0 \fs24\insrsid12343095  }{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid12343095 Requirements Specification for Projekt 2501\tab \tab Page }{\field{\*\fldinst {\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid12343095  PAGE  \\
-* MERGEFORMAT }}{\fldrslt {\rtlch\fcs1 \af37 \ltrch\fcs0 \lang1024\langfe1024\noproof\insrsid15826009 5}}}\sectd \marglsxn1296\margrsxn1296\linex0\endnhere\sectdefaultcl\sftnbj {\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid12343095 
+* MERGEFORMAT }}{\fldrslt {\rtlch\fcs1 \af37 \ltrch\fcs0 \lang1024\langfe1024\noproof\insrsid8796203 5}}}\sectd \marglsxn1296\margrsxn1296\linex0\endnhere\sectdefaultcl\sftnbj {\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid12343095 
 \par }}{\listtext\pard\plain\ltrpar \s1 \rtlch\fcs1 \ab\af0\afs36 \ltrch\fcs0 \b\f37\fs36\kerning28\insrsid12680092 \hich\af37\dbch\af0\loch\f37 1.\tab}\pard\plain \ltrpar\s1\ql \li0\ri0\sb480\sa240\sl240\slmult0
 \keep\keepn\widctlpar\wrapdefault\aspalpha\aspnum\faauto\ls1\outlinelevel0\adjustright\rin0\lin0\itap0\pararsid12680092 \rtlch\fcs1 \ab\af37\afs36\alang1025 \ltrch\fcs0 \b\f37\fs36\lang1033\langfe1033\kerning28\cgrid\langnp1033\langfenp1033 {\rtlch\fcs1 
 \af37 \ltrch\fcs0 \insrsid12680092 Overview
@@ -289,9 +289,9 @@ l be great, but if that does not happen then it is perfectly acceptable for the 
 \widctlpar\wrapdefault\aspalpha\aspnum\faauto\ls1\ilvl2\outlinelevel2\adjustright\rin0\lin0\itap0\pararsid16676020 \rtlch\fcs1 \ab\af37\afs24\alang1025 \ltrch\fcs0 \b\f37\fs24\lang1033\langfe1033\cgrid\langnp1033\langfenp1033 {\rtlch\fcs1 \af37 
 \ltrch\fcs0 \insrsid16676020 Frank Siegert\rquote s Project 2501
 \par }\pard\plain \ltrpar\ql \li0\ri0\sl-240\slmult0\widctlpar\wrapdefault\aspalpha\aspnum\faauto\adjustright\rin0\lin0\itap0\pararsid6372494 \rtlch\fcs1 \af37\afs24\alang1025 \ltrch\fcs0 \f37\fs24\lang1033\langfe1033\cgrid\langnp1033\langfenp1033 
-{\field\fldedit{\*\fldinst {\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid6372494  HYPERLINK "http://www.wizards.de/%7Efrank/project2501/index.html" }{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid4865219 {\*\datafield 
+{\field\fldedit{\*\fldinst {\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid6372494  HYPERLINK "http://www.wizards.de/%7Efrank/project2501/index.html" }{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid6565276 {\*\datafield 
 00d0c9ea79f9bace118c8200aa004ba90b0200000003000000e0c9ea79f9bace118c8200aa004ba90b8000000068007400740070003a002f002f007700770077002e00770069007a0061007200640073002e00640065002f007e006600720061006e006b002f00700072006f006a0065006300740032003500300031002f00
-69006e006400650078002e00680074006d006c000000795881f43b1d7f48af2c825dc485276300000000a5ab00000000}}}{\fldrslt {\rtlch\fcs1 \af37 \ltrch\fcs0 \cs28\ul\cf2\insrsid6372494 \u-257\'3fhttp://www.wizards.de/~frank/project2501/index.html}}}\sectd 
+69006e006400650078002e00680074006d006c000000795881f43b1d7f48af2c825dc485276300000000a5ab0000000000}}}{\fldrslt {\rtlch\fcs1 \af37 \ltrch\fcs0 \cs28\ul\cf2\insrsid6372494 \u-257\'3fhttp://www.wizards.de/~frank/project2501/index.html}}}\sectd 
 \marglsxn1296\margrsxn1296\psz1\pgnrestart\linex0\sectdefaultcl\sectrsid3173373\sftnbj {\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid6372494 
 \par }{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid6372494\charrsid6372494 
 \par }\pard \ltrpar\ql \fi720\li0\ri0\sl-240\slmult0\widctlpar\wrapdefault\aspalpha\aspnum\faauto\adjustright\rin0\lin0\itap0\pararsid15676724 {\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid16676020 
@@ -334,14 +334,15 @@ ed to a small number of servers that are run by the project }{\rtlch\fcs1 \af37 
 t server in order to}{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid9389417  be sorted into the proper section for the client. }{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid13785124 Sections will be broken up into 3 main groups, Preferred, Community and }{\rtlch\fcs1 
 \af37 \ltrch\fcs0 \insrsid11297192 Leagues}{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid13785124 .}{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid6437102 
 \par }{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid13785124 
-\par Preferred servers will be servers run by the project, or run by community members that meet specific criteria in quality and management. This is an invite only system. The preferred section is the only section that will have servers that allow unverified 
-users to play. The main goal of this is to provide a place for new players to instantly play and learn the game, but at the same time to separate }{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid13576717\charrsid13576717 griefers }{\rtlch\fcs1 \af37 \ltrch\fcs0 
-\insrsid13785124 from the main community.}{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid11297192  }{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid11607017 Severs for }{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid13576717 unverified}{\rtlch\fcs1 \af37 \ltrch\fcs0 
-\insrsid11607017  users}{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid13576717  will have in-}{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid11297192 game \'93tool tips\'94 and help prompts to assist the player in learning the game.}{\rtlch\fcs1 \af37 \ltrch\fcs0 
-\insrsid13785124 
+\par Preferred servers will be servers run by the project, or run by community members that meet specific cr
+iteria in quality and management. This is an invite only system. The preferred section is the only section that will have servers that allow unverified users to play. The main goal of this is to provide a place for new players to instantly play and learn 
+the game, but at the same time to separate }{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid13576717\charrsid13576717 griefers }{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid13785124 from the main community.}{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid11297192  }{\rtlch\fcs1 
+\af37 \ltrch\fcs0 \insrsid11607017 Severs for }{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid13576717 unverified}{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid11607017  users}{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid13576717  will have in-}{\rtlch\fcs1 \af37 \ltrch\fcs0 
+\insrsid11297192 game \'93tool tips\'94 and help prompts to assist the player in learning the game.}{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid13785124 
 \par 
-\par Community servers can be run by anyone that requests an authentication key from the list system. They will only show for players who have verified email addresses, but are not run by the project itself. Community s
-erver owners must provide a valid email address and have a registered game account to get an authentication key.
+\par Community servers can be run by anyone that requests an authe
+ntication key from the list system. They will only show for players who have verified email addresses, but are not run by the project itself. Community server owners must provide a valid email address and have a registered game account to get an authentic
+ation key.
 \par 
 \par League servers are similar to community servers but have been tagged as belonging to a registered league. These servers will only be show to members of the league, and will have instances that can be \lquote locked down\rquote 
  to specific teams to allow for match play.
@@ -355,22 +356,22 @@ erver owners must provide a valid email address and have a registered game accou
 \af37 \ltrch\fcs0 \insrsid7811558 \tab }{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid11297192 Game Servers
 \par }\pard\plain \ltrpar\ql \fi720\li0\ri0\sl-240\slmult0\widctlpar\wrapdefault\aspalpha\aspnum\faauto\adjustright\rin0\lin0\itap0\pararsid11297192 \rtlch\fcs1 \af37\afs24\alang1025 \ltrch\fcs0 \f37\fs24\lang1033\langfe1033\cgrid\langnp1033\langfenp1033 {
 \rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid11297192 Game servers will host one or more game states at a time. Each game state will be considered an \lquote instance\rquote 
-, and not affect any other instance. Instances do not have to run the same map or rule set, nor use the same resources. Instances can be created or deleted \'93on the fly\'94 as 
-the server runs. Server owners can set various conditions or permissions on specific instances as needed. Players can }{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid13576717 change instances as needed with}{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid11297192 
+, and not affect any other instance. Instances do not have to run the same map or rule set, nor use the same resources. Instances can be created or deleted \'93on the fly\'94
+ as the server runs. Server owners can set various conditions or permissions on specific instances as needed. Players can }{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid13576717 change instances as needed with}{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid11297192 
 out reconnecting.
 \par }\pard \ltrpar\ql \li0\ri0\sl-240\slmult0\widctlpar\wrapdefault\aspalpha\aspnum\faauto\adjustright\rin0\lin0\itap0\pararsid11297192 {\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid11297192 
-\par }\pard \ltrpar\ql \fi720\li0\ri0\sl-240\slmult0\widctlpar\wrapdefault\aspalpha\aspnum\faauto\adjustright\rin0\lin0\itap0\pararsid12343095 {\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid11297192 
-An instance represents a complete game state, including score. By default}{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid2373853 ,}{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid11297192  changing instance will reset a player\rquote 
-s score and state, in the same way a new player is treated. Server }{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid12343095 plug-ins}{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid11297192  can be made to change this behavior if desired.}{\rtlch\fcs1 \af37 \ltrch\fcs0 
-\insrsid12343095  This gamestate is managed by the GameState assembly that is shared with the game client using synced communication. 
+\par }\pard \ltrpar\ql \fi720\li0\ri0\sl-240\slmult0\widctlpar\wrapdefault\aspalpha\aspnum\faauto\adjustright\rin0\lin0\itap0\pararsid12343095 {\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid11297192 An instance represents a complete game state,
+ including score. By default}{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid2373853 ,}{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid11297192  changing instance will reset a player\rquote s score and state, in the same way a new player is treated. Server }{\rtlch\fcs1 
+\af37 \ltrch\fcs0 \insrsid12343095 plug-ins}{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid11297192  can be made to change this behavior if desired.}{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid12343095  This gamestate is managed by the GameState assembly that is shar
+ed with the game client using synced communication. 
 \par }{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid5323016 
 \par Game servers will push }{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid12404582 statistics}{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid5323016  up to a global collection system.
 \par {\listtext\pard\plain\ltrpar \s3 \rtlch\fcs1 \ab\af0 \ltrch\fcs0 \b\f37\insrsid5323016 \hich\af37\dbch\af0\loch\f37 1.4.1\tab}}\pard\plain \ltrpar\s3\ql \li0\ri0\sb240\sa240\sl-240\slmult0
 \widctlpar\wrapdefault\aspalpha\aspnum\faauto\ls1\ilvl2\outlinelevel2\adjustright\rin0\lin0\itap0\pararsid5323016 \rtlch\fcs1 \ab\af37\afs24\alang1025 \ltrch\fcs0 \b\f37\fs24\lang1033\langfe1033\cgrid\langnp1033\langfenp1033 {\rtlch\fcs1 \af37 
 \ltrch\fcs0 \insrsid5323016 Updates
 \par }\pard\plain \ltrpar\ql \fi720\li0\ri0\sl-240\slmult0\widctlpar\wrapdefault\aspalpha\aspnum\faauto\adjustright\rin0\lin0\itap0\pararsid5323016 \rtlch\fcs1 \af37\afs24\alang1025 \ltrch\fcs0 \f37\fs24\lang1033\langfe1033\cgrid\langnp1033\langfenp1033 {
-\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid5323016 All servers that register publicly will be automatically entered into an online mailing list that will notify owners of new versions of the server. Servers that ar
-e not running the current version will not be listed.}{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid5323016\charrsid5323016 
+\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid5323016 All servers that register publicly will be automatically entered into an online mailing list that will notify owners of 
+new versions of the server. Servers that are not running the current version will not be listed.}{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid5323016\charrsid5323016 
 \par }\pard \ltrpar\ql \fi720\li0\ri0\sl-240\slmult0\widctlpar\wrapdefault\aspalpha\aspnum\faauto\adjustright\rin0\lin0\itap0\pararsid12343095 {\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid12343095 
 \par {\listtext\pard\plain\ltrpar \s2 \rtlch\fcs1 \ab\af0\afs28 \ltrch\fcs0 \b\f37\fs28\insrsid4523601 \hich\af37\dbch\af0\loch\f37 1.5\tab}}\pard\plain \ltrpar\s2\ql \li0\ri0\sb280\sa280\sl240\slmult0
 \keep\keepn\widctlpar\wrapdefault\aspalpha\aspnum\faauto\ls1\ilvl1\outlinelevel1\adjustright\rin0\lin0\itap0\pararsid4523601 \rtlch\fcs1 \ab\af37\afs28\alang1025 \ltrch\fcs0 \b\f37\fs28\lang1033\langfe1033\cgrid\langnp1033\langfenp1033 {\rtlch\fcs1 \af37 
@@ -379,9 +380,8 @@ e not running the current version will not be listed.}{\rtlch\fcs1 \af37 \ltrch\
 \rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid4523601 The game client will be a C# application using windows forms and OpenTK. The application wil}{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid2373853 l consist of 2 main interfaces:}{\rtlch\fcs1 \af37 \ltrch\fcs0 
 \insrsid4523601  the launcher form and the main game display.
 \par 
-\par The launcher f
-orm will contain the interface for player registration/authentication, character management, server listing, and a simple news browser. Menu items will also be available to configure graphics preferences for the main game view such as screen resolution an
-d items to enable the player to configure various input settings}{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid12343095 
+\par The launcher form will contain the interface for player registration/authentication, character management, server listing, and a simple news browser. Menu items will also be available to configure graphics preferences for the m
+ain game view such as screen resolution and items to enable the player to configure various input settings}{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid12343095 
 \par }{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid4523601 
 \par The news browser will be a simple HTML control that connects to a special blog page on the project's website.
 \par 
@@ -391,39 +391,37 @@ d items to enable the player to configure various input settings}{\rtlch\fcs1 \a
 \widctlpar\wrapdefault\aspalpha\aspnum\faauto\ls1\ilvl2\outlinelevel2\adjustright\rin0\lin0\itap0\pararsid14311580 \rtlch\fcs1 \ab\af37\afs24\alang1025 \ltrch\fcs0 \b\f37\fs24\lang1033\langfe1033\cgrid\langnp1033\langfenp1033 {\rtlch\fcs1 \af37 
 \ltrch\fcs0 \insrsid14311580 Update system
 \par }\pard\plain \ltrpar\ql \fi720\li0\ri0\sl-240\slmult0\widctlpar\wrapdefault\aspalpha\aspnum\faauto\adjustright\rin0\lin0\itap0\pararsid5323016 \rtlch\fcs1 \af37\afs24\alang1025 \ltrch\fcs0 \f37\fs24\lang1033\langfe1033\cgrid\langnp1033\langfenp1033 {
-\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid14311580 The game will have an automated update system}{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid5323016  that is able to update clients as soon as they 
-launch the client. This system will perform a series of updates as needed in order to keep the clients on the current version. Development builds will have an option of disabling the update system for program data.}{\rtlch\fcs1 \af37 \ltrch\fcs0 
-\insrsid14311580 
+\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid14311580 The game will have an automated update system}{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid5323016 
+ that is able to update clients as soon as they launch the client. This system will perform a series of updates as needed in order to keep the clients on the current version. Development builds will have an option of disabling the update system for progra
+m data.}{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid14311580 
 \par }\pard \ltrpar\ql \li0\ri0\sl-240\slmult0\widctlpar\wrapdefault\aspalpha\aspnum\faauto\adjustright\rin0\lin0\itap0\pararsid14311580 {\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid5323016 
-\par }\pard \ltrpar\ql \fi720\li0\ri0\sl-240\slmult0\widctlpar\wrapdefault\aspalpha\aspnum\faauto\adjustright\rin0\lin0\itap0\pararsid5323016 {\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid5323016 The main entry point into the game will 
-be a small OS specific launcher. On start this launcher will check the user\rquote 
-s home directory/profile to locate a launcher of a higher version. If one exists it will launch it and exit. Once the launcher starts it will check for updates to the patcher. If t}{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid217372 here are updates (}{
-\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid5323016 
-as identified by a version number sent back from the central server), then they will be downloaded and installed replacing the existing files. If the install directory is not writeable then the system will ask the OS to elevate permissio}{\rtlch\fcs1 
-\af37 \ltrch\fcs0 \insrsid217372 ns (}{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid5323016 UAC on windows, whatever else it is on mac). If this is not possible then the patch system will be installed into the user\rquote 
+\par }\pard \ltrpar\ql \fi720\li0\ri0\sl-240\slmult0\widctlpar\wrapdefault\aspalpha\aspnum\faauto\adjustright\rin0\lin0\itap0\pararsid5323016 {\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid5323016 
+The main entry point into the game will be a small OS specific launcher. On start this launcher will check the user\rquote s home directory/profile to locate a launcher of a higher version. If one exists it will launch it and exit. Once the launcher start
+s it will check for updates to the patcher. If t}{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid217372 here are updates (}{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid5323016 as identified by a version number
+ sent back from the central server), then they will be downloaded and installed replacing the existing files. If the install directory is not writeable then the system will ask the OS to elevate permissio}{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid217372 ns (
+}{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid5323016 UAC on windows, whatever else it is on mac). If this is not possible then the patch system will be installed into the user\rquote 
 s home directory/profile. After updates to the patch system, the launcher will invoke the patch system.
 \par 
 \par The patch system will download a file list and version info from the central server and compare the data archive version to}{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid217372  a stored version that is in it}{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid5323016 
-s profile data. If the last patched version does not exist, or is different then the server version the patch process will star
-t. During patching the system will download a complete list of files for the entire data archive, complete with MD5 checksums for each file. The system will scan compare these checksums against the stored checksums for the last patch on each file. If a ch
-ecksum does not match or does not exist the file will be downloaded}{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid996167  via HTTP}{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid5323016 
- and installed. Files that have local checksums but are not listed in the server list will be deleted. In a similar manner to the launcher, if access to the installed files is not a
-llowed, the OS will be asked to elevate permissions, and if that fails, the files will be saved into the user\rquote s profile directory.
+s profile data. If the last patched version does not exist, or is different then the server version the patch process will start. During patching the system will download a compl
+ete list of files for the entire data archive, complete with MD5 checksums for each file. The system will scan compare these checksums against the stored checksums for the last patch on each file. If a checksum does not match or does not exist the file wi
+ll be downloaded}{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid996167  via HTTP}{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid5323016 
+ and installed. Files that have local checksums but are not listed in the server list will be deleted. In a similar manner to the launcher, if access to the installed files is not allowed, the OS will be asked to elevate permissions
+, and if that fails, the files will be saved into the user\rquote s profile directory.
 \par 
 \par When patching is complete the patcher will execute the }{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid996167 current m}{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid5323016 ain client}{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid996167  app}{\rtlch\fcs1 \af37 \ltrch\fcs0 
-\insrsid5323016  ( from the install dir, or the profile dir )}{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid996167  
-and run the game. The game client will be made in such a way where it will check for resources in the profile dir first before using the install dir, allowing for the use of the most current content.}{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid5323016 
+\insrsid5323016  ( from the install dir, or the profile dir )}{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid996167  and run the game. The game client will be made in s
+uch a way where it will check for resources in the profile dir first before using the install dir, allowing for the use of the most current content.}{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid5323016 
 \par 
-\par }{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid996167 A tool will be made to build up the required data archi
-ve for storage on the main server. Each file will have an entry with full path, URL, and MD5 checksum. Each file will then be compressed using gzip and copied to a separate folder structure to be uploaded to the update server.}{\rtlch\fcs1 \af37 
-\ltrch\fcs0 \insrsid5323016 
+\par }{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid996167 A tool will be made to build up the required data archive for storage on the main server. Each file will h
+ave an entry with full path, URL, and MD5 checksum. Each file will then be compressed using gzip and copied to a separate folder structure to be uploaded to the update server.}{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid5323016 
 \par {\listtext\pard\plain\ltrpar \s3 \rtlch\fcs1 \ab\af0 \ltrch\fcs0 \b\f37\insrsid14311580 \hich\af37\dbch\af0\loch\f37 1.5.2\tab}}\pard\plain \ltrpar\s3\ql \li0\ri0\sb240\sa240\sl-240\slmult0
 \widctlpar\wrapdefault\aspalpha\aspnum\faauto\ls1\ilvl2\outlinelevel2\adjustright\rin0\lin0\itap0\pararsid14311580 \rtlch\fcs1 \ab\af37\afs24\alang1025 \ltrch\fcs0 \b\f37\fs24\lang1033\langfe1033\cgrid\langnp1033\langfenp1033 {\rtlch\fcs1 \af37 
 \ltrch\fcs0 \insrsid14311580 Distribution
 \par }\pard\plain \ltrpar\ql \fi720\li0\ri0\sl-240\slmult0\widctlpar\wrapdefault\aspalpha\aspnum\faauto\adjustright\rin0\lin0\itap0\pararsid996167 \rtlch\fcs1 \af37\afs24\alang1025 \ltrch\fcs0 \f37\fs24\lang1033\langfe1033\cgrid\langnp1033\langfenp1033 {
-\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid996167 As previou
-sly stated the main deliverables will be mostly platform independent. Only a small platform specific launcher will need to be made in order to give the end user an acceptable starting experience for the host OS. The use of an automated update system can a
-llow the initial deliverable to be a very small package including just a version of the launcher, letting it download the rest of the application as part of the normal update system.}{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid14311580\charrsid14311580 
+\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid996167 As previously stated the main deliverables will be mostly pla
+tform independent. Only a small platform specific launcher will need to be made in order to give the end user an acceptable starting experience for the host OS. The use of an automated update system can allow the initial deliverable to be a very small pac
+kage including just a version of the launcher, letting it download the rest of the application as part of the normal update system.}{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid14311580\charrsid14311580 
 \par }\pard \ltrpar\ql \fi720\li0\ri0\sl-240\slmult0\widctlpar\wrapdefault\aspalpha\aspnum\faauto\adjustright\rin0\lin0\itap0\pararsid12343095 {\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid14311580 
 \par {\listtext\pard\plain\ltrpar \s1 \rtlch\fcs1 \ab\af0\afs36 \ltrch\fcs0 \b\f37\fs36\kerning28\insrsid12343095 \hich\af37\dbch\af0\loch\f37 2.\tab}}\pard\plain \ltrpar\s1\ql \li0\ri0\sb480\sa240\sl240\slmult0
 \keep\keepn\widctlpar\wrapdefault\aspalpha\aspnum\faauto\ls1\outlinelevel0\adjustright\rin0\lin0\itap0\pararsid12343095 \rtlch\fcs1 \ab\af37\afs36\alang1025 \ltrch\fcs0 \b\f37\fs36\lang1033\langfe1033\kerning28\cgrid\langnp1033\langfenp1033 {\rtlch\fcs1 
@@ -440,17 +438,16 @@ llow the initial deliverable to be a very small package including just a version
 \keep\keepn\widctlpar\wrapdefault\aspalpha\aspnum\faauto\ls1\ilvl1\outlinelevel1\adjustright\rin0\lin0\itap0\pararsid10908329 \rtlch\fcs1 \ab\af37\afs28\alang1025 \ltrch\fcs0 \b\f37\fs28\lang1033\langfe1033\cgrid\langnp1033\langfenp1033 {\rtlch\fcs1 
 \af37 \ltrch\fcs0 \insrsid10908329 \tab Players
 \par }\pard\plain \ltrpar\ql \fi720\li0\ri0\sl-240\slmult0\widctlpar\wrapdefault\aspalpha\aspnum\faauto\adjustright\rin0\lin0\itap0\pararsid10908329 \rtlch\fcs1 \af37\afs24\alang1025 \ltrch\fcs0 \f37\fs24\lang1033\langfe1033\cgrid\langnp1033\langfenp1033 {
-\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid10908329 
-Players take charge of a vehicle (aka. Tank) and pilot it throughout the game world. Each tank is equipped with a shield generator and at least one weapon. Additional weapons and accessories are available in the game world that modifies the tank\rquote 
-s behavior.}{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid12343095 
+\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid10908329 Players take charge of a vehicle (aka. Tank) and pilot it throughout the game world. 
+Each tank is equipped with a shield generator and at least one weapon. Additional weapons and accessories are available in the game world that modifies the tank\rquote s behavior.}{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid12343095 
 \par }\pard \ltrpar\ql \li720\ri0\sl-240\slmult0\widctlpar\wrapdefault\aspalpha\aspnum\faauto\adjustright\rin0\lin720\itap0\pararsid10908329 {\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid10908329\charrsid12343095 
 \par {\listtext\pard\plain\ltrpar \s3 \rtlch\fcs1 \ab\af0 \ltrch\fcs0 \b\f37\insrsid10908329 \hich\af37\dbch\af0\loch\f37 2.2.1\tab}}\pard\plain \ltrpar\s3\ql \li0\ri0\sb240\sa240\sl-240\slmult0
 \widctlpar\wrapdefault\aspalpha\aspnum\faauto\ls1\ilvl2\outlinelevel2\adjustright\rin0\lin0\itap0\pararsid10908329 \rtlch\fcs1 \ab\af37\afs24\alang1025 \ltrch\fcs0 \b\f37\fs24\lang1033\langfe1033\cgrid\langnp1033\langfenp1033 {\rtlch\fcs1 \af37 
 \ltrch\fcs0 \insrsid10908329 Damage}{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid10908329\charrsid10908329 
 \par }\pard\plain \ltrpar\ql \fi720\li0\ri0\sl-240\slmult0\widctlpar\wrapdefault\aspalpha\aspnum\faauto\adjustright\rin0\lin0\itap0\pararsid10908329 \rtlch\fcs1 \af37\afs24\alang1025 \ltrch\fcs0 \f37\fs24\lang1033\langfe1033\cgrid\langnp1033\langfenp1033 {
 \rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid10908329 
-As tank encounter shots from other players or the world they will take damage. This damage is represented as a numeric value. A tanks shield generator will absorb as much damage as possible each time the tank is hit. 
-Shield generators have a rating for how much damage they can absorb. Damage that is left over after a shield is discharged will be applied directly to the body rating of the tank. When a tank\rquote s body rating is reduced to zero it will explode.
+As tank encounter shots from other players or the world they will take damage. This damage is represented as a numeric value. A tanks shield generator will absorb as much damage as possible each time the tank is hit. Shield generators have a rating for ho
+w much damage they can absorb. Damage that is left over after a shield is discharged will be applied directly to the body rating of the tank. When a tank\rquote s body rating is reduced to zero it will explode.
 \par }\pard \ltrpar\ql \li0\ri0\sl-240\slmult0\widctlpar\wrapdefault\aspalpha\aspnum\faauto\adjustright\rin0\lin0\itap0\pararsid10908329 {\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid10908329 
 \par \tab A shield generator that is not sustaining active damage will regenerate at a fixed rate based on the specific tank\rquote s current shield generation rating. By default  shield regeneration will begin one (1) second after a shot hits a tank.
 \par 
@@ -459,25 +456,32 @@ Shield generators have a rating for how much damage they can absorb. Damage that
 \widctlpar\wrapdefault\aspalpha\aspnum\faauto\ls1\ilvl2\outlinelevel2\adjustright\rin0\lin0\itap0\pararsid10908329 \rtlch\fcs1 \ab\af37\afs24\alang1025 \ltrch\fcs0 \b\f37\fs24\lang1033\langfe1033\cgrid\langnp1033\langfenp1033 {\rtlch\fcs1 \af37 
 \ltrch\fcs0 \insrsid10908329 Weapons
 \par }\pard\plain \ltrpar\ql \fi720\li0\ri0\sl-240\slmult0\widctlpar\wrapdefault\aspalpha\aspnum\faauto\adjustright\rin0\lin0\itap0\pararsid14632799 \rtlch\fcs1 \af37\afs24\alang1025 \ltrch\fcs0 \f37\fs24\lang1033\langfe1033\cgrid\langnp1033\langfenp1033 {
-\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid10908329 Tanks are equipped with a primary defau
-lt weapon. This weapon is energy based and pulls from shot power buffer. This power buffer is rated in damage points and regenerates at a fixed rate that is specified by the }{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid14632799 tank\rquote s power}{
-\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid10908329  rating.}{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid14632799  A limited number of additional weapons can be mounted on the 
-tank during play. Each tank has a specific number of additional weapons that can be equipped at a time. When a tank has filled all of its weapon slots it can no longer equip new weapons until it drops an existing one. The default weapon can not be dropped
-. The player can switch to any equipped weapon at will, with a short server defined switch time.}{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid10908329 
-\par }\pard \ltrpar\ql \li720\ri0\sl-240\slmult0\widctlpar\wrapdefault\aspalpha\aspnum\faauto\adjustright\rin0\lin720\itap0\pararsid10908329 {\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid14632799 
-\par }{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid14632799\charrsid10908329 
+\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid10908329 Tanks are equipped with a primary default weapon. This weapon is energy based 
+and pulls from shot power buffer. This power buffer is rated in damage points and regenerates at a fixed rate that is specified by the }{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid14632799 tank\rquote s power}{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid10908329 
+ rating.}{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid14632799  A limited number of additional weapons can be mounted on the tank during play. Each tank has a speci
+fic number of additional weapons that can be equipped at a time. When a tank has filled all of its weapon slots it can no longer equip new weapons until it drops an existing one. The default weapon can not be dropped. The player can switch to any equipped
+ weapon at will, with a short server defined switch time.}{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid10908329 
+\par }\pard \ltrpar\ql \li0\ri0\sl-240\slmult0\widctlpar\wrapdefault\aspalpha\aspnum\faauto\adjustright\rin0\lin0\itap0\pararsid8996043 {\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid14632799\charrsid10908329 
 \par }\pard \ltrpar\ql \li0\ri0\sl-240\slmult0\widctlpar\wrapdefault\aspalpha\aspnum\faauto\adjustright\rin0\lin0\itap0\pararsid10908329 {\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid14632799 \tab Weapons may use the tank\rquote 
 s power buffer for shots, internal ammunition supplies, or a mixture of both as defined by the weapon type. Weapons that use internal ammunition are not useable when the supply runs out, and the weapon will be automatically des-pawned.}{\rtlch\fcs1 \af37 
 \ltrch\fcs0 \insrsid9379654  Weapons that use ammunition but are not empty can be dropped into the game world, but retain the level of ammunition they had.}{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid10908329 
 \par }{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid14776083 
-\par \tab Weapons generate shots 
-that apply specific damage values to targets when it is detonated. Optionally a shot may generate area based splash damage when it is detonated. Each shot type has a detonation detection radius that will trigger the damage effects.
+\par \tab Weapons generate shots that apply specific damage values to ta
+rgets when it is detonated. Optionally a shot may generate area based splash damage when it is detonated. Each shot type has a detonation detection radius that will trigger the damage effects.
 \par 
 \par \tab Shots can have varying flight characteristics as defined by the shot type.
 \par }{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid9379654 
 \par \tab Specific pickup object or }{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid8617443 areas}{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid9379654  in the map can reload ammunition based weapons.
-\par }{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid7604137 
-\par {\listtext\pard\plain\ltrpar \s4 \rtlch\fcs1 \ab\ai\af0\afs22 \ltrch\fcs0 \b\i\f37\fs22\insrsid7604137 \hich\af37\dbch\af0\loch\f37 2.2.2.1\tab}}\pard\plain \ltrpar\s4\qj \li0\ri0\sb240\sa60\sl-220\slmult0
+\par {\listtext\pard\plain\ltrpar \s4 \rtlch\fcs1 \ab\ai\af0\afs22 \ltrch\fcs0 \b\i\f37\fs22\insrsid8996043 \hich\af37\dbch\af0\loch\f37 2.2.2.1\tab}}\pard\plain \ltrpar\s4\qj \li0\ri0\sb240\sa60\sl-220\slmult0
+\keepn\widctlpar\wrapdefault\aspalpha\aspnum\faauto\ls1\ilvl3\outlinelevel3\adjustright\rin0\lin0\itap0\pararsid8996043 \rtlch\fcs1 \ab\ai\af0\afs22\alang1025 \ltrch\fcs0 \b\i\f37\fs22\lang1033\langfe1033\cgrid\langnp1033\langfenp1033 {\rtlch\fcs1 \af0 
+\ltrch\fcs0 \insrsid8996043 Weapon Definitions
+\par }\pard\plain \ltrpar\ql \fi720\li0\ri0\sl-240\slmult0\widctlpar\wrapdefault\aspalpha\aspnum\faauto\adjustright\rin0\lin0\itap0\pararsid8996043 \rtlch\fcs1 \af37\afs24\alang1025 \ltrch\fcs0 \f37\fs24\lang1033\langfe1033\cgrid\langnp1033\langfenp1033 {
+\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid8996043 Weapons will be defined with a common weapon descriptor that fully defines the weapon, including graphical and game characteristics.
+ It will contain a reference to a shot definition that is described in a similar way. Both shots and weapons will have a soft named reference to various graphical effects that the client will use and the server will ign
+ore. The data stored in shots and weapon defs will be used to create a hash (md5?). This has can be used by the client for caching reasons }{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid8796203 (mostly}{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid8996043  
+to see if the user has ever picked up the weapon before for in game help (always show, never show, show first N times ).}{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid8996043\charrsid8996043 
+\par }\pard \ltrpar\ql \li0\ri0\sl-240\slmult0\widctlpar\wrapdefault\aspalpha\aspnum\faauto\adjustright\rin0\lin0\itap0\pararsid10908329 {\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid7604137 
+\par {\listtext\pard\plain\ltrpar \s4 \rtlch\fcs1 \ab\ai\af0\afs22 \ltrch\fcs0 \b\i\f37\fs22\insrsid7604137 \hich\af37\dbch\af0\loch\f37 2.2.2.2\tab}}\pard\plain \ltrpar\s4\qj \li0\ri0\sb240\sa60\sl-220\slmult0
 \keepn\widctlpar\wrapdefault\aspalpha\aspnum\faauto\ls1\ilvl3\outlinelevel3\adjustright\rin0\lin0\itap0\pararsid2623192 \rtlch\fcs1 \ab\ai\af0\afs22\alang1025 \ltrch\fcs0 \b\i\f37\fs22\lang1033\langfe1033\cgrid\langnp1033\langfenp1033 {\rtlch\fcs1 \af0 
 \ltrch\fcs0 \insrsid7604137 Weapon Flight Modes
 \par }\pard\plain \ltrpar\ql \li0\ri0\sl-240\slmult0\widctlpar\wrapdefault\aspalpha\aspnum\faauto\adjustright\rin0\lin0\itap0\pararsid7604137 \rtlch\fcs1 \af37\afs24\alang1025 \ltrch\fcs0 \f37\fs24\lang1033\langfe1033\cgrid\langnp1033\langfenp1033 {
@@ -489,7 +493,7 @@ that apply specific damage values to targets when it is detonated. Optionally a 
 \par }\pard \ltrpar\ql \li360\ri0\sl-240\slmult0\widctlpar\wrapdefault\aspalpha\aspnum\faauto\adjustright\rin0\lin360\itap0\pararsid7604137 {\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid7604137 
 \par Each mode can be optionally guided or unguided.
 \par }{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid2623192 
-\par {\listtext\pard\plain\ltrpar \s4 \rtlch\fcs1 \ab\ai\af0\afs22 \ltrch\fcs0 \b\i\f37\fs22\insrsid2623192 \hich\af37\dbch\af0\loch\f37 2.2.2.2\tab}}\pard\plain \ltrpar\s4\qj \li0\ri0\sb240\sa60\sl-220\slmult0
+\par {\listtext\pard\plain\ltrpar \s4 \rtlch\fcs1 \ab\ai\af0\afs22 \ltrch\fcs0 \b\i\f37\fs22\insrsid2623192 \hich\af37\dbch\af0\loch\f37 2.2.2.3\tab}}\pard\plain \ltrpar\s4\qj \li0\ri0\sb240\sa60\sl-220\slmult0
 \keepn\widctlpar\wrapdefault\aspalpha\aspnum\faauto\ls1\ilvl3\outlinelevel3\adjustright\rin0\lin0\itap0\pararsid2623192 \rtlch\fcs1 \ab\ai\af0\afs22\alang1025 \ltrch\fcs0 \b\i\f37\fs22\lang1033\langfe1033\cgrid\langnp1033\langfenp1033 {\rtlch\fcs1 \af0 
 \ltrch\fcs0 \insrsid2623192 Specific Weapons
 \par }\pard\plain \ltrpar\ql \li360\ri0\sl-240\slmult0\widctlpar\wrapdefault\aspalpha\aspnum\faauto\adjustright\rin0\lin360\itap0\pararsid7604137 \rtlch\fcs1 \af37\afs24\alang1025 \ltrch\fcs0 \f37\fs24\lang1033\langfe1033\cgrid\langnp1033\langfenp1033 {
@@ -513,8 +517,8 @@ that apply specific damage values to targets when it is detonated. Optionally a 
 \widctlpar\wrapdefault\aspalpha\aspnum\faauto\ls1\ilvl2\outlinelevel2\adjustright\rin0\lin0\itap0\pararsid10908329 \rtlch\fcs1 \ab\af37\afs24\alang1025 \ltrch\fcs0 \b\f37\fs24\lang1033\langfe1033\cgrid\langnp1033\langfenp1033 {\rtlch\fcs1 \af37 
 \ltrch\fcs0 \insrsid10908329 Movement
 \par }\pard\plain \ltrpar\ql \fi720\li0\ri0\sl-240\slmult0\widctlpar\wrapdefault\aspalpha\aspnum\faauto\adjustright\rin0\lin0\itap0\pararsid791811 \rtlch\fcs1 \af37\afs24\alang1025 \ltrch\fcs0 \f37\fs24\lang1033\langfe1033\cgrid\langnp1033\langfenp1033 {
-\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid791811 Tank movement is directed by the pilot and consists of at least two axes of movement. The pilot can rotate the tank around its central vertical axis in ord
-er to turn left and right, accelerate or decelerate the tank along it\rquote 
+\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid791811 Tank movement is directed by the pilot and consists of at least two axes of movement. The pilot can rotate the tank aroun
+d its central vertical axis in order to turn left and right, accelerate or decelerate the tank along it\rquote 
 s facing axis in order move forward and backwards. Optimally for some game modes and tank types the pilot can move the tank sideways at a slower speed (sidestep for hover tanks), or cause the tank to accelerate briefly in the vertical axis ( jump).
 \par }\pard \ltrpar\ql \li0\ri0\sl-240\slmult0\widctlpar\wrapdefault\aspalpha\aspnum\faauto\adjustright\rin0\lin0\itap0\pararsid791811 {\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid791811 
 \par }\pard \ltrpar\ql \fi720\li0\ri0\sl-240\slmult0\widctlpar\wrapdefault\aspalpha\aspnum\faauto\adjustright\rin0\lin0\itap0\pararsid791811 {\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid791811 
@@ -525,8 +529,8 @@ Acceleration and deceleration values are specified per tank, based on global phy
  These aim movements will be controlled by a mouse or joystick, not by keys. This is to give the shot vector maximum granularity.}{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid791811 
 \par 
 \par As tanks move throughout the world and encounter obstacles, they will first attempt to drive over them if they are lower then a specified distance. A tank will sit at the orientation of the obstacle or world geometry that }{\rtlch\fcs1 \af37 \ltrch\fcs0 
-\insrsid16279574 is directly under its center point. World collision will move the tank to the best possible point to prevent the tank\rquote s bounding cylinder from inter
-secting any world objects or geometry. When collisions happen only the direction of motion that point into the collision are blocked, allowing the cylinder to \lquote slide\rquote 
+\insrsid16279574 is directly under its center point. World collision will move the tank to the best possible point to prevent the tank\rquote 
+s bounding cylinder from intersecting any world objects or geometry. When collisions happen only the direction of motion that point into the collision are blocked, allowing the cylinder to \lquote slide\rquote 
  around obstacles at a slower rate then normal driving. No collisions or falling will cause a tank to rotate in any axis. As a tank falls it\rquote 
 s orientation will be set by the normal of the surface that is projected to be under the tank as it falls. When orientation changes are needed they will be interpolated at a fast rate set by the server that is common to all tanks.}{\rtlch\fcs1 \af37 
 \ltrch\fcs0 \insrsid791811\charrsid791811 
@@ -539,10 +543,10 @@ s orientation will be set by the normal of the surface that is projected to be u
 Like weapons when all slots are full, no new accessories can be installed. 
 \par }\pard \ltrpar\ql \li0\ri0\sl-240\slmult0\widctlpar\wrapdefault\aspalpha\aspnum\faauto\adjustright\rin0\lin0\itap0\pararsid16279574 {\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid3211592 
 \par }\pard \ltrpar\ql \fi720\li0\ri0\sl-240\slmult0\widctlpar\wrapdefault\aspalpha\aspnum\faauto\adjustright\rin0\lin0\itap0\pararsid3211592 {\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid16279574 Accessories modify normal equipment or provide additional }{
-\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid3211592 capabilities. Installed accessories can individually be activated or deactivated. When activated, an accessory will ether be passive and draw power from the tank\rquote s power buffer, or generate some kin
-d of effect then deactivate (one shot). One shot accessories may have a number of \'93charges\'94 based on type. When all the charges of a one shot accessory are used, it will automatically de-spawn. If another one shot accessory of the same type }{
-\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid9379654 as one that has been used but is not empty, it will replace the existing accessory. Accessories can not be dropped into the world once they have been installed.}{\rtlch\fcs1 \af37 \ltrch\fcs0 
-\insrsid16279574\charrsid16279574 
+\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid3211592 capabilities. Installed accessories can individually be activated or deactivated. When activated, an accessory will ether be passive and draw power from the tank\rquote 
+s power buffer, or generate some kind of effect then deactivate (one shot). One shot accessories may have a number of \'93charges\'94 based on type. When all the charges of a one shot accessory are used, it will automatic
+ally de-spawn. If another one shot accessory of the same type }{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid9379654 
+as one that has been used but is not empty, it will replace the existing accessory. Accessories can not be dropped into the world once they have been installed.}{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid16279574\charrsid16279574 
 \par }\pard \ltrpar\ql \li0\ri0\sl-240\slmult0\widctlpar\wrapdefault\aspalpha\aspnum\faauto\adjustright\rin0\lin0\itap0\pararsid12343095 {\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid12343095 
 \par {\listtext\pard\plain\ltrpar \s4 \rtlch\fcs1 \ab\ai\af0\afs22 \ltrch\fcs0 \b\i\f37\fs22\insrsid2187559 \hich\af37\dbch\af0\loch\f37 2.2.4.1\tab}}\pard\plain \ltrpar\s4\qj \li0\ri0\sb240\sa60\sl-220\slmult0
 \keepn\widctlpar\wrapdefault\aspalpha\aspnum\faauto\ls1\ilvl3\outlinelevel3\adjustright\rin0\lin0\itap0\pararsid2623192 \rtlch\fcs1 \ab\ai\af0\afs22\alang1025 \ltrch\fcs0 \b\i\f37\fs22\lang1033\langfe1033\cgrid\langnp1033\langfenp1033 {\rtlch\fcs1 \af0 
@@ -550,8 +554,8 @@ d of effect then deactivate (one shot). One shot accessories may have a number o
 \par {\listtext\pard\plain\ltrpar \rtlch\fcs1 \af37 \ltrch\fcs0 \f3\insrsid2187559 \loch\af3\dbch\af0\hich\f3 \'b7\tab}}\pard\plain \ltrpar\ql \fi-360\li720\ri0\sl-240\slmult0\widctlpar
 \jclisttab\tx720\wrapdefault\aspalpha\aspnum\faauto\ls14\adjustright\rin0\lin720\itap0\pararsid2187559 \rtlch\fcs1 \af37\afs24\alang1025 \ltrch\fcs0 \f37\fs24\lang1033\langfe1033\cgrid\langnp1033\langfenp1033 {\rtlch\fcs1 \af37 \ltrch\fcs0 
 \insrsid2187559 Super Radar: Extends }{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid13194687 sensor}{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid2187559  view
-\par {\listtext\pard\plain\ltrpar \rtlch\fcs1 \af37 \ltrch\fcs0 \f3\insrsid2187559 \loch\af3\dbch\af0\hich\f3 \'b7\tab}Super Shields: Increases }{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid13194687 shield}{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid2187559  regen at th
-e cost of power
+\par {\listtext\pard\plain\ltrpar \rtlch\fcs1 \af37 \ltrch\fcs0 \f3\insrsid2187559 \loch\af3\dbch\af0\hich\f3 \'b7\tab}Super Shields: Increases }{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid13194687 shield}{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid2187559 
+ regen at the cost of power
 \par {\listtext\pard\plain\ltrpar \rtlch\fcs1 \af37 \ltrch\fcs0 \f3\insrsid2187559 \loch\af3\dbch\af0\hich\f3 \'b7\tab}Repulse: Fixed Charges, sends all shots away
 \par {\listtext\pard\plain\ltrpar \rtlch\fcs1 \af37 \ltrch\fcs0 \f3\insrsid2187559 \loch\af3\dbch\af0\hich\f3 \'b7\tab}Turbo: Double speed at the cost of power
 \par {\listtext\pard\plain\ltrpar \rtlch\fcs1 \af37 \ltrch\fcs0 \f3\insrsid2187559 \loch\af3\dbch\af0\hich\f3 \'b7\tab}Thermal Sensor: See tanks through nearby obstacles
@@ -571,17 +575,16 @@ e cost of power
 \widctlpar\wrapdefault\aspalpha\aspnum\faauto\ls1\ilvl2\outlinelevel2\adjustright\rin0\lin0\itap0\pararsid14944045 \rtlch\fcs1 \ab\af37\afs24\alang1025 \ltrch\fcs0 \b\f37\fs24\lang1033\langfe1033\cgrid\langnp1033\langfenp1033 {\rtlch\fcs1 \af37 
 \ltrch\fcs0 \insrsid14944045 Overview
 \par }\pard\plain \ltrpar\ql \li0\ri0\sl-240\slmult0\widctlpar\wrapdefault\aspalpha\aspnum\faauto\adjustright\rin0\lin0\itap0\pararsid14944045 \rtlch\fcs1 \af37\afs24\alang1025 \ltrch\fcs0 \f37\fs24\lang1033\langfe1033\cgrid\langnp1033\langfenp1033 {
-\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid14944045 \tab The world w
-ill be defined as a simplified portal system consisting of groups of linked cells. Each 'cell' in the world will be an area where players can move. These cells will be stored in groups that are linked by shared edges called portals. Cells can be any plana
-r
- polygon and are defined with both a floor a ceiling. The edges of a cell can link to N other cells. When a pair of cells share an edge any difference in Z between the connecting cells will be filled with a vertical wall of the appropriate size. Cells can
- optionally define flags that will not draw any wall, floor, or ceiling.
+\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid14944045 \tab The world will be defined as a simplified portal system consisting of groups of linked cells. Each 'cell' in the world will be an area where players can move. These cells will be stored in 
+groups that are linked by shared edges called portals. Cells can be any planar polygon and are defined with both a floor a ceiling. The edges of a cell can link to N other cells. When a pair of cells share an edge any difference in Z between the connectin
+g cells will be filled with a vertical wall of the appropriate size. Cells can optionally define flags that will not draw any wall, floor, or ceiling.
 \par 
-\par \tab This system will allow for a clean mix of indoor/outdoor geometry and provide an efficient culling system with support for occlusion. Cells that do not draw the ceiling and some wall
-s will show a skybox background and appear to be "outside" instead of just a large room.
+\par \tab This system will allow for a clean mix of indoor/outdoor geo
+metry and provide an efficient culling system with support for occlusion. Cells that do not draw the ceiling and some walls will show a skybox background and appear to be "outside" instead of just a large room.
 \par 
-\par \tab Each cell or can reference a list of object instances to be placed in them. Object instances that span cell boundaries will be referenced in all cells that t
-hey are in, letting the graphics system  manage the removal of duplicate drawing. Non graphic instance locations will also be stored in the cells in order to specify special locations such as player/weapon spawns, and  event triggers.
+\par \tab Each cell or can reference a list of object
+ instances to be placed in them. Object instances that span cell boundaries will be referenced in all cells that they are in, letting the graphics system  manage the removal of duplicate drawing. Non graphic instance locations will also be stored in the c
+ells in order to specify special locations such as player/weapon spawns, and  event triggers.
 \par 
 \par \tab The map will be stored as compressed binary data saved from the .net serialization functions. There is no need for the map format to be human readable. Tools will be used to fully edit map files.}{\rtlch\fcs1 \af37 \ltrch\fcs0 
 \insrsid14944045\charrsid9449821 
@@ -605,31 +608,32 @@ hey are in, letting the graphics system  manage the removal of duplicate drawing
 \keepn\widctlpar\wrapdefault\aspalpha\aspnum\faauto\ls1\ilvl3\outlinelevel3\adjustright\rin0\lin0\itap0\pararsid4523601 \rtlch\fcs1 \ab\ai\af0\afs22\alang1025 \ltrch\fcs0 \b\i\f37\fs22\lang1033\langfe1033\cgrid\langnp1033\langfenp1033 {\rtlch\fcs1 \af0 
 \ltrch\fcs0 \insrsid4523601 Window/Graphics Setup
 \par }\pard\plain \ltrpar\ql \li0\ri0\sl-240\slmult0\widctlpar\wrapdefault\aspalpha\aspnum\faauto\adjustright\rin0\lin0\itap0\pararsid14776083 \rtlch\fcs1 \af37\afs24\alang1025 \ltrch\fcs0 \f37\fs24\lang1033\langfe1033\cgrid\langnp1033\langfenp1033 {
-\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid4523601 \tab 
-Window and graphics setup options will all take place on the game's main "launcher" form before the 3d view is initialized. Any changes to the view will require the player to disconnect from a game server and change the settings
- before reconnecting. This may seem a little harsh but it is simpler to implement, and prevents players from using these controls to induce lag. Graphics setup will be a one/rare time action that players do on first run/hardware change.
+\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid4523601 \tab Window and graphics setup options will all take place on the game's main "launcher" form before the 3d view is initialized. Any changes to the view will require the player to disc
+onnect from a game server and change the settings before reconnecting. This may seem a little harsh but it is simpler to implement, and prevents players from using these controls to induce lag. Graphics setup will be a one/rare time action that players do
+ on first run/hardware change.
 \par }{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid9449821 
 \par {\listtext\pard\plain\ltrpar \s4 \rtlch\fcs1 \ab\ai\af0\afs22 \ltrch\fcs0 \b\i\f37\fs22\insrsid6242022 \hich\af37\dbch\af0\loch\f37 4.1.1.2\tab}}\pard\plain \ltrpar\s4\qj \li0\ri0\sb240\sa60\sl-220\slmult0
 \keepn\widctlpar\wrapdefault\aspalpha\aspnum\faauto\ls1\ilvl3\outlinelevel3\adjustright\rin0\lin0\itap0\pararsid9449821 \rtlch\fcs1 \ab\ai\af0\afs22\alang1025 \ltrch\fcs0 \b\i\f37\fs22\lang1033\langfe1033\cgrid\langnp1033\langfenp1033 {\rtlch\fcs1 \af0 
 \ltrch\fcs0 \insrsid6242022 World Rendering}{\rtlch\fcs1 \af0 \ltrch\fcs0 \insrsid9449821 
 \par }\pard\plain \ltrpar\ql \li0\ri0\sl-240\slmult0\widctlpar\wrapdefault\aspalpha\aspnum\faauto\adjustright\rin0\lin0\itap0\pararsid14944045 \rtlch\fcs1 \af37\afs24\alang1025 \ltrch\fcs0 \f37\fs24\lang1033\langfe1033\cgrid\langnp1033\langfenp1033 {
 \rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid9449821 \tab }{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid6242022 
-The Game system will render the world using a portal traversal system, starting from the cell the camera is in. Should the camera ever go outside all cells, it will be up to the application to decide what to draw. Editors should draw all cells, the 
-game should draw from the last cell.}{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid14776083 
+The Game system will render the world using a portal traversal system, starting from the cell the camera is in. Should the camera ever go outside all cells, it will be up to the application to decide 
+what to draw. Editors should draw all cells, the game should draw from the last cell.}{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid14776083 
 \par }{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid4523601 
-\par \tab This style of rendering system will allow multiple cells to occupy the same 3d space, but not be shown as overlapping if the visibility system does not walk into the cell via a portal connected to the current viewset.
- Special portals can also be made that change the rendering position of any items viewed through it. This these 2 features will allow the use of 5d space and "portals in space" types of rendering (see marathon, and quake style portals)
+\par \tab This style of rendering system will allow multiple cells to occupy the same 3d space, but not be shown as overlapping if the visibility system does not walk into the ce
+ll via a portal connected to the current viewset. Special portals can also be made that change the rendering position of any items viewed through it. This these 2 features will allow the use of 5d space and "portals in space" types of rendering (see marat
+hon, and quake style portals)
 \par }{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid15758049 
-\par \tab The graphics syste
-m will use a basic materials system that will allow a color and texture for each face. Future releases may add more surface options. Transparent faces will be sorted and drawn after opaque ones. All world faces will support static light maps and the world
- will use fixed lights. Dynamic lighting effects will be handled via projected textures or shaders.
+\par \tab The graphics system will use a basic materials system that will allow a color and texture for each face. Future releases may add more surface options. Transparent faces will be sorted and drawn after opaque ones. All world fa
+ces will support static light maps and the world will use fixed lights. Dynamic lighting effects will be handled via projected textures or shaders.
 \par }{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid9516288 
 \par {\listtext\pard\plain\ltrpar \s3 \rtlch\fcs1 \ab\af0 \ltrch\fcs0 \b\f37\insrsid9516288 \hich\af37\dbch\af0\loch\f37 4.1.2\tab}}\pard\plain \ltrpar\s3\ql \li0\ri0\sb240\sa240\sl-240\slmult0
 \widctlpar\wrapdefault\aspalpha\aspnum\faauto\ls1\ilvl2\outlinelevel2\adjustright\rin0\lin0\itap0\pararsid9516288 \rtlch\fcs1 \ab\af37\afs24\alang1025 \ltrch\fcs0 \b\f37\fs24\lang1033\langfe1033\cgrid\langnp1033\langfenp1033 {\rtlch\fcs1 \af37 
 \ltrch\fcs0 \insrsid9516288 UI
 \par }\pard\plain \ltrpar\ql \li0\ri0\sl-240\slmult0\widctlpar\wrapdefault\aspalpha\aspnum\faauto\adjustright\rin0\lin0\itap0\pararsid9516288 \rtlch\fcs1 \af37\afs24\alang1025 \ltrch\fcs0 \f37\fs24\lang1033\langfe1033\cgrid\langnp1033\langfenp1033 {
-\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid9516288 \tab The game w}{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid15758049 indow UI will be drawn with OpenGL in orthographic mode (possibly in perspective if the math can be worked out ). The UI will be loaded 
-From an XML (or lua) definition. It will specify the location of various pre-made control components and containers.  This will allow the end user to fully customize the final UI for the game.}{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid9516288 
+\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid9516288 \tab The game w}{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid15758049 
+indow UI will be drawn with OpenGL in orthographic mode (possibly in perspective if the math can be worked out ). The UI will be loaded From an XML (or lua) definition. It will specify the location of various pre-made control components and containers.  T
+his will allow the end user to fully customize the final UI for the game.}{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid9516288 
 \par }{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid15758049 Main UI elements will be;
 \par {\listtext\pard\plain\ltrpar \rtlch\fcs1 \af37 \ltrch\fcs0 \f3\insrsid15758049 \loch\af3\dbch\af0\hich\f3 \'b7\tab}}\pard \ltrpar\ql \fi-360\li720\ri0\sl-240\slmult0\widctlpar
 \jclisttab\tx720\wrapdefault\aspalpha\aspnum\faauto\ls10\adjustright\rin0\lin720\itap0\pararsid15758049 {\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid15758049 Chat Window with tabs
@@ -652,12 +656,11 @@ From an XML (or lua) definition. It will specify the location of various pre-mad
 \widctlpar\wrapdefault\aspalpha\aspnum\faauto\ls1\ilvl2\outlinelevel2\adjustright\rin0\lin0\itap0\pararsid12125703 \rtlch\fcs1 \ab\af37\afs24\alang1025 \ltrch\fcs0 \b\f37\fs24\lang1033\langfe1033\cgrid\langnp1033\langfenp1033 {\rtlch\fcs1 \af37 
 \ltrch\fcs0 \insrsid12125703 Voice
 \par }\pard\plain \ltrpar\ql \li0\ri0\sl-240\slmult0\widctlpar\wrapdefault\aspalpha\aspnum\faauto\adjustright\rin0\lin0\itap0\pararsid12125703 \rtlch\fcs1 \af37\afs24\alang1025 \ltrch\fcs0 \f37\fs24\lang1033\langfe1033\cgrid\langnp1033\langfenp1033 {
-\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid12125703 \tab If the OpenAL API allows it, the system will support built
- in voice chat. Voice data will be compressed and sent to the server over a dedicated network channel. Voice chat will by default be limited to players on the same team. Controls for muting some or all of the voice chat will be provided. When voice chat i
-s
- played through a client it will be positioned in 3d to properly represent the location of the speaker in the game world. For team players, only the direction will be represented in the sound, not the distance. For non team players (if that is enabled) bo
-th direction and distance will be used. This will cause players further away to be harder to hear. Given proper settings it would allow teams to listen in on other team's communications if they are able to get close enough.}{\rtlch\fcs1 \af37 \ltrch\fcs0 
-\insrsid12125703\charrsid12125703 
+\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid12125703 \tab If the OpenAL API allows it, the system will support built in voice chat. Voice data will be compressed and sent to the server over a dedicated network channel. Voice chat will b
+y default be limited to players on the same team. Controls for muting some or all of the voice chat will be provided. When voice chat is played through a client it will be positioned in 3d to properly represent the location of the speaker in the game worl
+d
+. For team players, only the direction will be represented in the sound, not the distance. For non team players (if that is enabled) both direction and distance will be used. This will cause players further away to be harder to hear. Given proper settings
+ it would allow teams to listen in on other team's communications if they are able to get close enough.}{\rtlch\fcs1 \af37 \ltrch\fcs0 \insrsid12125703\charrsid12125703 
 \par {\listtext\pard\plain\ltrpar \s1 \rtlch\fcs1 \ab\af0\afs36 \ltrch\fcs0 \b\f37\fs36\kerning28\insrsid9449821 \hich\af37\dbch\af0\loch\f37 6.\tab}}\pard\plain \ltrpar\s1\ql \li0\ri0\sb480\sa240\sl240\slmult0
 \keep\keepn\widctlpar\wrapdefault\aspalpha\aspnum\faauto\ls1\outlinelevel0\adjustright\rin0\lin0\itap0\pararsid9449821 \rtlch\fcs1 \ab\af37\afs36\alang1025 \ltrch\fcs0 \b\f37\fs36\lang1033\langfe1033\kerning28\cgrid\langnp1033\langfenp1033 {\rtlch\fcs1 
 \af37 \ltrch\fcs0 \insrsid9449821 Input
