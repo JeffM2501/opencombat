@@ -130,9 +130,7 @@ namespace Project2501Server
 
         List<Client> PlayingClients = new List<Client>();
 
-        List<byte[]> worldMessages = new List<byte[]>();
-
-        int WorldMessageDataSize = 2048;
+        int WorldCacheFile = -1;
 
         protected Server server = null;
         protected Thread worker = null;
@@ -174,36 +172,23 @@ namespace Project2501Server
             sim.Init();
             sim.SetWorld(settings.MapFile);
 
-            // build a set of world buffers
-            byte[] buffer;
-            MemoryStream memStream = new MemoryStream();
-            sim.World.Write(memStream, true);
-            buffer = memStream.ToArray();
-            memStream.Close();
-
-            int pos = 0;
-            while ( pos < buffer.Length )
+            using (MemoryStream stream = new MemoryStream())
             {
-                int size = WorldMessageDataSize;
-                if (buffer.Length - pos < size)
-                    size = buffer.Length - pos;
-
-                byte[] b = new byte[size];
-                for (int i = pos; i < pos + size; i++)
-                    b[i-pos] = buffer[i];
-
-                worldMessages.Add(b);
-                pos += size;
+                sim.World.Write(stream,true);
+                WorldCacheFile = FileDownloadManager.ChacheFile(new MemoryStream(stream.ToArray()));
+                stream.Close();
             }
-        }
+            // save some ram
+            sim.World.FlushLightmaps();
+       }
 
-        public void SendMap ( Client client )
+        public void SendMap ( Client client, int id )
         {
             if (!PlayingClients.Contains(client))
                 return;
 
-            for (int i = 0; i < worldMessages.Count; i++ )
-                server.Send(client, new MapInfo(worldMessages[i], worldMessages.Count,i+1));
+            foreach(FileTransfter file in FileDownloadManager.GetMessages(WorldCacheFile, id))
+                server.Send(client, file);
         }
 
         public void AddMessage ( Client client, MessageClass message )

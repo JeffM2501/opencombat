@@ -1,6 +1,5 @@
 non graphics tasks
-
-Make FileDownloadManager that can prepack and send files with hashes.
+have server send map hash to client to see if they have it yet
 Send world using file manager
 player list
 chat

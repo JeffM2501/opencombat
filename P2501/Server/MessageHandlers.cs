@@ -31,7 +31,7 @@ namespace Project2501Server
             messageCodeHandlers.Add(MessageClass.RequestInstanceList, new MessageHandler(RequestInstanceListHandler));
             messageHandlers.Add(typeof(InstanceSelect), new MessageHandler(InstanceSelectHandler));
 
-            instanceMessageCodeHandlers.Add(MessageClass.RequestMapInfo, new InstanceMessageHandler(RequestMapInfoHandler));
+            instanceMessageHandlers.Add(typeof(RequestMapInfo), new InstanceMessageHandler(RequestMapInfoHandler));
             instanceMessageCodeHandlers.Add(MessageClass.PlayerJoin, new InstanceMessageHandler(PlayerJoinHandler));
             instanceMessageCodeHandlers.Add(MessageClass.RequestSpawn, new InstanceMessageHandler(RequestSpawnHandler));
             instanceMessageHandlers.Add(typeof(ChatMessage), new InstanceMessageHandler(ChatMessageHandler));
@@ -218,7 +218,10 @@ namespace Project2501Server
 
         protected void RequestMapInfoHandler(Client client, MessageClass message, ServerInstance instance)
         {
-            instance.SendMap(client);
+            RequestMapInfo msg = message as RequestMapInfo;
+            if (msg == null)
+                return;
+            instance.SendMap(client, msg.ID);
         }
 
         protected void PlayerJoinHandler(Client client, MessageClass message, ServerInstance instance)

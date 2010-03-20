@@ -76,13 +76,14 @@ namespace Messages
         public static int PlayerJoinAccept = 430;
 
         public static int RequestMapInfo = 500;
-        public static int MapInfo = 510;
 
         public static int ChatMessage = 600;
 
         public static int AllowSpawn = 700;
         public static int RequestSpawn = 710;
         public static int PlayerSpawn = 720;
+
+        public static int FileTransfter = 10000;
 
         static int GetName ( ref NetBuffer  buffer )
         {
@@ -596,31 +597,59 @@ namespace Messages
         }
     }
 
-    public class MapInfo : MessageClass
+    public class RequestMapInfo : MessageClass
     {
+        public int ID = 0;
+
+        public RequestMapInfo()
+        {
+            Name = MessageClass.RequestMapInfo;
+        }
+
+        public override NetBuffer Pack()
+        {
+            NetBuffer buffer = base.Pack();
+            buffer.Write(ID);
+            return buffer;
+        }
+
+        public override bool Unpack(ref NetBuffer buffer)
+        {
+            if (!base.Unpack(ref buffer))
+                return false;
+
+            ID = buffer.ReadInt32();
+            return true;
+        }
+    }
+
+    public class FileTransfter : MessageClass
+    {
+        public FileTransfter()
+        {
+            Name = MessageClass.FileTransfter;
+        }
+
+        public int ID = 0;
         public int Size = 0;
         public int Chunk = 0;
         public int Total = 0;
         public byte[] Data = null;
 
-        public MapInfo()
+        public FileTransfter(byte[] b, int count, int i, int id)
         {
-            Name = MessageClass.MapInfo;
-        }
-
-        public MapInfo( byte[] b, int count, int i)
-        {
-            Name = MessageClass.MapInfo;
+            Name = MessageClass.FileTransfter;
             Data = b;
             Size = b.Length;
             Chunk = i;
             Total = count;
+            ID = id;
         }
-
 
         public override NetBuffer Pack()
         {
             NetBuffer buffer = base.Pack();
+            buffer.Write(ID);
             buffer.Write(Chunk);
             buffer.Write(Total);
             buffer.Write(Size);
@@ -633,6 +662,7 @@ namespace Messages
             if (!base.Unpack(ref buffer))
                 return false;
 
+            ID = buffer.ReadInt32();
             Chunk = buffer.ReadInt32();
             Total = buffer.ReadInt32();
             Size = buffer.ReadInt32();
