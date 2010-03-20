@@ -163,7 +163,9 @@ namespace Project2501Server
                 FinishLogin(client);
             }
             else
-                tokenChecker.AddJob(login.UID, login.Token, login.CID,client.Connection.RemoteEndpoint.Address.ToString(), client);
+            {
+                tokenChecker.AddJob(new TokenChecker.TokenCheckerJob(login.UID, login.Token, login.CID, client.Connection.RemoteEndpoint.Address.ToString(), client));
+            }
         }
 
         protected void FinishLogin ( Client client )

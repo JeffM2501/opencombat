@@ -9,9 +9,9 @@ using System.Threading;
 
 namespace Project2501Server
 {
-    public class TokenChecker : IDisposable
+    public class TokenChecker : AsyncTask
     {
-        public class Job
+        public class TokenCheckerJob : AsyncTask.Job
         {
             public UInt64 UID = 0;
             public UInt64 CID = 0;
@@ -23,118 +23,48 @@ namespace Project2501Server
 
             public string Callsign = string.Empty;
 
-            public object Tag = null;
-        }
-
-        protected List<Job> PendingJobs = new List<Job>();
-        protected List<Job> FinishedJobs = new List<Job>();
-
-        protected Thread worker = null;
-
-        public TokenChecker()
-        {
-            worker = new Thread(new ThreadStart(Worker));
-            worker.Start();
-        }
-
-        public void Dispose()
-        {
-            Kill();
-        }
-
-        public void Kill()
-        {
-            if (worker != null)
+            public TokenCheckerJob(UInt64 uid, UInt64 token, UInt64 cid, string ip, object tag)
             {
-                worker.Abort();
-                worker = null;
+                UID = uid;
+                CID = cid;
+                Token = token;
+                IP = ip;
+                Tag = tag;
             }
         }
 
-        protected void Worker ()
-        {
-            bool done = false;
 
+        protected override void Process(Job j)
+        {
             WebClient client = new WebClient();
+            TokenCheckerJob job = j as TokenCheckerJob;
 
-            while (!done)
+           if (job != null)
             {
-                Job job = null;
-                int jobCount = 0;
-                lock(PendingJobs)
-                {
-                    if (PendingJobs.Count > 0)
-                    {
-                        job = PendingJobs[0];
-                        PendingJobs.Remove(job);
-                    }
+                // do job
+                job.Checked = false;
+                job.Verified = false;
 
-                    jobCount = PendingJobs.Count;
+                string url = "http://www.opencombat.net/services/authceck.php?uid=" + job.UID.ToString() + "&token=" + job.Token.ToString() + "&cid=" + job.CID.ToString() + "&ip=" + HttpUtility.UrlEncode(job.IP);
+
+                Stream stream = client.OpenRead(url);
+                StreamReader reader = new StreamReader(stream);
+
+                string code = reader.ReadLine();
+                if (code == "ok")
+                {
+                    if (reader.ReadLine() == "verified")
+                        job.Verified = true;
+
+                    job.Callsign = reader.ReadLine();
                 }
 
-                if (job != null)
-                {
-                    // do job
+                reader.Close();
+                stream.Close();
+
+                if (job.Callsign == string.Empty)
                     job.Checked = false;
-                    job.Verified = false;
-
-                    string url = "http://www.opencombat.net/services/authceck.php?uid=" + job.UID.ToString() + "&token=" + job.Token.ToString() + "&cid=" + job.CID.ToString() + "&ip=" + HttpUtility.UrlEncode(job.IP);
-
-                    Stream stream = client.OpenRead(url);
-                    StreamReader reader = new StreamReader(stream);
-
-                    string code = reader.ReadLine();
-                    if (code == "ok")
-                    {
-                        if (reader.ReadLine() == "verified")
-                            job.Verified = true;
-
-                        job.Callsign = reader.ReadLine();
-                    }
-
-                    reader.Close();
-                    stream.Close();
-
-                    if (job.Callsign == string.Empty)
-                        job.Checked = false;
-
-                    lock (FinishedJobs)
-                    {
-                        FinishedJobs.Add(job);
-                    }
-                }
-                if (jobCount == 0)
-                    Thread.Sleep(1000);
             }
-        }
-
-        public void AddJob ( UInt64 UID, UInt64 Token, UInt64 CID, string IP, object tag )
-        {
-            Job job = new Job();
-            job.UID = UID;
-            job.CID = CID;
-            job.Token = Token;
-            job.IP = IP;
-            job.Tag = tag;
-
-            lock(PendingJobs)
-            {
-                PendingJobs.Add(job);
-            }
-        }
-
-        public Job GetFinishedJob ()
-        {
-            Job job = null;
-            lock (FinishedJobs)
-            {
-                if (FinishedJobs.Count > 0)
-                { 
-                   job = FinishedJobs[0];
-                   FinishedJobs.Remove(job);
-                }
-            }
-            return job;
         }
     }
 }
