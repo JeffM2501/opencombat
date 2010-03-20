@@ -138,7 +138,7 @@ namespace Project2501Server
                 return;
             }
 
-            ServerLister.Job job = new ServerLister.Job();
+            ServerLister.ServerListJob job = new ServerLister.ServerListJob();
             if (!PublicListInfo(ref job.host, ref job.name, ref job.desc, ref job.key, ref job.serverType))
             {
                 serverLister.Kill();
@@ -146,7 +146,7 @@ namespace Project2501Server
                 return;
             }
 
-            serverLister.AddHost(job);
+            serverLister.AddJob(job);
         }
 
         public bool Run ()
@@ -246,11 +246,11 @@ namespace Project2501Server
 
             if (tokenChecker != null)
             {
-                TokenChecker.Job job = tokenChecker.GetFinishedJob();
+                TokenChecker.TokenCheckerJob job = tokenChecker.GetFinishedJob() as TokenChecker.TokenCheckerJob;
                 while (job != null)
                 {
                     ProcessTokenJob(job);
-                    job = tokenChecker.GetFinishedJob();
+                    job = tokenChecker.GetFinishedJob() as TokenChecker.TokenCheckerJob;
                 }
             }
 
@@ -263,7 +263,7 @@ namespace Project2501Server
             }
         }
 
-        protected void ProcessTokenJob ( TokenChecker.Job job )
+        protected void ProcessTokenJob ( TokenChecker.TokenCheckerJob job )
         {
             Client client = job.Tag as Client;
             if (client == null)
