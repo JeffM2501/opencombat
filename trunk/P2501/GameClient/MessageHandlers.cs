@@ -30,7 +30,7 @@ namespace P2501GameClient
             messageHandlers.Add(typeof(ServerVersInfo), new MessageHandler(ServerVersHandler));
             messageHandlers.Add(typeof(PlayerInfo), new MessageHandler(PlayerInfoHandler));
             messageCodeHandlers.Add(MessageClass.PlayerListDone, new MessageHandler(PlayerListDoneHandler));
-            messageHandlers.Add(typeof(MapInfo), new MessageHandler(MapInfoHandler));
+            messageHandlers.Add(typeof(FileTransfter), new MessageHandler(FileTransfterHandler));
             messageCodeHandlers.Add(MessageClass.PlayerJoinAccept, new MessageHandler(PlayerJoinAcceptHandler));
             messageHandlers.Add(typeof(ChatMessage), new MessageHandler(ChatMessageHandler));
             messageCodeHandlers.Add(MessageClass.AllowSpawn, new MessageHandler(AllowSpawnHandler));
@@ -240,7 +240,17 @@ namespace P2501GameClient
             sim.Settings = info.Settings;
 
             mapBuffer = null;
-            Send(MessageClass.RequestMapInfo);
+            RequestMapInfo mapInfo = new RequestMapInfo();
+            mapInfo.ID = FileDownloadManager.GetDownloadID(new FileEventHandler(MapComplete));
+            Send(mapInfo);
+        }
+
+        protected void MapComplete(object sender, FileDownloadEventArgs args)
+        {
+            sim.SetWorld(PortalWorld.Read(FileDownloadManager.GetFile(args.ID), true));
+
+            if (MapLoaded != null)
+                MapLoaded(this, EventArgs.Empty);
         }
 
         protected void PlayerInfoHandler(MessageClass message)
@@ -259,46 +269,13 @@ namespace P2501GameClient
             sim.AddPlayer(player);
         }
 
-        protected void MapInfoHandler ( MessageClass message )
+        protected void FileTransfterHandler(MessageClass message)
         {
-            MapInfo info = message as MapInfo;
+            FileTransfter info = message as FileTransfter;
             if (info == null)
                 return;
 
-            if (mapBuffer == null)
-            {
-                mapBuffer = new byte[info.Total][];
-            }
-            else if ( mapBuffer.Length < info.Total)
-            {
-                byte[][] newbuf = new byte[info.Total][];
-                mapBuffer.CopyTo(newbuf,0);
-                mapBuffer = newbuf;
-            }
-            mapBuffer[info.Chunk - 1] = info.Data;
-
-            if (MapProgress != null)
-                MapProgress(this, new MapProgressEventArgs(info.Chunk, info.Total));
-
-            if (info.Chunk == info.Total)
-            {
-                int p = 0;
-                foreach( byte[] chunk in mapBuffer)
-                    p += chunk.Length;
-
-                byte[] buffer = new byte[p];
-                p = 0;
-                foreach( byte[] chunk in mapBuffer)
-                {
-                    chunk.CopyTo(buffer,p);
-                    p += chunk.Length;
-                }
-
-                sim.SetWorld(PortalWorld.Read(new MemoryStream(buffer),true));
-
-                if (MapLoaded != null)
-                    MapLoaded(this, EventArgs.Empty);
-            }
+            FileDownloadManager.AddFileData(info);
         }
 
         protected void PlayerListDoneHandler ( MessageClass message )
