@@ -8,8 +8,8 @@
     <ProjectGuid>{6A2BDA81-FD16-42E2-A120-DC29D10B2333}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ClientServerTestHarnes</RootNamespace>
-    <AssemblyName>ClientServerTestHarnes</AssemblyName>
+    <RootNamespace>ClientServerTestHarness</RootNamespace>
+    <AssemblyName>ClientServerTestHarness</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
