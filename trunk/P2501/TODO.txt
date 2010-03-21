@@ -1,6 +1,4 @@
 non graphics tasks
-have server send map hash to client to see if they have it yet
-Send world using file manager
 player list
 chat
 spawn players
