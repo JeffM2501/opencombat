@@ -191,6 +191,18 @@ namespace Project2501Server
                 server.Send(client, file);
         }
 
+        public void SendSettings ( Client client )
+        {
+            if (!PlayingClients.Contains(client))
+                return;
+
+            InstanceSettings settings = new InstanceSettings();
+            settings.ID = ID;
+            settings.Settings = Settings.Settings;
+            settings.MapChecksum = FileDownloadManager.GetFileChecksum(WorldCacheFile);
+            server.Send(client, settings);
+        }
+
         public void AddMessage ( Client client, MessageClass message )
         {
             lock(PendingMessages)
@@ -270,8 +282,11 @@ namespace Project2501Server
             // process new clients
             lock(NewbornCients)
             {
-                foreach(Client newClient in NewbornCients)
+                foreach (Client newClient in NewbornCients)
+                {
                     PlayingClients.Add(newClient);
+                    SendSettings(newClient);
+                }
                 NewbornCients.Clear();
             }
 

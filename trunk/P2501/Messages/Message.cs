@@ -62,7 +62,6 @@ namespace Messages
         public static int LoginAccept = 210;
         public static int InstanceSelect = 220;
         public static int InstanceSelectFailed = 222;
-        public static int InstanceJoined = 223;
         public static int InstanceSettings = 225;
 
         public static int RequestServerVersInfo = 300;
@@ -489,36 +488,11 @@ namespace Messages
         }
     }
 
-    public class InstanceJoined : MessageClass
-    {
-        public int ID = -1;
-
-        public InstanceJoined()
-        {
-            Name = MessageClass.InstanceJoined;
-        }
-
-        public override NetBuffer Pack()
-        {
-            NetBuffer buffer = base.Pack();
-            buffer.Write(ID);
-            return buffer;
-        }
-
-        public override bool Unpack(ref NetBuffer buffer)
-        {
-            if (!base.Unpack(ref buffer))
-                return false;
-
-            ID = buffer.ReadInt32();
-
-            return true;
-        }
-    }
-
     public class InstanceSettings : MessageClass
     {
+        public int ID = -1;
         public SimSettings Settings = new SimSettings();
+        public string MapChecksum = string.Empty;
 
         public InstanceSettings()
         {
@@ -529,6 +503,7 @@ namespace Messages
         {
             NetBuffer buffer = base.Pack();
             PackClass(ref buffer, Settings);
+            buffer.Write(MapChecksum);
             return buffer;
         }
 
@@ -538,7 +513,7 @@ namespace Messages
                 return false;
 
             Settings = (SimSettings)UnpackClass(ref buffer);
-
+            MapChecksum = buffer.ReadString();
             return true;
         }
     }

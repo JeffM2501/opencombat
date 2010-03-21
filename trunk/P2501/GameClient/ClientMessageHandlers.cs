@@ -16,7 +16,7 @@ namespace P2501GameClient
         Dictionary<Type, MessageHandler> messageHandlers = new Dictionary<Type, MessageHandler>();
         Dictionary<int, MessageHandler> messageCodeHandlers = new Dictionary<int, MessageHandler>();
 
-        byte[][] mapBuffer = null;
+        int MapFileID = -1;
 
         protected void InitMessageHandlers()
         {
@@ -25,7 +25,6 @@ namespace P2501GameClient
             messageCodeHandlers.Add(MessageClass.Hail, new MessageHandler(HailHandler));
             messageHandlers.Add(typeof(LoginAccept), new MessageHandler(LoginAcceptHandler));
             messageHandlers.Add(typeof(InstanceList), new MessageHandler(InstanceListHandler));
-            messageHandlers.Add(typeof(InstanceJoined), new MessageHandler(InstanceJoinedHandler));
             messageCodeHandlers.Add(MessageClass.InstanceSelectFailed, new MessageHandler(InstanceSelectFailedHandler));
             messageHandlers.Add(typeof(ServerVersInfo), new MessageHandler(ServerVersHandler));
             messageHandlers.Add(typeof(PlayerInfo), new MessageHandler(PlayerInfoHandler));
@@ -144,8 +143,8 @@ namespace P2501GameClient
 
             RequestInstanceList();
 
-            if (LoginAcceptEvent != null)
-                LoginAcceptEvent(this, EventArgs.Empty);
+            if (LoginAccepted != null)
+                LoginAccepted(this, EventArgs.Empty);
         }
 
         public void RequestInstanceList ()
@@ -165,8 +164,8 @@ namespace P2501GameClient
                 return;
             }
 
-            if (ServerVersionEvent != null)
-                ServerVersionEvent(this, new ServerVersionEventArgs(info.Major, info.Minor, info.Rev));
+            if (ServerVersionReceived != null)
+                ServerVersionReceived(this, new ServerVersionEventArgs(info.Major, info.Minor, info.Rev));
         }
 
         protected void InstanceListHandler(MessageClass message)
@@ -184,8 +183,8 @@ namespace P2501GameClient
                 AvailableInstances.Add(def);
             }
 
-            if (InstanceListEvent != null)
-                InstanceListEvent(this, EventArgs.Empty);
+            if (InstanceList != null)
+                InstanceList(this, EventArgs.Empty);
         }
 
         protected bool InstanceExists ( int id )
@@ -209,26 +208,12 @@ namespace P2501GameClient
             return true;
         }
 
-        protected void InstanceJoinedHandler(MessageClass message)
-        {
-            InstanceJoined info = message as InstanceJoined;
-            if (info == null)
-            {
-                if (InstanceJoinFailedEvent != null)
-                    InstanceJoinFailedEvent(this, EventArgs.Empty);
-                return;
-            }
-            ConnectedInstance = info.ID;
-            if (InstanceJoinedEvent != null)
-                InstanceJoinedEvent(this, EventArgs.Empty);
-        }
-
         protected void InstanceSelectFailedHandler(MessageClass message)
         {
             ConnectedInstance = -1;
 
-            if (InstanceJoinFailedEvent != null)
-                InstanceJoinFailedEvent(this, EventArgs.Empty);
+            if (InstanceJoinFailed != null)
+                InstanceJoinFailed(this, EventArgs.Empty);
         }
 
         protected void InstanceSettingsHandler(MessageClass message)
@@ -237,20 +222,52 @@ namespace P2501GameClient
             if (info == null)
                 return;
 
+            if (ConnectedInstance != info.ID)
+            {
+                ConnectedInstance = info.ID;
+                if (InstanceJoined != null)
+                    InstanceJoined(this, EventArgs.Empty);
+            }
+
+            if (InstanceSettingsReceived != null)
+                InstanceSettingsReceived(this, EventArgs.Empty);
+
             sim.Settings = info.Settings;
 
-            mapBuffer = null;
-            RequestMapInfo mapInfo = new RequestMapInfo();
-            mapInfo.ID = FileDownloadManager.GetDownloadID(new FileEventHandler(MapComplete));
-            Send(mapInfo);
+            if (FileDownloadManager.FileExist(info.MapChecksum)) // we already have the map
+                LoadMap(FileDownloadManager.GetFile(info.MapChecksum));
+            else
+            {
+                RequestMapInfo mapInfo = new RequestMapInfo();
+                MapFileID = mapInfo.ID = FileDownloadManager.GetDownloadID(new FileEventHandler(MapComplete));
+                Send(mapInfo);
+                if (StartMapTransfer != null)
+                    StartMapTransfer(this, EventArgs.Empty);
+            }
+        }
+
+        protected void LoadMap ( Stream stream )
+        {
+            sim.SetWorld(PortalWorld.Read(stream, true));
+
+            if (sim.World == null)
+            {
+                if (MapLoadFailed != null)
+                    MapLoadFailed(this, EventArgs.Empty);
+            }
+            else
+            {
+                if (MapLoaded != null)
+                    MapLoaded(this, EventArgs.Empty);
+            }
         }
 
         protected void MapComplete(object sender, FileDownloadEventArgs args)
         {
-            sim.SetWorld(PortalWorld.Read(FileDownloadManager.GetFile(args.ID), true));
+            if (EndMapTransfer != null)
+                EndMapTransfer(this, EventArgs.Empty);
 
-            if (MapLoaded != null)
-                MapLoaded(this, EventArgs.Empty);
+            LoadMap(FileDownloadManager.GetFile(args.ID));
         }
 
         protected void PlayerInfoHandler(MessageClass message)
@@ -275,6 +292,14 @@ namespace P2501GameClient
             if (info == null)
                 return;
 
+            if (FileTransferProgress != null)
+            {
+                FileTransferProgressEventArgs.FileTransferType t = FileTransferProgressEventArgs.FileTransferType.Other;
+                if (info.ID == MapFileID)
+                    t = FileTransferProgressEventArgs.FileTransferType.Map;
+                FileTransferProgress(this, new FileTransferProgressEventArgs(info.Chunk, info.Total,t));
+            }
+
             FileDownloadManager.AddFileData(info);
         }
 
@@ -297,16 +322,16 @@ namespace P2501GameClient
             if (msg == null)
                 return;
 
-            if (ChatReceivedEvent != null)
-                ChatReceivedEvent(this, new ChatEventArgs(msg.ChatChannel, msg.From, msg.Message));
+            if (ChatReceived != null)
+                ChatReceived(this, new ChatEventArgs(msg.ChatChannel, msg.From, msg.Message));
         }
 
         protected void CallAllowSpawn ()
         {
             requestedSpawn = false;
             ThisPlayer.Status = PlayerStatus.Despawned;
-            if (AllowSpawnEvent != null)
-                AllowSpawnEvent(this, new  PlayerEventArgs(ThisPlayer));
+            if (AllowSpawn != null)
+                AllowSpawn(this, new  PlayerEventArgs(ThisPlayer));
         }
 
         protected void AllowSpawnHandler(MessageClass message)
