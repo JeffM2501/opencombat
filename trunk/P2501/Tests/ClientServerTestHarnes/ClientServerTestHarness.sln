@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientServerTestHarnes", "ClientServerTestHarnes.csproj", "{6A2BDA81-FD16-42E2-A120-DC29D10B2333}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientServerTestHarness", "ClientServerTestHarness.csproj", "{6A2BDA81-FD16-42E2-A120-DC29D10B2333}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server", "..\..\Server\Server.csproj", "{1A9B8887-1292-4F4A-BFFC-5290F794A898}"
 EndProject
