@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
+using System.IO;
 
 using Simulation;
 using Clients;
@@ -62,15 +63,24 @@ namespace P2501GameClient
         }
     }
 
-    public class MapProgressEventArgs : EventArgs
+    public class FileTransferProgressEventArgs : EventArgs
     {
         public int Position = 0;
         public int Total = 0;
 
-        public MapProgressEventArgs(int p, int t)
+        public enum FileTransferType
+        {
+            Map,
+            Other
+        }
+
+        public FileTransferType FileType = FileTransferType.Other;
+
+        public FileTransferProgressEventArgs(int p, int t, FileTransferType tp)
         {
             Position = p;
             Total = t;
+            FileType = tp;
         }
     }
 
@@ -79,29 +89,34 @@ namespace P2501GameClient
     public delegate void ChatEventHandler ( object sender, ChatEventArgs args );
     public delegate void HostConnectionHandler(object sender, HostConnectionEventArgs args);
     public delegate void GeneralEventHandler(object sender, EventArgs args);
-    public delegate void MapProgressEventHandler(object sender, MapProgressEventArgs args);
+    public delegate void FileTransferProgressEventHandler(object sender, FileTransferProgressEventArgs args);
 
     public partial class GameClient
     {
         public Sim sim = new Sim();
         public Player ThisPlayer = null;
 
-        public event ServerVersionHandler ServerVersionEvent;
-        public event PlayerEventHandler AllowSpawnEvent;
-        public event ChatEventHandler ChatSentEvent;
-        public event ChatEventHandler ChatReceivedEvent;
+        public event ServerVersionHandler ServerVersionReceived;
+        public event PlayerEventHandler AllowSpawn;
+        public event ChatEventHandler ChatSent;
+        public event ChatEventHandler ChatReceived;
 
-        public event HostConnectionHandler HostConnectionEvent;
-        public event HostConnectionHandler HostDisconnectionEvent;
+        public event HostConnectionHandler HostConnected;
+        public event HostConnectionHandler HostDisconnected;
 
-        public event GeneralEventHandler LoginAcceptEvent;
+        public event GeneralEventHandler LoginAccepted;
 
-        public event GeneralEventHandler InstanceListEvent;
-        public event GeneralEventHandler InstanceJoinedEvent;
-        public event GeneralEventHandler InstanceJoinFailedEvent;
+        public event GeneralEventHandler InstanceList;
+        public event GeneralEventHandler InstanceJoined;
+        public event GeneralEventHandler InstanceJoinFailed;
 
-        public event MapProgressEventHandler MapProgress;
+        public event GeneralEventHandler InstanceSettingsReceived;
+
         public event GeneralEventHandler MapLoaded;
+        public event GeneralEventHandler MapLoadFailed;
+        public event GeneralEventHandler StartMapTransfer;
+        public event GeneralEventHandler EndMapTransfer;
+        public event FileTransferProgressEventHandler FileTransferProgress;
 
         public class InstanceDefinition
         {
@@ -119,6 +134,15 @@ namespace P2501GameClient
         public double Time
         {
             get { return lastUpdateTime; }
+        }
+
+        public DirectoryInfo CacheFileDir
+        {
+            set
+            {
+                if (value.Exists)
+                    FileDownloadManager.CacheFileDir = value;
+            }
         }
 
         Client client;
@@ -200,16 +224,16 @@ namespace P2501GameClient
 
             if (!connected && client.IsConnected)
             {
-                if (HostConnectionEvent != null)
-                    HostConnectionEvent(this, new HostConnectionEventArgs("Connected"));
+                if (HostConnected != null)
+                    HostConnected(this, new HostConnectionEventArgs("Connected"));
             }
 
             if (connected)
             {
                 if (!client.IsConnected)
                 {
-                    if (HostDisconnectionEvent != null)
-                        HostDisconnectionEvent(this, new HostConnectionEventArgs("Disconnected"));
+                    if (HostDisconnected != null)
+                        HostDisconnected(this, new HostConnectionEventArgs("Disconnected"));
                     return false;
                 }
 
@@ -291,8 +315,8 @@ namespace P2501GameClient
             if (message == string.Empty)
                 return;
 
-            if (ChatSentEvent != null)
-                ChatSentEvent(this, new ChatEventArgs(channel, ThisPlayer.Callsign, message));
+            if (ChatSent != null)
+                ChatSent(this, new ChatEventArgs(channel, ThisPlayer.Callsign, message));
 
             ChatMessage msg = new ChatMessage();
             msg.ChatChannel = channel;

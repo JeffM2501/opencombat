@@ -38,23 +38,22 @@ namespace Messages
             }
         }
 
-        public static DirectoryInfo CacheFileDIr
+        public static DirectoryInfo CacheFileDir
         {
             set
             {
-                lock(CacheDir)
-                {
-                    CacheDir = value;
-                }
+                CacheDir = value;
             }
         }
 
         protected static DirectoryInfo CacheDir = null;
 
-        protected static List<DownladedFile> files = new List<DownladedFile>();
+        protected static List<DownladedFile> filesToTransfer = new List<DownladedFile>();
+        protected static List<DownladedFile> downloadedFiles = new List<DownladedFile>();
 
-        public static int MaxMessageSize = -1;
+        public static int MaxMessageSize = 4086;
 
+        // server side
         public static int ChacheFile ( FileInfo file )
         {
             if (!file.Exists)
@@ -106,6 +105,7 @@ namespace Messages
                     byte[] b = new byte[size];
                     Array.Copy(buffer, pos, b, 0, size);
                     temp.Add(b);
+                    pos += size;
                 }
 
                 memFile.Buffers = temp.ToArray();
@@ -115,9 +115,9 @@ namespace Messages
             foreach (byte b in MD5.Create().ComputeHash(buffer))
                 memFile.Checksum += b.ToString("x2");
 
-            lock (files)
+            lock (filesToTransfer)
             {
-                files.Add(memFile);
+                filesToTransfer.Add(memFile);
             }
 
             return memFile.ID;
@@ -125,13 +125,13 @@ namespace Messages
 
         public static FileTransfter[] GetMessages(int fileID, int clientID)
         {
-            lock (files)
+            lock (filesToTransfer)
             {
                 List<FileTransfter> msgs = new List<FileTransfter>();
 
                 DownladedFile file = null;
 
-                foreach (DownladedFile f in files)
+                foreach (DownladedFile f in filesToTransfer)
                 {
                     if (f.ID == fileID)
                     {
@@ -159,24 +159,11 @@ namespace Messages
             }
         }
 
-        public static bool FileExist ( int id )
+        public static string GetFileChecksum(int id)
         {
-            lock (files)
+            lock (filesToTransfer)
             {
-                foreach (DownladedFile f in files)
-                {
-                    if (f.ID == id)
-                        return true;
-                }
-            }
-            return false;
-        }
-
-        public static string GetFileChecksum (int id)
-        {
-            lock (files)
-            {
-                foreach (DownladedFile f in files)
+                foreach (DownladedFile f in filesToTransfer)
                 {
                     if (f.ID == id)
                         return f.Checksum;
@@ -185,11 +172,42 @@ namespace Messages
             }
         }
 
+        // client side
+        public static bool FileExist ( int id )
+        {
+            lock (downloadedFiles)
+            {
+                foreach (DownladedFile f in downloadedFiles)
+                {
+                    if (f.ID == id)
+                        return true;
+                }
+            }
+            return false;
+        }
+
+        public static bool FileExist(string checksum)
+        {
+            lock (downloadedFiles)
+            {
+                foreach (DownladedFile file in downloadedFiles)
+                {
+                    if (file.Checksum == checksum && file.Buffers != null)
+                        return true;
+                }
+            }
+
+            if (CacheDir == null)
+                return false;
+
+            return File.Exists(Path.Combine(CacheDir.FullName, checksum));
+        }
+
         public static Stream GetFile( int ID )
         {
-            lock (files)
+            lock (downloadedFiles)
             {
-                foreach (DownladedFile file in files)
+                foreach (DownladedFile file in downloadedFiles)
                 {
                     if (file.ID == ID && file.Checksum != string.Empty && file.Buffers != null)
                         return new MemoryStream(file.Buffers[0]);
@@ -200,23 +218,20 @@ namespace Messages
 
         public static Stream GetFile ( string checksum )
         {
-            lock (files)
+            lock (downloadedFiles)
             {
-                foreach ( DownladedFile file in files )
+                foreach (DownladedFile file in downloadedFiles)
                 {
                     if (file.Checksum == checksum && file.Buffers!= null)
                         return new MemoryStream(file.Buffers[0]);
                 }
             }
 
-            lock (CacheDir)
-            {
-                if (CacheDir == null)
-                    return null;
-            }
+            if (CacheDir == null)
+                return null;
 
             FileInfo f = new FileInfo(Path.Combine(CacheDir.FullName, checksum));
-            if (!f.Exists)
+            if (f.Exists)
             {
                 FileStream stream = f.OpenRead();
                 byte[] buffer = new byte[f.Length];
@@ -229,12 +244,12 @@ namespace Messages
 
         public static int GetDownloadID ( FileEventHandler complete )
         {
-            lock(files)
+            lock (downloadedFiles)
             {
                 DownladedFile file = new DownladedFile();
                 file.ID = lastFileID++;
                 file.Complete += complete;
-                files.Add(file);
+                downloadedFiles.Add(file);
                 return file.ID;
             }
         }
@@ -242,9 +257,9 @@ namespace Messages
         public static bool AddFileData ( FileTransfter msg )
         {
             DownladedFile file = null;
-            lock (files)
+            lock (downloadedFiles)
             {
-                foreach(DownladedFile f in files)
+                foreach (DownladedFile f in downloadedFiles)
                 {
                     if (f.ID == msg.ID)
                     {
@@ -257,7 +272,7 @@ namespace Messages
                 {
                     file = new DownladedFile();
                     file.ID = msg.ID;
-                    files.Add(file);
+                    downloadedFiles.Add(file);
                 }
 
                 if (file.Buffers == null || msg.Total > file.Buffers.Length)
@@ -299,19 +314,16 @@ namespace Messages
                 // ok try to cache this thing out
                 if (CacheDir != null)
                 {
-                    lock (CacheDir)
+                    FileInfo cachefile = new FileInfo(Path.Combine(CacheDir.FullName, file.Checksum));
+                    try
                     {
-                        FileInfo cachefile = new FileInfo(Path.Combine(CacheDir.FullName, file.Checksum));
-                        try
-                        {
-                            Stream s = cachefile.OpenWrite();
-                            s.Write(file.Buffers[0], 0, file.Buffers[0].Length);
-                            s.Close();
-                        }
-                        catch (System.Exception /*ex*/)
-                        {
-                            CacheDir = null;// the cache dir is crap, don't try to cache anymore stuff
-                        }
+                        Stream s = cachefile.OpenWrite();
+                        s.Write(file.Buffers[0], 0, file.Buffers[0].Length);
+                        s.Close();
+                    }
+                    catch (System.Exception /*ex*/)
+                    {
+                        CacheDir = null;// the cache dir is crap, don't try to cache anymore stuff
                     }
                 }
                

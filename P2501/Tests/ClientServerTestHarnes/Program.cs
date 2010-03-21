@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading;
+using System.Diagnostics;
 
 using Project2501Server;
 using P2501GameClient;
@@ -19,6 +20,8 @@ namespace ClientServerTestHarnes
 
         static void Main(string[] args)
         {
+            Console.WriteLine("System Startup");
+
             map = new FileInfo("./map.PortalMap");
             if (!map.Exists)
             {
@@ -37,7 +40,7 @@ namespace ClientServerTestHarnes
                     }
                 }
             }
-
+            Console.WriteLine("Starting Server");
             Server server = new Server(2501);
             server.DefaultInstanceSetup = new DefaultInstanceSetupCallback(defaultInstCB);
             server.NoTokenCheck = true;
@@ -60,11 +63,20 @@ namespace ClientServerTestHarnes
             Console.WriteLine("Server Started");
 
             GameClient client = new GameClient("localhost", 2501);
+            client.CacheFileDir = new DirectoryInfo("./");
 
             client.GetAuthentication = new AuthenticationCallback(authCB);
-            client.InstanceListEvent += new GeneralEventHandler(client_InstanceListEvent);
-            client.LoginAcceptEvent += new GeneralEventHandler(client_LoginAcceptEvent);
-            client.HostConnectionEvent += new HostConnectionHandler(client_HostConnectionEvent);
+            client.InstanceList += new GeneralEventHandler(client_InstanceListEvent);
+            client.LoginAccepted += new GeneralEventHandler(client_LoginAcceptEvent);
+            client.HostConnected += new HostConnectionHandler(client_HostConnectionEvent);
+            client.InstanceSettingsReceived += new GeneralEventHandler(client_InstanceSettingsReceived);
+
+            client.StartMapTransfer += new GeneralEventHandler(client_StartMapTransfer);
+            client.EndMapTransfer += new GeneralEventHandler(client_EndMapTransfer);
+            client.FileTransferProgress += new FileTransferProgressEventHandler(client_FileTransferProgress);
+
+            client.MapLoaded += new GeneralEventHandler(client_MapLoaded);
+            client.MapLoadFailed += new GeneralEventHandler(client_MapLoadFailed);
             
             while ( true )
             {
@@ -74,6 +86,36 @@ namespace ClientServerTestHarnes
 
             client.Kill();
             server.Kill();
+        }
+
+        static void client_MapLoadFailed(object sender, EventArgs args)
+        {
+            Console.WriteLine("**ERROR Map load failed**");
+        }
+
+        static void client_InstanceSettingsReceived(object sender, EventArgs args)
+        {
+            Console.WriteLine("Settings Received");
+        }
+
+        static void client_MapLoaded(object sender, EventArgs args)
+        {
+            Console.WriteLine("Map loaded");
+        }
+
+        static void client_FileTransferProgress(object sender, FileTransferProgressEventArgs args)
+        {
+            Console.Write("=");
+        }
+
+        static void client_EndMapTransfer(object sender, EventArgs args)
+        {
+            Console.WriteLine(">");
+        }
+
+        static void client_StartMapTransfer(object sender, EventArgs args)
+        {
+            Console.Write("Map Transfer <");
         }
 
         static void server_InstanceStarted(object sender, InstanceEventArgs args)

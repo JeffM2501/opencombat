@@ -199,21 +199,8 @@ namespace Project2501Server
                 return;
             }
 
-            lock (client)
-            {
-                client.Instance = instance;
-                instance.AddClient(client);
-            }
-
-            InstanceJoined joined = new InstanceJoined();
-
-            joined.ID = instance.ID;
-
-            Send(client, joined);
-
-            InstanceSettings settings = new InstanceSettings();
-            settings.Settings = instance.Settings.Settings;
-            Send(client, settings);
+            client.Instance = instance;
+            instance.AddClient(client);
         }
 
         protected void RequestMapInfoHandler(Client client, MessageClass message, ServerInstance instance)

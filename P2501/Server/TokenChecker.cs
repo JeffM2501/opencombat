@@ -33,7 +33,6 @@ namespace Project2501Server
             }
         }
 
-
         protected override void Process(Job j)
         {
             WebClient client = new WebClient();
