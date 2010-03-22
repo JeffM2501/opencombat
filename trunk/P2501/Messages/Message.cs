@@ -1,4 +1,22 @@
-﻿using System;
+﻿/*
+    Open Combat/Projekt 2501
+    Copyright (C) 2010  Jeffery Allen Myers
+
+    This library is free software; you can redistribute it and/or
+    modify it under the terms of the GNU Lesser General Public
+    License as published by the Free Software Foundation; either
+    version 2.1 of the License, or (at your option) any later version.
+
+    This library is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    Lesser General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public
+    License along with this library; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
@@ -493,6 +511,7 @@ namespace Messages
         public int ID = -1;
         public SimSettings Settings = new SimSettings();
         public string MapChecksum = string.Empty;
+        public string[] TeamNames;
 
         public InstanceSettings()
         {
@@ -504,6 +523,9 @@ namespace Messages
             NetBuffer buffer = base.Pack();
             PackClass(ref buffer, Settings);
             buffer.Write(MapChecksum);
+            buffer.Write(TeamNames.Length);
+            foreach (string s in TeamNames)
+                buffer.Write(s);
             return buffer;
         }
 
@@ -514,6 +536,12 @@ namespace Messages
 
             Settings = (SimSettings)UnpackClass(ref buffer);
             MapChecksum = buffer.ReadString();
+
+            int count = buffer.ReadInt32();
+            TeamNames = new string[count];
+            for (int i = 0; i < count; i++)
+                TeamNames[i] = buffer.ReadString();
+
             return true;
         }
     }
@@ -522,7 +550,7 @@ namespace Messages
     {
         public UInt64 PlayerID = 0;
         public string Callsign = string.Empty;
-        public string Pilot = string.Empty;
+        public int Team = -1;
         public Int32 Score = -1;
         public PlayerStatus Status = PlayerStatus.Despawned;
 
@@ -538,7 +566,6 @@ namespace Messages
             PlayerID = player.ID;
             Callsign = player.Callsign;
             Score = player.Score;
-            Pilot = player.Pilot;
             Status = player.Status;
         }
 
@@ -548,7 +575,6 @@ namespace Messages
             buffer.Write(PlayerID);
             buffer.Write(Callsign);
             buffer.Write(Score);
-            buffer.Write(Pilot);
             buffer.Write((byte)Status);
             return buffer;
         }
@@ -561,7 +587,6 @@ namespace Messages
             PlayerID = buffer.ReadUInt64();
             Callsign = buffer.ReadString();
             Score = buffer.ReadInt32();
-            Pilot = buffer.ReadString();
             Status = (PlayerStatus)Enum.ToObject(typeof(PlayerStatus), buffer.ReadByte());
             return true;
         }
