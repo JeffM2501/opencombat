@@ -1,4 +1,22 @@
-﻿using System;
+﻿/*
+    Open Combat/Projekt 2501
+    Copyright (C) 2010  Jeffery Allen Myers
+
+    This library is free software; you can redistribute it and/or
+    modify it under the terms of the GNU Lesser General Public
+    License as published by the Free Software Foundation; either
+    version 2.1 of the License, or (at your option) any later version.
+
+    This library is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    Lesser General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public
+    License along with this library; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Text;
@@ -155,6 +173,17 @@ namespace Project2501Server
             get { return worker == null; }
         }
 
+        protected string[] GetTeamNames ( SimSettings settings )
+        {
+            if (settings.GameMode == GameType.DeathMatch || settings.GameMode == GameType.KillTheChicken)
+                return null;
+
+            if (settings.GameMode == GameType.TeamDeathMatch)
+                return new string[4]{"Red","Blue","Yellow","Purple"};
+
+            return new string[2]{"Red", "Blue" };
+        }
+
         public ServerInstance ( Server s, ServerInstanceSettings serverSettings )
         {
             settings = serverSettings;
@@ -168,6 +197,10 @@ namespace Project2501Server
             sim.PlayerJoined += new PlayerJoinedHandler(sim_PlayerJoined);
             sim.PlayerRemoved += new PlayerRemovedHandler(sim_PlayerRemoved);
             sim.PlayerStatusChanged += new PlayerStatusChangeHandler(sim_PlayerStatusChanged);
+
+            string[] teams = GetTeamNames(serverSettings.Settings);
+            if (teams != null)
+                sim.TeamNames = teams;
 
             sim.Init();
             sim.SetWorld(settings.MapFile);
@@ -200,6 +233,7 @@ namespace Project2501Server
             settings.ID = ID;
             settings.Settings = Settings.Settings;
             settings.MapChecksum = FileDownloadManager.GetFileChecksum(WorldCacheFile);
+            settings.TeamNames = sim.TeamNames;
             server.Send(client, settings);
         }
 
