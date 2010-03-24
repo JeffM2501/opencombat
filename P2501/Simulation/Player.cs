@@ -39,6 +39,8 @@ namespace Simulation
         public string Callsign = string.Empty;
         public int Score = -1;
         public string Pilot = string.Empty;
+        public string Avatar = string.Empty;
+        public int Team = -1;
 
         public float MovementSpeed
         {
