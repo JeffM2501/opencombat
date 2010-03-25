@@ -1,6 +1,4 @@
 non graphics tasks
-player list
-chat
 spawn players
 player movement
 weapon/shot definition
