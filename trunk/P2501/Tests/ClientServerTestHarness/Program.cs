@@ -105,6 +105,8 @@ namespace ClientServerTestHarnes
 
             client.SpawnRequested += new GeneralEventHandler(client_SpawnRequested);
             client.Spawned += new GeneralEventHandler(client_Spawned);
+
+            client.ChatReceived += new ChatEventHandler(client_ChatReceived);
             
             while ( true )
             {
@@ -119,6 +121,21 @@ namespace ClientServerTestHarnes
             server.Kill();
         }
 
+        static void client_ChatReceived(object sender, ChatEventArgs args)
+        {
+            Console.WriteLine("Chat received in channel " + args.Channel);
+            GameClient client = sender as GameClient;
+            if (client != null)
+            {
+                if (args.From == client.ThisPlayer.Callsign)
+                    Console.Write("From: Me");
+                else
+                    Console.Write("From:" + args.From);
+
+                Console.WriteLine(" " + args.Text);
+            }
+        }
+
         static void client_PlayerListRecived(object sender, EventArgs args)
         {
             Console.WriteLine("Player List received");
@@ -131,6 +148,9 @@ namespace ClientServerTestHarnes
             if (client != null)
             {
                 Console.WriteLine("Player loc " + client.ThisPlayer.LastUpdateState.Position.ToString());
+
+                client.SendChat("Global", "Chat test 1");
+                client.SendChat("Secondary", "Chat test 2");
             }
         }
 
