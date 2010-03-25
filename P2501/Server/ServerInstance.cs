@@ -106,7 +106,6 @@ namespace Project2501Server
                     MournedInstances.Add(inst.ID);
                     Instances.Remove(inst);
                 }
-
         }
 
         public static KeyValuePair<int,string>[] GetInstanceList ()
@@ -215,26 +214,38 @@ namespace Project2501Server
             sim.World.FlushLightmaps();
        }
 
+        public bool ClientIsPlayer( Client client )
+        {
+            return PlayingClients.Contains(client);
+        }
+
         public void SendMap ( Client client, int id )
         {
-            if (!PlayingClients.Contains(client))
-                return;
-
             foreach(FileTransfter file in FileDownloadManager.GetMessages(WorldCacheFile, id))
                 server.Send(client, file);
         }
 
         public void SendSettings ( Client client )
         {
-            if (!PlayingClients.Contains(client))
-                return;
-
             InstanceSettings settings = new InstanceSettings();
             settings.ID = ID;
             settings.Settings = Settings.Settings;
             settings.MapChecksum = FileDownloadManager.GetFileChecksum(WorldCacheFile);
             settings.TeamNames = sim.TeamNames;
             server.Send(client, settings);
+        }
+
+        public void SetPlayerTeamPref ( Client client, int team )
+        {
+            Player player = client.Player;
+            if (player == null || player.SpawnedOnce)
+                return;
+            player.TeamPreference = team;
+        }
+
+        public void SpawnPlayer ( Client client )
+        {
+            sim.SpawnPlayer(client.Player, -1);
         }
 
         public void AddMessage ( Client client, MessageClass message )
@@ -258,6 +269,7 @@ namespace Project2501Server
         {
             client.Player.ID = client.UID;
             client.Player.Tag = client;
+            client.Player.TeamPreference = -1;
             sim.AddPlayer(client.Player);
             return client.Player;
         }

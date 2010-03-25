@@ -226,6 +226,22 @@ namespace P2501GameClient
             return true;
         }
 
+        public bool SetPreferedTeam ( int team )
+        {
+            SetTeamPreference msg = new SetTeamPreference();
+            if (team < 0)
+                msg.Team = -1;
+            else
+            {
+                if (team >= sim.TeamNames.Length)
+                    return false;
+                else
+                    msg.Team = team;
+            }
+            Send(msg);
+            return true;
+        }
+
         protected void InstanceSelectFailedHandler(MessageClass message)
         {
             ConnectedInstance = -1;
@@ -240,6 +256,9 @@ namespace P2501GameClient
             if (info == null)
                 return;
 
+            sim.Settings = info.Settings;
+            sim.TeamNames = info.TeamNames;
+
             if (ConnectedInstance != info.ID)
             {
                 ConnectedInstance = info.ID;
@@ -249,8 +268,6 @@ namespace P2501GameClient
 
             if (InstanceSettingsReceived != null)
                 InstanceSettingsReceived(this, EventArgs.Empty);
-
-            sim.Settings = info.Settings;
 
             if (FileDownloadManager.FileExist(info.MapChecksum)) // we already have the map
                 LoadMap(FileDownloadManager.GetFile(info.MapChecksum));
