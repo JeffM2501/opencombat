@@ -42,6 +42,14 @@ namespace Simulation
         public string Avatar = string.Empty;
         public int Team = -1;
 
+        protected bool spawned = false;
+        public bool SpawnedOnce
+        {
+            get { return spawned; }
+        }
+
+        public int TeamPreference = -1;
+
         public float MovementSpeed
         {
             get { return forAftSpeed; }

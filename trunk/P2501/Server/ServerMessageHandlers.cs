@@ -53,7 +53,8 @@ namespace Project2501Server
             instanceMessageCodeHandlers.Add(MessageClass.PlayerJoin, new InstanceMessageHandler(PlayerJoinHandler));
             instanceMessageCodeHandlers.Add(MessageClass.RequestSpawn, new InstanceMessageHandler(RequestSpawnHandler));
             instanceMessageHandlers.Add(typeof(ChatMessage), new InstanceMessageHandler(ChatMessageHandler));
-        }
+            instanceMessageHandlers.Add(typeof(SetTeamPreference), new InstanceMessageHandler(SetTeamPreferenceHandler));
+       }
 
         protected void ProcessMessage(Message msg)
         {
@@ -70,7 +71,7 @@ namespace Project2501Server
 
             MessageClass message = null;
 
-            if (client.Instance != null) // see if an instance wants it
+            if (client.Instance != null || client.Instance.ClientIsPlayer(client)) // see if an instance wants it
             {
                 lock(instanceMessageHandlers)
                 {
@@ -234,6 +235,15 @@ namespace Project2501Server
             instance.AddPlayer(client);
             Send(client, MessageClass.PlayerJoinAccept);
             Send(client, MessageClass.AllowSpawn);
+        }
+
+        protected void SetTeamPreferenceHandler(Client client, MessageClass message, ServerInstance instance)
+        {
+            SetTeamPreference info = message as SetTeamPreference;
+            if (info == null)
+                return;
+
+            instance.SetPlayerTeamPref(client,info.Team);
         }
 
         protected void ChatMessageHandler(Client client, MessageClass message, ServerInstance instance)

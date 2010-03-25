@@ -173,6 +173,11 @@ namespace P2501GameClient
             get { return connected; }
         }
 
+        public String[] TeamNames
+        {
+            get { if (sim == null) return null; return sim.TeamNames; }
+        }
+
         public AuthenticationCallback GetAuthentication;
 
         MessageMapper messageMapper = new MessageMapper();

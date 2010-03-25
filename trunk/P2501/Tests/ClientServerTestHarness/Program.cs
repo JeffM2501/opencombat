@@ -113,6 +113,10 @@ namespace ClientServerTestHarnes
 
         static void client_InstanceSettingsReceived(object sender, EventArgs args)
         {
+            GameClient client = sender as GameClient;
+            if (client != null)
+                client.SetPreferedTeam(-1);
+
             Console.WriteLine("Settings Received");
         }
 

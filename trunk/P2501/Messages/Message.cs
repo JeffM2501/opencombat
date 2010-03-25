@@ -81,6 +81,7 @@ namespace Messages
         public static int InstanceSelect = 220;
         public static int InstanceSelectFailed = 222;
         public static int InstanceSettings = 225;
+        public static int SetTeamPreference = 230;
 
         public static int RequestServerVersInfo = 300;
         public static int ServerVersInfo = 305;
@@ -594,6 +595,32 @@ namespace Messages
         public override NetChannel Channel()
         {
             return NetChannel.ReliableInOrder2;
+        }
+    }
+
+    public class SetTeamPreference : MessageClass
+    {
+        public int Team = -1;
+
+        public SetTeamPreference()
+        {
+            Name = MessageClass.SetTeamPreference;
+        }
+
+        public override NetBuffer Pack()
+        {
+            NetBuffer buffer = base.Pack();
+            buffer.Write(Team);
+            return buffer;
+        }
+
+        public override bool Unpack(ref NetBuffer buffer)
+        {
+            if (!base.Unpack(ref buffer))
+                return false;
+
+            Team = buffer.ReadInt32();
+            return true;
         }
     }
 
