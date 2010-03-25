@@ -318,6 +318,9 @@ namespace P2501GameClient
             player.Team = info.Team;
             player.Avatar = info.Avatar;
 
+            if (ThisPlayer.ID == player.ID)
+                ThisPlayer = player;
+
             sim.AddPlayer(player);
         }
 
@@ -343,13 +346,6 @@ namespace P2501GameClient
             if (PlayerListRecived != null)
                 PlayerListRecived(this, EventArgs.Empty);
 
-            SendPing();
-        }
-
-        protected void PlayerJoinAcceptHandler ( MessageClass message )
-        {
-            // just fire off a callback or something
-            sim.AddPlayer(ThisPlayer);
             SendPing();
         }
 
