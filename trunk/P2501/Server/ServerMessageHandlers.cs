@@ -168,6 +168,7 @@ namespace Project2501Server
             client.CID = login.CID;
             client.Token = login.Token;
             client.Player = Sim.NewPlayer();
+            client.Player.ID = login.UID;
 
             if (NoTokenCheck)
             {

@@ -23,6 +23,7 @@ using System.Text;
 
 using OpenTK;
 using Math3D;
+using World;
 
 namespace Simulation
 {
@@ -30,13 +31,65 @@ namespace Simulation
     {
         public static bool SpawnPlayer ( Player player, Sim sim )
         {
-            player.LastUpdateState.Position = new Vector3(FloatHelper.Random(-sim.MapInfo.Bounds.X, sim.MapInfo.Bounds.X), FloatHelper.Random(-sim.MapInfo.Bounds.Y, sim.MapInfo.Bounds.Y), 0);
+            // see if there are any spawn objects for this player team in the map
+            List<ObjectInstance> spawns = sim.World.FindObjects("Spawn");
+            if (spawns.Count > 0)
+            {
+                List<ObjectInstance> teamspawns = new List<ObjectInstance>();
+                if (player.Team < 0)
+                    teamspawns = spawns;
+                else
+                {
+                    foreach (ObjectInstance spawn in spawns)
+                    {
+                        if (spawn.ObjectAttributes.FindAttributeWithValue("Team", sim.TeamNames[player.Team]))
+                            teamspawns.Add(spawn);
+                    }
+                }
+
+                ObjectInstance spawnobject = teamspawns[new Random().Next(teamspawns.Count - 1)];
+
+                player.LastUpdateState.Position = new Vector3(spawnobject.Postion);
+                player.LastUpdateState.Movement = Vector3.Zero;
+                player.LastUpdateState.Rotation = spawnobject.Rotation.Z;
+                player.LastUpdateState.Spin = 0;
+                return true;
+            }
+
+            // find a cell with the right attribute
+
+            List<Cell> teamspawnCells = new List<Cell>();
+
+            foreach (CellGroup group in sim.World.CellGroups)
+            {
+                foreach(Cell cell in group.Cells)
+                {
+                    if (player.Team < 0)
+                    {
+                        if (cell.CellAttributes.Find("Spwan").Length > 0)
+                            teamspawnCells.Add(cell);
+                    }
+                    else
+                    {
+                        if (cell.CellAttributes.FindAttributeWithValue("Spawn", sim.TeamNames[player.Team]))
+                            teamspawnCells.Add(cell);
+                    }
+                }
+            }
+
+            if (teamspawnCells.Count == 0)               
+                teamspawnCells.Add(sim.World.CellGroups[0].Cells[0]); // fuckit, first cell
+
+            Cell spawnCell = teamspawnCells[0];
+            if (teamspawnCells.Count > 1)
+                spawnCell = teamspawnCells[new Random().Next(teamspawnCells.Count - 1)];
+
+            BoundingBox box = spawnCell.GetBoundingBox();
+
+            player.LastUpdateState.Position = new Vector3(box.Min+(box.Max-box.Min));
             player.LastUpdateState.Movement = Vector3.Zero;
-            player.LastUpdateState.Rotation = FloatHelper.Random(-180f, 180f);
+            player.LastUpdateState.Rotation = (float)(new Random().NextDouble())*360f;
             player.LastUpdateState.Spin = 0;
-
-            // todo, figure out if this is a good place or not
-
             return true;
         }
     }
