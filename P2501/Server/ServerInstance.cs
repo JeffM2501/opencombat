@@ -233,6 +233,14 @@ namespace Project2501Server
             settings.MapChecksum = FileDownloadManager.GetFileChecksum(WorldCacheFile);
             settings.TeamNames = sim.TeamNames;
             server.Send(client, settings);
+
+            // send player list
+
+            foreach (Player player in sim.Players)
+                server.Send(new PlayerInfo(player));
+
+            server.Send(client,MessageClass.PlayerListDone);
+            server.Send(client, MessageClass.AllowSpawn);
         }
 
         public void SetPlayerTeamPref ( Client client, int team )
@@ -380,8 +388,7 @@ namespace Project2501Server
 
         protected void sim_PlayerJoined ( object sender, PlayerEventArgs args )
         {           
-            PlayerInfo info = new PlayerInfo(args.player);
-            Broadcast(info);
+            Broadcast(new PlayerInfo(args.player));
         }
 
         protected void sim_PlayerRemoved(object sender, PlayerEventArgs args)
@@ -401,9 +408,12 @@ namespace Project2501Server
                 server.Send(client, message);
         }
 
-        public void Spawn ( Player player )
+        public void Spawn ( Client client )
         {
-            sim.SpawnPlayer(player, lastUpdateTime);
+            if (client.Player == null || !sim.Players.Contains(client.Player))
+                AddPlayer(client);
+
+            sim.SpawnPlayer(client.Player, lastUpdateTime);
         }
     }
 }

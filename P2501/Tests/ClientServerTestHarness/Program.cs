@@ -26,6 +26,7 @@ using System.Diagnostics;
 using Project2501Server;
 using P2501GameClient;
 using Simulation;
+using OpenTK;
 
 namespace ClientServerTestHarnes
 {
@@ -95,15 +96,62 @@ namespace ClientServerTestHarnes
 
             client.MapLoaded += new GeneralEventHandler(client_MapLoaded);
             client.MapLoadFailed += new GeneralEventHandler(client_MapLoadFailed);
+
+            client.PlayerListRecived += new GeneralEventHandler(client_PlayerListRecived);
+
+            client.sim.PlayerJoined += new PlayerJoinedHandler(sim_PlayerJoined);
+            client.sim.PlayerRemoved += new PlayerRemovedHandler(sim_PlayerRemoved);
+            client.sim.PlayerStatusChanged += new PlayerStatusChangeHandler(sim_PlayerStatusChanged);
+
+            client.SpawnRequested += new GeneralEventHandler(client_SpawnRequested);
+            client.Spawned += new GeneralEventHandler(client_Spawned);
             
             while ( true )
             {
                 if (!client.Update())
                     break;
+
+                if (client.Spwanable)
+                    client.RequestSpawn();
             }
 
             client.Kill();
             server.Kill();
+        }
+
+        static void client_PlayerListRecived(object sender, EventArgs args)
+        {
+            Console.WriteLine("Player List received");
+        }
+
+        static void client_Spawned(object sender, EventArgs args)
+        {
+            Console.WriteLine("Client player spawned");
+            GameClient client = sender as GameClient;
+            if (client != null)
+            {
+                Console.WriteLine("Player loc " + client.ThisPlayer.LastUpdateState.Position.ToString());
+            }
+        }
+
+        static void client_SpawnRequested(object sender, EventArgs args)
+        {
+            Console.WriteLine("Client player requested spawn");
+        }
+
+        static void sim_PlayerStatusChanged(object sender, Simulation.PlayerEventArgs args)
+        {
+            Console.WriteLine("Player " + args.player.ID.ToString() + " status changed to " + args.player.Status.ToString());
+        }
+
+        static void sim_PlayerRemoved(object sender, Simulation.PlayerEventArgs args)
+        {
+            Console.WriteLine("Player " + args.player.ID.ToString() + " parted");
+        }
+
+        static void sim_PlayerJoined(object sender, Simulation.PlayerEventArgs args)
+        {
+            Console.WriteLine("Player " + args.player.ID.ToString() + " joined ");
         }
 
         static void client_MapLoadFailed(object sender, EventArgs args)

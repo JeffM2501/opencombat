@@ -129,6 +129,10 @@ namespace P2501GameClient
         public event GeneralEventHandler InstanceJoinFailed;
 
         public event GeneralEventHandler InstanceSettingsReceived;
+        public event GeneralEventHandler PlayerListRecived;
+       
+        public event GeneralEventHandler SpawnRequested;
+        public event GeneralEventHandler Spawned;
 
         public event GeneralEventHandler MapLoaded;
         public event GeneralEventHandler MapLoadFailed;
@@ -187,6 +191,15 @@ namespace P2501GameClient
         Stopwatch stopwatch = new Stopwatch();
 
         bool haveSyncedTime = false;
+        public bool Spwanable
+        {
+            get
+            {
+                if (requestedSpawn || ThisPlayer == null || ThisPlayer.Status == PlayerStatus.Alive || sim == null || sim.World == null)
+                    return false;
+                return gotAllowSpawn;
+            }
+        }
         bool gotAllowSpawn = false;
 
         UInt64 lastPing = 0;
@@ -307,10 +320,13 @@ namespace P2501GameClient
 
         public void RequestSpawn ()
         {
-            if (requestedSpawn || ThisPlayer == null || ThisPlayer.Status != PlayerStatus.Despawned)
+            if (requestedSpawn || ThisPlayer == null || ThisPlayer.Status == PlayerStatus.Alive)
                 return;
 
+            requestedSpawn = true;
             Send(MessageClass.RequestSpawn);
+            if (SpawnRequested != null)
+                SpawnRequested(this, EventArgs.Empty);
         }
 
         public void SendClockUpdate ( )

@@ -48,7 +48,6 @@ namespace P2501GameClient
             messageHandlers.Add(typeof(PlayerInfo), new MessageHandler(PlayerInfoHandler));
             messageCodeHandlers.Add(MessageClass.PlayerListDone, new MessageHandler(PlayerListDoneHandler));
             messageHandlers.Add(typeof(FileTransfter), new MessageHandler(FileTransfterHandler));
-            messageCodeHandlers.Add(MessageClass.PlayerJoinAccept, new MessageHandler(PlayerJoinAcceptHandler));
             messageHandlers.Add(typeof(ChatMessage), new MessageHandler(ChatMessageHandler));
             messageCodeHandlers.Add(MessageClass.AllowSpawn, new MessageHandler(AllowSpawnHandler));
             messageHandlers.Add(typeof(PlayerSpawn), new MessageHandler(PlayerSpawnHandler));
@@ -316,6 +315,8 @@ namespace P2501GameClient
             player.Callsign = info.Callsign;
             player.Score = info.Score;
             player.Status = info.Status;
+            player.Team = info.Team;
+            player.Avatar = info.Avatar;
 
             sim.AddPlayer(player);
         }
@@ -339,7 +340,9 @@ namespace P2501GameClient
 
         protected void PlayerListDoneHandler ( MessageClass message )
         {
-            Send(MessageClass.PlayerJoin);
+            if (PlayerListRecived != null)
+                PlayerListRecived(this, EventArgs.Empty);
+
             SendPing();
         }
 
@@ -390,6 +393,8 @@ namespace P2501GameClient
             player.Update(player.LastUpdateTime);
             sim.SetPlayerStatus(player, PlayerStatus.Alive,lastUpdateTime);
             SendPing();
+            if (Spawned != null)
+                Spawned(this, EventArgs.Empty);
         }
 
         protected void TheTimeIsNowHandler(MessageClass message)

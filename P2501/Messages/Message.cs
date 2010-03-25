@@ -90,8 +90,6 @@ namespace Messages
 
         public static int PlayerInfo = 400;
         public static int PlayerListDone = 410;
-        public static int PlayerJoin = 420;
-        public static int PlayerJoinAccept = 430;
 
         public static int RequestMapInfo = 500;
 
@@ -553,6 +551,7 @@ namespace Messages
         public string Callsign = string.Empty;
         public int Team = -1;
         public Int32 Score = -1;
+        public string Avatar = string.Empty;
         public PlayerStatus Status = PlayerStatus.Despawned;
 
         public PlayerInfo()
@@ -568,6 +567,8 @@ namespace Messages
             Callsign = player.Callsign;
             Score = player.Score;
             Status = player.Status;
+            Avatar = player.Avatar;
+            Team = player.Team;
         }
 
         public override NetBuffer Pack()
@@ -576,6 +577,8 @@ namespace Messages
             buffer.Write(PlayerID);
             buffer.Write(Callsign);
             buffer.Write(Score);
+            buffer.Write(Team);
+            buffer.Write(Avatar);
             buffer.Write((byte)Status);
             return buffer;
         }
@@ -588,6 +591,8 @@ namespace Messages
             PlayerID = buffer.ReadUInt64();
             Callsign = buffer.ReadString();
             Score = buffer.ReadInt32();
+            Team = buffer.ReadInt32();
+            Avatar = buffer.ReadString();
             Status = (PlayerStatus)Enum.ToObject(typeof(PlayerStatus), buffer.ReadByte());
             return true;
         }
