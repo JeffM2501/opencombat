@@ -50,7 +50,6 @@ namespace Project2501Server
             messageHandlers.Add(typeof(InstanceSelect), new MessageHandler(InstanceSelectHandler));
 
             instanceMessageHandlers.Add(typeof(RequestMapInfo), new InstanceMessageHandler(RequestMapInfoHandler));
-            instanceMessageCodeHandlers.Add(MessageClass.PlayerJoin, new InstanceMessageHandler(PlayerJoinHandler));
             instanceMessageCodeHandlers.Add(MessageClass.RequestSpawn, new InstanceMessageHandler(RequestSpawnHandler));
             instanceMessageHandlers.Add(typeof(ChatMessage), new InstanceMessageHandler(ChatMessageHandler));
             instanceMessageHandlers.Add(typeof(SetTeamPreference), new InstanceMessageHandler(SetTeamPreferenceHandler));
@@ -69,17 +68,16 @@ namespace Project2501Server
                     return;
             }
 
-            MessageClass message = null;
+            MessageClass message = messageMapper.MessageFromID(msg.Name);
+            if (message != null)
+                message.Unpack(ref msg.Data);
 
-            if (client.Instance != null || client.Instance.ClientIsPlayer(client)) // see if an instance wants it
+            if (client.Instance != null && client.Instance.ClientIsPlayer(client)) // see if an instance wants it
             {
                 lock(instanceMessageHandlers)
                 {
-                    message = messageMapper.MessageFromID(msg.Name);
                     if (message != null)
                     {
-                        message.Unpack(ref msg.Data);
-
                         if (instanceMessageHandlers.ContainsKey(message.GetType()) || instanceMessageCodeHandlers.ContainsKey(msg.Name))
                         {
                             client.Instance.AddMessage(client, message);
@@ -99,11 +97,8 @@ namespace Project2501Server
 
             lock(client)
             {
-                message = messageMapper.MessageFromID(msg.Name);
                 if (message != null)
                 {
-                    message.Unpack(ref msg.Data);
-
                     if (messageHandlers.ContainsKey(message.GetType()))
                         messageHandlers[message.GetType()](client, message);
                     else if (messageCodeHandlers.ContainsKey(msg.Name))
@@ -230,13 +225,6 @@ namespace Project2501Server
             instance.SendMap(client, msg.ID);
         }
 
-        protected void PlayerJoinHandler(Client client, MessageClass message, ServerInstance instance)
-        {
-            instance.AddPlayer(client);
-            Send(client, MessageClass.PlayerJoinAccept);
-            Send(client, MessageClass.AllowSpawn);
-        }
-
         protected void SetTeamPreferenceHandler(Client client, MessageClass message, ServerInstance instance)
         {
             SetTeamPreference info = message as SetTeamPreference;
@@ -258,7 +246,7 @@ namespace Project2501Server
         
         protected void RequestSpawnHandler(Client client, MessageClass message, ServerInstance instance)
         {
-            instance.Spawn(client.Player);
+            instance.Spawn(client);
         }
 
         protected void WhatTimeIsItHandler(Client client, MessageClass message)
