@@ -78,6 +78,7 @@ namespace Simulation
         public float BaseTurnSpeed = 180.0f;
         public float BaseAcceleration = 25f;
         public float BaseTurnAcceleration = 10f;
+        public float BaseGravity = -10f;
     }
     public delegate void SimEventHandler(object sender, EventArgs args);
 
