@@ -23,6 +23,7 @@ using System.Text;
 
 using OpenTK;
 using OpenTK.Graphics;
+using Simulation;
 
 namespace P2501Client
 {
@@ -32,8 +33,31 @@ namespace P2501Client
 
         public UpdateEventHandler Update;
 
+        protected Sim simSate = null;
+
+        public Sim GameState = null;
+
+        protected Player ThisPlayer = null;
+
+        public Player ThePlayer
+        {
+            get { return ThisPlayer; }
+            set
+            {
+                ThisPlayer = value;
+            }
+        }
+
+        public HUDRenderer HUD; 
+
         public Visual (int width, int height, GraphicsMode mode, GameWindowFlags options) : base(width,height,mode,"Projekt2501",options)
         {
+            HUD = new HUDRenderer(this);
+        }
+
+        public void SetPlayer (Player player)
+        {
+            ThisPlayer = player;
         }
 
         protected override void OnUpdateFrame(FrameEventArgs e)
@@ -45,6 +69,10 @@ namespace P2501Client
         protected override void OnRenderFrame(FrameEventArgs e)
         {
             base.OnRenderFrame(e);
+            if (GameState == null)
+                return;
+
+            HUD.Update();
         }
     }
 }
