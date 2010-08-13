@@ -129,6 +129,10 @@
       <Project>{BA202214-F6F8-4853-BCC9-CA4F13C5F479}</Project>
       <Name>Lidgren.Network</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\graphicslib\GPLib\Drawables\Drawables.csproj">
+      <Project>{71452148-876E-4B8E-9244-A8F014CF72E6}</Project>
+      <Name>Drawables</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Components\Auth\Auth.csproj">
       <Project>{569385E8-A102-4C6B-B87C-C3C48E675B3F}</Project>
       <Name>Auth</Name>
@@ -136,6 +140,10 @@
     <ProjectReference Include="..\..\GameClient\GameClient.csproj">
       <Project>{1F5E5A59-5A45-4646-9D17-D3603CF7061B}</Project>
       <Name>GameClient</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Simulation\Simulation.csproj">
+      <Project>{55D7275D-C279-455E-8505-9E9C6A3BA1D1}</Project>
+      <Name>Simulation</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

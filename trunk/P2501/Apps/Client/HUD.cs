@@ -24,10 +24,10 @@ namespace P2501Client
 
         void Win_Resize(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            
         }
 
-        public void Update ( double time )
+        public void Update ()
         {
 
         }
