@@ -23,7 +23,9 @@ using System.Text;
 
 using OpenTK;
 using OpenTK.Graphics;
+using OpenTK.Graphics.OpenGL;
 using Simulation;
+using Drawables.Cameras;
 
 namespace P2501Client
 {
@@ -48,16 +50,28 @@ namespace P2501Client
             }
         }
 
+        protected Camera camera;
+
         public HUDRenderer HUD; 
 
         public Visual (int width, int height, GraphicsMode mode, GameWindowFlags options) : base(width,height,mode,"Projekt2501",options)
         {
             HUD = new HUDRenderer(this);
+            camera = new Camera();
+        }
+
+        protected override void OnResize(EventArgs e)
+        {
+            base.OnResize(e);
+            GL.Viewport(0, 0, Width, Height);
+            if (camera != null)
+                camera.Resize(Width, Height);
         }
 
         public void SetPlayer (Player player)
         {
             ThisPlayer = player;
+            HUD.ThePlayer = player;
         }
 
         protected override void OnUpdateFrame(FrameEventArgs e)
@@ -69,10 +83,20 @@ namespace P2501Client
         protected override void OnRenderFrame(FrameEventArgs e)
         {
             base.OnRenderFrame(e);
-            if (GameState == null)
-                return;
+            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-            HUD.Update();
+            GL.Disable(EnableCap.Texture2D);
+            GL.Disable(EnableCap.Lighting);
+
+            if (GameState != null)
+            { 
+
+                // set ortho
+                camera.SetOrthographic();
+                HUD.Update(); 
+            }
+
+            SwapBuffers();
         }
     }
 }
