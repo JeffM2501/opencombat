@@ -58,7 +58,8 @@ namespace P2501Client
             foreach (string name in prefs.Accounts)
                 Username.Items.Add(name);
 
-            Username.SelectedIndex = 0;
+            if (Username.Items.Count > 0)
+                Username.SelectedIndex = 0;
 
             timer = new Timer();
             timer.Interval = 15000;
