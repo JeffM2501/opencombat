@@ -21,6 +21,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 
+using Project2501Server;
+using ServerConfigurator;
+
 namespace P2501Client
 {
     static class Program
@@ -41,10 +44,37 @@ namespace P2501Client
                 Application.Run(startupForm);
 
                 if (startupForm.OkToPlay)
+                {
+                    Server server = null;
+                    
+
+                    if (startupForm.StartPublicServer)
+                    {
+                        ServerConfig config = new ServerConfig();
+                        LoadDefaultConfig(config);
+
+                        server = new Server(config.GetInt("port"));
+                        server.Run();
+                    }
                     new Game(startupForm.ConnectHost, startupForm.UID, startupForm.Token, startupForm.CharacterID).Run();
+
+                    if (server != null)
+                    {
+                        server.Kill();
+                        server = null;
+                    }
+                }
                 else
                     done = true;
             }
+        }
+
+        static void LoadDefaultConfig(ServerConfig config)
+        {
+            config.SetItem("port", "2501");
+            config.SetItem("host", "localhost:2501");
+            config.SetItem("description", "Default Test Server Run by client");
+            config.SetItem("name", "TestServer");
         }
     }
 }

@@ -82,6 +82,7 @@ namespace P2501Client
             this.Options = new System.Windows.Forms.Button();
             this.Play = new System.Windows.Forms.Button();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.StartServer = new System.Windows.Forms.Button();
             PreferedServer = new System.Windows.Forms.ColumnHeader();
             PreferedDescription = new System.Windows.Forms.ColumnHeader();
             PreferedPlayers = new System.Windows.Forms.ColumnHeader();
@@ -287,6 +288,7 @@ namespace P2501Client
             this.GamesGroup.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
+            this.GamesGroup.Controls.Add(this.StartServer);
             this.GamesGroup.Controls.Add(this.ServerTabs);
             this.GamesGroup.Controls.Add(this.Options);
             this.GamesGroup.Controls.Add(this.Play);
@@ -445,6 +447,16 @@ namespace P2501Client
             this.splitContainer1.SplitterDistance = 199;
             this.splitContainer1.TabIndex = 4;
             // 
+            // StartServer
+            // 
+            this.StartServer.Location = new System.Drawing.Point(205, 253);
+            this.StartServer.Name = "StartServer";
+            this.StartServer.Size = new System.Drawing.Size(110, 23);
+            this.StartServer.TabIndex = 3;
+            this.StartServer.Text = "Start Local Server";
+            this.StartServer.UseVisualStyleBackColor = true;
+            this.StartServer.Click += new System.EventHandler(this.StartServer_Click);
+            // 
             // StartupForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -497,6 +509,7 @@ namespace P2501Client
         private System.Windows.Forms.TabPage LeagueTab;
         private System.Windows.Forms.ImageList ServerListIcons;
         private System.Windows.Forms.ListView CommunityList;
+        private System.Windows.Forms.Button StartServer;
     }
 }
 
