@@ -34,6 +34,8 @@ namespace P2501Client
         public UInt64 CharacterID = 0;
         public string ConnectHost = string.Empty;
 
+        public bool StartPublicServer = false;
+
         public bool OkToPlay = false;
 
         GameList gameList = null;
@@ -303,6 +305,12 @@ namespace P2501Client
         private void PreferedList_SelectedIndexChanged(object sender, EventArgs e)
         {
             UpdateUIStates();
+        }
+
+        private void StartServer_Click(object sender, EventArgs e)
+        {
+            StartPublicServer = true;
+            Play_Click(sender, e);
         }
     }
 }

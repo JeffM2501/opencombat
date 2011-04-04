@@ -57,6 +57,11 @@ namespace P2501Client
             Prefs = ClientPrefs.Read(ClientPrefs.GetDefaultPrefsFile());
         }
 
+        public Game(UInt64 uid, UInt64 token, UInt64 cid)
+        {
+            Prefs = ClientPrefs.Read(ClientPrefs.GetDefaultPrefsFile());
+        }
+
         public void Init ()
         {
             GameWindowFlags flags = GameWindowFlags.Default;

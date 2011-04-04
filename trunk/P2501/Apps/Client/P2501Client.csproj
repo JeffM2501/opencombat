@@ -121,6 +121,14 @@
     <Compile Include="Visual.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Common\Host\Host.csproj">
+      <Project>{2EE0E321-3FC6-4B3A-9F13-C34B8B49D7B5}</Project>
+      <Name>Host</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Common\ServerConfigurator\ServerConfigurator.csproj">
+      <Project>{CA9368CE-BC6D-4028-9FF8-99F012201DC6}</Project>
+      <Name>ServerConfigurator</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\graphicslib\Common\Client\Client.csproj">
       <Project>{416EE5A4-4061-4AAC-B00F-132FB4C19513}</Project>
       <Name>Client</Name>
@@ -140,6 +148,10 @@
     <ProjectReference Include="..\..\GameClient\GameClient.csproj">
       <Project>{1F5E5A59-5A45-4646-9D17-D3603CF7061B}</Project>
       <Name>GameClient</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Server\Server.csproj">
+      <Project>{1A9B8887-1292-4F4A-BFFC-5290F794A898}</Project>
+      <Name>Server</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Simulation\Simulation.csproj">
       <Project>{55D7275D-C279-455E-8505-9E9C6A3BA1D1}</Project>
