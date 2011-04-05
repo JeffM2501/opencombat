@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{5854ECD6-A478-462C-82E8-291308A07FE8}</ProjectGuid>
     <OutputType>WinExe</OutputType>
@@ -129,15 +129,15 @@
       <Project>{CA9368CE-BC6D-4028-9FF8-99F012201DC6}</Project>
       <Name>ServerConfigurator</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\graphicslib\Common\Client\Client.csproj">
+    <ProjectReference Include="..\..\..\Common\Client\Client.csproj">
       <Project>{416EE5A4-4061-4AAC-B00F-132FB4C19513}</Project>
       <Name>Client</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\graphicslib\Common\lidgren-network\Lidgren.Network\Lidgren.Network.csproj">
+    <ProjectReference Include="..\..\..\Common\lidgren-network\Lidgren.Network\Lidgren.Network.csproj">
       <Project>{BA202214-F6F8-4853-BCC9-CA4F13C5F479}</Project>
       <Name>Lidgren.Network</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\graphicslib\GPLib\Drawables\Drawables.csproj">
+    <ProjectReference Include="..\..\..\GPLib\Drawables\Drawables.csproj">
       <Project>{71452148-876E-4B8E-9244-A8F014CF72E6}</Project>
       <Name>Drawables</Name>
     </ProjectReference>
