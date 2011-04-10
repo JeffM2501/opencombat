@@ -112,7 +112,7 @@ namespace Project2501Server
             if (DefaultInstanceSetup != null)
                 DefaultInstanceSetup(ref defaultInstanceSettings);
 
-            if (!defaultInstanceSettings.MapFile.Exists)
+            if (defaultInstanceSettings.MapFile == null || !defaultInstanceSettings.MapFile.Exists)
                 return false;
 
             // add the root instance
