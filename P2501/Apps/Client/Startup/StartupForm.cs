@@ -310,7 +310,20 @@ namespace P2501Client
         private void StartServer_Click(object sender, EventArgs e)
         {
             StartPublicServer = true;
-            Play_Click(sender, e);
+            if (CallsignList.SelectedItem != null)
+                CharacterID = ((CharaterListItem)CallsignList.SelectedItem).CID;
+            else
+            {
+                if (CallsignList.Items.Count > 0)
+                    CharacterID = ((CharaterListItem)CallsignList.Items[0]).CID;
+                else
+                    return;
+            }
+            ConnectHost = "localhost";
+
+            OkToPlay = true;
+            DialogResult = DialogResult.OK;
+            this.Close();
         }
     }
 }
