@@ -20,6 +20,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using System.IO;
 
 using Project2501Server;
 using ServerConfigurator;
@@ -54,6 +55,7 @@ namespace P2501Client
                         LoadDefaultConfig(config);
 
                         server = new Server(config.GetInt("port"));
+                        server.DefaultInstanceSetup = new DefaultInstanceSetupCallback(SetupInstance);
                         server.Run();
                     }
                     new Game(startupForm.ConnectHost, startupForm.UID, startupForm.Token, startupForm.CharacterID).Run();
@@ -67,6 +69,11 @@ namespace P2501Client
                 else
                     done = true;
             }
+        }
+
+        static void SetupInstance(ref ServerInstanceSettings settings)
+        {
+            settings.MapFile = WorldBuilder.BuildDefaultWorld(Path.GetTempFileName());
         }
 
         static void LoadDefaultConfig(ServerConfig config)

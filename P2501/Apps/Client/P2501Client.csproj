@@ -119,6 +119,7 @@
       <DependentUpon>WaitBox.cs</DependentUpon>
     </Compile>
     <Compile Include="Visual.cs" />
+    <Compile Include="WorldBuilder.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Common\Host\Host.csproj">
@@ -140,6 +141,14 @@
     <ProjectReference Include="..\..\..\GPLib\Drawables\Drawables.csproj">
       <Project>{71452148-876E-4B8E-9244-A8F014CF72E6}</Project>
       <Name>Drawables</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\GPLib\Math\Math3D.csproj">
+      <Project>{0BC4671F-FF72-4D3E-9889-44382F6C64F2}</Project>
+      <Name>Math3D</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\GPLib\World\World.csproj">
+      <Project>{D5EC63EC-B662-4C70-8C34-6E6AE3661D07}</Project>
+      <Name>World</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Components\Auth\Auth.csproj">
       <Project>{569385E8-A102-4C6B-B87C-C3C48E675B3F}</Project>
