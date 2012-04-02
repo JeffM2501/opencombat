@@ -1,0 +1,42 @@
+
+--MONO---
+Implement a browser manager interface on mono
+Verify correct direcotries are gotten in file locaitons in mono
+Verify data update in mono
+
+--Editor--
+Block Painting
+Flood Fill
+Erosions
+Plugins
+
+
+--Updates--
+Work out bin update system and make copy tools for windows.
+Verify what dirs are writable on different OSs.
+
+
+--Input--
+Joysticks?
+
+--Sound--
+Implement it
+
+
+--Simulation--
+Faster world collisions.
+More block shapes.
+Make a sim class and hook the input/view into it.
+
+
+--Networking--
+Make a server
+Load worlds on server and pack
+Use Sim on server.
+
+--Graphics--
+VBOs for speed.
+Lightmaps?
+Better textures.
+Objects.
+Actors.
