@@ -1,0 +1,18 @@
+non graphics tasks
+player movement
+weapon/shot definition
+shot tracking
+pickups
+spawn types
+
+graphics tasks
+Draw world
+drawHud
+Better lighting
+tank drawing
+shot drawing
+pickup drawing
+
+
+
+
