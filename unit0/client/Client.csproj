@@ -1,0 +1,151 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{12BA1FC0-8904-44E3-AEB2-AB4D25D91993}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Client</RootNamespace>
+    <AssemblyName>Client</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
+    <WarningLevel>4</WarningLevel>
+    <Optimize>false</Optimize>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="OpenTK.Compatibility, Version=1.0.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\opentk\Binaries\OpenTK\Release\OpenTK.Compatibility.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenTK, Version=1.0.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\opentk\Binaries\OpenTK\Release\OpenTK.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenTK.GLControl, Version=1.0.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\opentk\Binaries\OpenTK\Release\OpenTK.GLControl.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="API\API.cs" />
+    <Compile Include="API\API.DebugDisplay.cs" />
+    <Compile Include="Hasher.cs" />
+    <Compile Include="Input.cs" />
+    <Compile Include="MainWindow.cs" />
+    <Compile Include="Patcher.cs" />
+    <Compile Include="PreGame.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PreGame.Designer.cs">
+      <DependentUpon>PreGame.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UpdateProgress.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UpdateProgress.Designer.cs">
+      <DependentUpon>UpdateProgress.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View.cs" />
+    <Compile Include="ViewDebug.cs" />
+    <EmbeddedResource Include="PreGame.resx">
+      <DependentUpon>PreGame.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <EmbeddedResource Include="UpdateProgress.resx">
+      <DependentUpon>UpdateProgress.cs</DependentUpon>
+    </EmbeddedResource>
+    <Compile Include="API\API.Windows.cs" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\components\Math\Math3D.csproj">
+      <Project>{0BC4671F-FF72-4D3E-9889-44382F6C64F2}</Project>
+      <Name>Math3D</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\components\Renderer\Renderer.csproj">
+      <Project>{3320A147-244A-4710-90FB-A20671FEDE59}</Project>
+      <Name>Renderer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\components\Textures\Textures.csproj">
+      <Project>{8AFCDAAF-5B7F-4955-B27A-224EAA8EEABA}</Project>
+      <Name>Textures</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FileLocations\FileLocations.csproj">
+      <Project>{6116C236-5282-47FD-B802-459E12D047FB}</Project>
+      <Name>FileLocations</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\game\Game.csproj">
+      <Project>{EE05A0AF-465E-4A59-9C6F-7FF2A115AC30}</Project>
+      <Name>Game</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\gridWorld\GridWorld.csproj">
+      <Project>{721F485A-C3A7-4340-AD60-A24F08E18323}</Project>
+      <Name>GridWorld</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WorldDrawing\WorldDrawing.csproj">
+      <Project>{24A40852-BF0F-416C-9ABF-496CFED0BF6E}</Project>
+      <Name>WorldDrawing</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
