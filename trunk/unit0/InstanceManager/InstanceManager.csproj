@@ -49,6 +49,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Instance.cs" />
+    <Compile Include="InstanceConnection.cs" />
     <Compile Include="Manager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -56,6 +58,16 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\InstanceConfig\InstanceConfig.csproj">
+      <Project>{5D68096C-B899-460F-85C6-676A37C427FB}</Project>
+      <Name>InstanceConfig</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Lidgren.Network\Lidgren.Network.csproj">
+      <Project>{49BA1C69-6104-41AC-A5D8-B54FA9F696E8}</Project>
+      <Name>Lidgren.Network</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

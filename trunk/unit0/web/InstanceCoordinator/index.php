@@ -5,20 +5,20 @@
 	{
 		$key = Request("key");
 		if (!$key)
-			DieWithError("Error: No Key");
+			DieWithError("addhost;Error=No Key");
 			
 		$keyID =  GetDBFieldForKey("Secret", $key, "HostKeys", "ID" );
 		if (!$keyID)
-			DieWithError("Error: Unknown Key");
+			DieWithError("addhost;Error= Unknown Key");
 			
 		$host = GetDBFieldForID( $keyID, "HostKeys", "Host" );
 		
 		if (!$host)
-			DieWithError("Error: No Host");
+			DieWithError("addhost;Error=No Host");
 			
 		$remoteHost = $_SERVER['REMOTE_ADDR'];
 		if ($remoteHost != $host)
-			DieWithError("Error: Invalid Host Requst " . $remoteHost);
+			DieWithError("addhost;Error=Invalid Host Requst " . $remoteHost);
 			
 		// see if we have a record with this host and key
 		$hosts = FieldsFromQuery("SELECT ID FROM Hosts WHERE Host='$host' AND Secret='$key'");
@@ -41,7 +41,7 @@
 		UpdateDBFieldForID ( $serverID, "Hosts", "Max_Players", Request("max_players") );
 		UpdateDBFieldForID ( $serverID, "Hosts", "Last_Heartbeat", NOW_DATETIME() );
 			
-		echo "OK: " . $serverID;
+		echo "addhost;OK;ID=" . $serverID;
 	}
 	
 	$db = ConnectToDB();

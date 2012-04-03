@@ -22,8 +22,6 @@ namespace InstanceConfig
         public string Name = string.Empty;
         public UInt64 InstanceID = UInt64.MaxValue;
 
-        public string PIDPath = string.Empty;
-
         public static Configuration Read(string path)
         {
             FileInfo file = new FileInfo(path);
