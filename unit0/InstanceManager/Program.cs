@@ -13,7 +13,7 @@ namespace InstanceManager
 {
     class Program
     {
-        static List<WebRequest> Requests = new List<WebRequest>();
+        static List<WebInbound> Requests = new List<WebInbound>();
 
         static void Main(string[] args)
         {
@@ -27,7 +27,7 @@ namespace InstanceManager
             listener.Start();
             bool killMe = false;
 
-            Manager.Instance.Init(config);
+            Manager.TheManager.Init(config);
 
             Thread deadThread = new Thread(new ThreadStart(CheckForDead));
 
@@ -38,7 +38,7 @@ namespace InstanceManager
                 if (!deadThread.IsAlive)
                     deadThread.Start();
 
-                WebRequest r = new WebRequest(context);
+                WebInbound r = new WebInbound(context);
                 lock(Requests)
                     Requests.Add(r);
 
@@ -46,14 +46,14 @@ namespace InstanceManager
             }
             
             listener.Stop();
-            Manager.Instance.Kill();
+            Manager.TheManager.Kill();
 
             if(deadThread.IsAlive)
                 deadThread.Abort();
 
             lock(Requests)
             {
-                foreach (WebRequest request in Requests)
+                foreach (WebInbound request in Requests)
                     request.Kill();
                 Requests.Clear();
             }
@@ -67,14 +67,14 @@ namespace InstanceManager
                 Thread.Sleep(200);
                 lock (Requests)
                 {
-                    List<WebRequest> dead = new List<WebRequest>();
-                    foreach (WebRequest request in Requests)
+                    List<WebInbound> dead = new List<WebInbound>();
+                    foreach (WebInbound request in Requests)
                     {
                         if (request.Done)
                             dead.Add(request);
                     }
 
-                    foreach (WebRequest request in dead)
+                    foreach (WebInbound request in dead)
                         Requests.Remove(request);
 
                     if (Requests.Count == 0)
@@ -109,7 +109,7 @@ namespace InstanceManager
         }
     }
 
-    public class InstanceManagerConfig
+    internal class InstanceManagerConfig
     {
         static List<string> DefualtPrefixes()
         {
@@ -127,6 +127,14 @@ namespace InstanceManager
         public int MaxInstances = 0;
         public int MaxPlayers = 0;
         public double HeartbeatTimeout = 60.0;
+
+        public int InstanceManagePort = 2503;
+
+        public string InstanceConfigPath = "./";
+        public string PathToInstanceExe = "./GameInstance.exe";
+        public string CLICommandLine = string.Empty;
+
+        public string PIDFolder = string.Empty;
 
         public static InstanceManagerConfig Read(string path)
         {
