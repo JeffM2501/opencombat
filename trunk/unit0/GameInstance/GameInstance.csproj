@@ -42,8 +42,31 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ManagerConnection.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\components\Math\Math3D.csproj">
+      <Project>{0BC4671F-FF72-4D3E-9889-44382F6C64F2}</Project>
+      <Name>Math3D</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\game\Game.csproj">
+      <Project>{EE05A0AF-465E-4A59-9C6F-7FF2A115AC30}</Project>
+      <Name>Game</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GridWorld\GridWorld.csproj">
+      <Project>{721F485A-C3A7-4340-AD60-A24F08E18323}</Project>
+      <Name>GridWorld</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\InstanceConfig\InstanceConfig.csproj">
+      <Project>{5D68096C-B899-460F-85C6-676A37C427FB}</Project>
+      <Name>InstanceConfig</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Lidgren.Network\Lidgren.Network.csproj">
+      <Project>{49BA1C69-6104-41AC-A5D8-B54FA9F696E8}</Project>
+      <Name>Lidgren.Network</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
