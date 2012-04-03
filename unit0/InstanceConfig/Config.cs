@@ -9,9 +9,9 @@ using System.Xml.Serialization;
 
 namespace InstanceConfig
 {
-    public class Config
+    public class Configuration
     {
-        public static Config Empty = new Config();
+        public static Configuration Empty = new Configuration();
 
         public string MapFilePath = string.Empty;
         public string GameMode = string.Empty;
@@ -20,16 +20,19 @@ namespace InstanceConfig
         public string ManagerAddress = string.Empty;
 
         public string Name = string.Empty;
+        public UInt64 InstanceID = UInt64.MaxValue;
 
-        public static Config Read(string path)
+        public string PIDPath = string.Empty;
+
+        public static Configuration Read(string path)
         {
             FileInfo file = new FileInfo(path);
             if (!file.Exists)
                 return Empty;
 
             FileStream fs = file.OpenRead();
-            XmlSerializer xml = new XmlSerializer(typeof(Config));
-            Config c = (Config)xml.Deserialize(fs);
+            XmlSerializer xml = new XmlSerializer(typeof(Configuration));
+            Configuration c = (Configuration)xml.Deserialize(fs);
             fs.Close();
             return c;
         }
@@ -43,7 +46,7 @@ namespace InstanceConfig
             try
             {
                 FileStream fs = file.OpenWrite();
-                XmlSerializer xml = new XmlSerializer(typeof(Config));
+                XmlSerializer xml = new XmlSerializer(typeof(Configuration));
                 xml.Serialize(fs,this);
                 fs.Close();
             }
