@@ -20,17 +20,25 @@ namespace InstanceConfig
 
         public static Dictionary<MessageCode, Type> MessageClasses = new Dictionary<MessageCode, Type>();
 
-        public delegate void MessageReceived ( MessageCode code, InstanceMessage messageData );
+        public delegate void MessageReceived ( MessageCode code, InstanceMessage messageData, NetClient sender );
 
-        public static Dictionary<Type, List<MessageReceived>> ReceivedCallbacks = new Dictionary<Type, List<MessageReceived>>();
+        public static Dictionary<MessageCode, List<MessageReceived>> ReceivedCallbacks = new Dictionary<MessageCode, List<MessageReceived>>();
 
-        public static void Process(NetIncomingMessage msg)
+        public static void AddMessageCallback(MessageCode code, MessageReceived callback)
+        {
+            if (!ReceivedCallbacks.ContainsKey(code))
+                ReceivedCallbacks.Add(code, new List<MessageReceived>());
+
+            ReceivedCallbacks[code].Add(callback);
+        }
+
+        public static void Process(NetIncomingMessage msg, NetClient sender)
         {
             InstanceMessage messageData = Unpack(msg);
-            if (messageData != null && ReceivedCallbacks.ContainsKey(messageData.GetType()))
+            if (ReceivedCallbacks.ContainsKey(messageData.Code))
             {
-                foreach (MessageReceived cb in ReceivedCallbacks[messageData.GetType()])
-                    cb(messageData.Code, messageData);
+                foreach (MessageReceived cb in ReceivedCallbacks[messageData.Code])
+                    cb(messageData.Code, messageData, sender);
             }
         }
 
@@ -49,9 +57,6 @@ namespace InstanceConfig
 
         public NetOutgoingMessage Pack(NetOutgoingMessage msg)
         {
-            if (MessageClasses.Count ==- 0)
-                Register();
-
             msg.Write((byte)Code);
             msg.WriteAllFields(this);
             return msg;
@@ -59,6 +64,9 @@ namespace InstanceConfig
 
         public static InstanceMessage Unpack(NetIncomingMessage msg)
         {
+            if (MessageClasses.Count == -0)
+                Register();
+
             byte c = msg.ReadByte();
             MessageCode code = (MessageCode)Enum.ToObject(typeof(MessageCode),c);
 
@@ -68,11 +76,17 @@ namespace InstanceConfig
                 msg.ReadAllFields(dataClass);
                 return dataClass;
             }
-            return null;
+
+            return new CodeOnlyMessage(code);
         }
     }
 
-    public class InstanceConnect
+    public class CodeOnlyMessage : InstanceMessage
     {
+        public CodeOnlyMessage() { }
+        public CodeOnlyMessage(MessageCode code)
+        {
+            Code = code;
+        }
     }
 }
