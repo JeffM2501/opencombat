@@ -12,6 +12,10 @@ namespace GameInstance
     class Program
     {
         public static Configuration Config = Configuration.Empty;
+
+        public static ManagerConnection Manager = null;
+
+        public static bool Die = false;
     
         static void Main(string[] args)
         {
@@ -21,7 +25,13 @@ namespace GameInstance
             Config = Configuration.Read(args[0]);
             if (Config == Configuration.Empty)
                 return;
-     
+
+            Manager = new ManagerConnection();
+
+            while (!Die)
+            {
+                Thread.Sleep();
+            }
         }
     }
 }

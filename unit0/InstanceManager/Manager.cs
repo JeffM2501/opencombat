@@ -46,6 +46,13 @@ namespace InstanceManager
 
         protected Dictionary<UInt64, Instance> Instances = new Dictionary<UInt64, Instance>();
 
+        protected Instance GetInstance(UInt64 id)
+        {
+            if (Instances.ContainsKey(id))
+                return Instances[id];
+            return null;
+        }
+
         protected bool StartInstance(string paramters, UInt64 ID)
         {
             lock (Instances)
@@ -107,19 +114,32 @@ namespace InstanceManager
             }
         }
 
-        void InstanceLink_InstanceMessage(UInt64 instance)
+        void InstanceLink_InstanceMessage(UInt64 id)
         {
-            throw new NotImplementedException();
+            Instance instance = GetInstance(id);
+            if (instance == null)
+                return;
         }
 
-        void InstanceLink_InstanceDisconnected(UInt64 instance)
+        void InstanceLink_InstanceDisconnected(UInt64 id)
         {
-            throw new NotImplementedException();
+            Instance instance = GetInstance(id);
+            if (instance == null)
+                return;
+
+            instance.ConnectionStatus = Instance.Status.Disconnected;
+
+            // kill them or do a timeout?
+            KillInstance(id);
         }
 
-        void InstanceLink_InstanceConnected(UInt64 instance)
+        void InstanceLink_InstanceConnected(UInt64 id)
         {
-            throw new NotImplementedException();
+            Instance instance = GetInstance(id);
+            if (instance == null)
+                return;
+            InstanceLink.SendMessage(id, "accept;OK");
+            instance.ConnectionStatus = Instance.Status.Connected;
         }
 
         public void Kill()
@@ -129,8 +149,6 @@ namespace InstanceManager
 
             InstanceLink.Kill();
         }
-
-        bool gotHostID = false;
 
         Stopwatch timer = new Stopwatch();
 
@@ -152,7 +170,7 @@ namespace InstanceManager
         
         protected void ProcessConnections()
         {
-            gotHostID = false;
+           /* gotHostID = false;*/
 
             SendInitalConnection();
             while (true)

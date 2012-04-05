@@ -7,11 +7,11 @@ using Lidgren.Network;
 
 namespace GameInstance
 {
-    class ManagerConnection
+    internal class ManagerConnection
     {
         NetClient Client = null;
 
-        ManagerConnection()
+        public ManagerConnection()
         {
             NetPeerConfiguration netConfig = new NetPeerConfiguration("ManagerConnection");
 
@@ -29,6 +29,12 @@ namespace GameInstance
             hail.Write("ManagerConnection: " + Program.Config.InstanceID.ToString());
 
             Client.Connect(address[0], ManagerPort);
+        }
+
+        public void Send(string text)
+        {
+            lock (Client)
+                Client.SendMessage(Client.CreateMessage(text), NetDeliveryMethod.ReliableOrdered, 1);
         }
 
         public void GotMessage(object peer)
