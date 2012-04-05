@@ -13,6 +13,18 @@ namespace InstanceManager
         public Configuration Config = null;
         public Process Proc = null;
 
+        public enum Status
+        {
+            Unknown,
+            Connected,
+            Ready,
+            Inactive,
+            Restarting,
+            Disconnected,
+        }
+
+        public Status ConnectionStatus = Status.Unknown;
+
         public Instance(string configParams, UInt64 InstanceID)
         {
             Config = new Configuration();
