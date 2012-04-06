@@ -44,7 +44,7 @@ namespace InstanceManager
             worker = null;
 
             if (Server != null)
-                Server.Shutdown("Manager Kill");
+                Server.Shutdown("Kill;Manager_Kill");
 
             Server = null;
             InboundMessages.Clear();

@@ -14,6 +14,9 @@ namespace InstanceConfig
         public static Configuration Empty = new Configuration();
 
         public string MapFilePath = string.Empty;
+        public string MapHash = string.Empty;
+        public string MapURL = string.Empty;
+
         public string GameMode = string.Empty;
 
         public int Port = -1;

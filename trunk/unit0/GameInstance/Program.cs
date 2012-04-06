@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Diagnostics;
+using System.Threading;
 
 using InstanceConfig;
 
@@ -13,25 +14,35 @@ namespace GameInstance
     {
         public static Configuration Config = Configuration.Empty;
 
-        public static ManagerConnection Manager = null;
+        public static GameServer Server = null;
 
         public static bool Die = false;
-    
+
         static void Main(string[] args)
         {
             if (args.Length == 0)
-                return;
+                Config = Configuration.Read(args[0]);
 
-            Config = Configuration.Read(args[0]);
             if (Config == Configuration.Empty)
-                return;
-
-            Manager = new ManagerConnection();
-
-            while (!Die)
             {
-                Thread.Sleep();
+                if (args.Length > 0 && args[0] != string.Empty)
+                {
+                    Config = new Configuration();
+                    Config.Write(args[0]);
+                }
+                else
+                    return;
             }
+
+            Server = new GameServer();
+
+            while (!Server.Die())
+            {
+                Server.Update();
+                Thread.Sleep(10);
+            }
+
+            Server.Kill();
         }
     }
 }
