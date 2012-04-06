@@ -43,7 +43,9 @@
   <ItemGroup>
     <Compile Include="Actors.cs" />
     <Compile Include="ControledActor.cs" />
+    <Compile Include="GameMessages.cs" />
     <Compile Include="GameState.cs" />
+    <Compile Include="Messages\ConnectionMessages.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="VectorActor.cs" />
   </ItemGroup>
@@ -55,6 +57,10 @@
     <ProjectReference Include="..\GridWorld\GridWorld.csproj">
       <Project>{721F485A-C3A7-4340-AD60-A24F08E18323}</Project>
       <Name>GridWorld</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Lidgren.Network\Lidgren.Network.csproj">
+      <Project>{49BA1C69-6104-41AC-A5D8-B54FA9F696E8}</Project>
+      <Name>Lidgren.Network</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
