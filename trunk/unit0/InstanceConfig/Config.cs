@@ -25,6 +25,8 @@ namespace InstanceConfig
         public string Name = string.Empty;
         public UInt64 InstanceID = UInt64.MaxValue;
 
+        public int MaxPlayers = 100;
+
         public static Configuration Read(string path)
         {
             FileInfo file = new FileInfo(path);

@@ -7,6 +7,8 @@ using System.IO;
 using InstanceConfig;
 using Lidgren.Network;
 
+using Game;
+
 using GridWorld;
 
 namespace GameInstance
@@ -15,19 +17,28 @@ namespace GameInstance
     {
         public ManagerConnection Manager = null;
 
-        public World Map = null;
+        public GameState State = null;
+
+        protected GameMessageProcessor Processor = null;
 
         public GameServer()
         {
             if (Program.Config.ManagerAddress != string.Empty)
                 Manager = new ManagerConnection();
-            if (LoadMap())
-            {
 
-            }
+            State = new GameState();
+            State.GetWorld = LoadMap;
+            State.Ready += new EventHandler<EventArgs>(State_Ready);
+
+            State.Load();
 
             // TODO, start the net message thread here
             // that will update sim, process chat, and handle resource requests
+        }
+
+        void State_Ready(object sender, EventArgs e)
+        {
+            Processor = new GameMessageProcessor(State);
         }
 
         public void Kill()
@@ -39,9 +50,9 @@ namespace GameInstance
             }
         }
 
-        public bool LoadMap()
+        World LoadMap()
         {
-            Map = World.ReadWorldAndClusters(new System.IO.FileInfo(Program.Config.MapFilePath));
+            World Map = World.ReadWorldAndClusters(new System.IO.FileInfo(Program.Config.MapFilePath));
 
             if (Map == null || Map.Clusters.Count == 0)
             {
@@ -50,7 +61,7 @@ namespace GameInstance
                 
                 _Die = true;
             }
-            return true;
+            return Map;
         }
 
         protected bool _Die = false;
@@ -71,6 +82,8 @@ namespace GameInstance
                     managerString = Manager.PopMessage();
                 }
             }
+
+            State.UpdateActors();
            
         }
 
