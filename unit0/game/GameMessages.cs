@@ -11,6 +11,8 @@ namespace Game
 {
     public class GameMessage
     {
+        public static string ConnectionName = "Unit0GameConnection";
+
         public enum MessageCode
         {
             Null = 0,

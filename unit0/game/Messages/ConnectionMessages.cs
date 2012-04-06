@@ -9,6 +9,7 @@ namespace Game.Messages
     {
         public string Magic = "Unit0Proto1";
         public string RequestedName = string.Empty;
+        public string Token = string.Empty;
 
         public HailMessage()
         {

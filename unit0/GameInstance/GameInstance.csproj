@@ -45,6 +45,7 @@
     <Compile Include="GameMessageProcessor.cs" />
     <Compile Include="GameServer.cs" />
     <Compile Include="ManagerConnection.cs" />
+    <Compile Include="Player.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

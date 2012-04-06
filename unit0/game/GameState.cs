@@ -19,6 +19,9 @@ namespace Game
 
         public event EventHandler<EventArgs> MapLoaded;
         public event EventHandler<EventArgs> RegisterFactories;
+
+        public event EventHandler<EventArgs> Ready;
+
         public event ActorEvent ActorCreated;
         public event ActorEvent ActorDeleted;
         public event ActorEvent ActorUpdated;
