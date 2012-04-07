@@ -19,13 +19,24 @@ namespace GameInstance
 
         public string Name = string.Empty;
 
-        public NetClient Connection = null;
+        public NetConnection Connection = null;
         public TeamInfo Team = TeamInfo.Empty;
         public RemotePlayer SimPlayer = null;
 
         public static Player Empty = new Player(null);
 
-        public Player(NetClient con)
+        public enum PlayerStatus
+        {
+            New,
+            Identified,
+            Loaded,
+            Joined, // player has an actor
+            
+        }
+
+        public PlayerStatus Status = PlayerStatus.New;
+
+        public Player(NetConnection con)
         {
             Connection = con;
         }
@@ -33,8 +44,8 @@ namespace GameInstance
         protected static Dictionary<UInt64, Player> Players = new Dictionary<UInt64, Player>();
         protected static Dictionary<UInt64, Player> PlayersUID = new Dictionary<UInt64, Player>();
 
-        protected static int LastPlayerID = 0;
-        public static int NewPlayerID()
+        protected static UInt64 LastPlayerID = 0;
+        public static UInt64 NewPlayerID()
         {
             lock (Players)
             {
@@ -64,7 +75,7 @@ namespace GameInstance
             return Player.Empty;
         }
 
-        public static Player PlayerByConnection(NetClient con)
+        public static Player PlayerByConnection(NetConnection con)
         {
             lock (Players)
             {
