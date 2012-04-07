@@ -69,7 +69,15 @@ namespace GameInstance
                             else
                             {
                                 // add them
-                                Player player = 
+                                Player player = new Player(im.SenderConnection);
+                                player.PID = Player.NewPlayerID();
+
+                                // check token against one sent from master hail.Token = 
+                                // this should have come from the master, but fake it for now
+                                player.UID = player.PID;
+                                player.Name = "Player_" + player.UID.ToString();
+
+                                Player.AddPlayer(player);
                             }
                             break;
                     }
