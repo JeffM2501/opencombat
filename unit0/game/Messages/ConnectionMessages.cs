@@ -34,7 +34,7 @@ namespace Game.Messages
         {
             public string Name = string.Empty;
             public int Default = -1;
-            public List<string>Options = new List<string>();
+            public List<string> Options = new List<string>();
         }
 
         public List<OptionInfo> Options = new List<OptionInfo>();

@@ -46,6 +46,12 @@ namespace GameInstance
             Server = null;
         }
 
+        public NetOutgoingMessage NewMessage()
+        {
+            lock (Server)
+                return Server.CreateMessage();
+        }
+
         public void Run()
         {
             while (true)
@@ -78,6 +84,18 @@ namespace GameInstance
                                 player.Name = "Player_" + player.UID.ToString();
 
                                 Player.AddPlayer(player);
+
+                                ConnectInfo info = new ConnectInfo();
+                                info.GameStyle = GameInfo.Info.GameStyle;
+                                info.Options = GameInfo.Info.UserOptions;
+                                info.PID = player.PID;
+                                info.UID = player.UID;
+                                info.Name = player.Name;
+                                info.TeamID = -1;
+                                info.TeamName = string.Empty;
+                                info.ScriptPack = ServerScripting.Script.ScriptPackName;
+
+                                player.SendReliable(info.Pack(NewMessage()));
                             }
                             break;
                     }

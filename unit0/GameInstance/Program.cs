@@ -20,18 +20,17 @@ namespace GameInstance
 
         static void Main(string[] args)
         {
-            if (args.Length == 0)
-                Config = Configuration.Read(args[0]);
+            string confPath = "temp.xml";
 
-            if (Config == Configuration.Empty)
+            if (args.Length != 0)
+                confPath = args[0];
+
+            if (File.Exists(confPath))
+                Config = Configuration.Read(confPath);
+            else
             {
-                if (args.Length > 0 && args[0] != string.Empty)
-                {
-                    Config = new Configuration();
-                    Config.Write(args[0]);
-                }
-                else
-                    return;
+                Config = new Configuration();
+                Config.Write(confPath);
             }
 
             Server = new GameServer();
