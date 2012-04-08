@@ -52,7 +52,13 @@ namespace GameInstance
 
         World LoadMap()
         {
-            World Map = World.ReadWorldAndClusters(new System.IO.FileInfo(Program.Config.MapFilePath));
+            World Map = null;
+            if (Program.Config.MapFilePath != string.Empty)
+                Map = World.ReadWorldAndClusters(new System.IO.FileInfo(Program.Config.MapFilePath));
+            else
+                Map = WorldBuilder.NewWorld(string.Empty, null);
+
+            Map.Finailize();
 
             if (Map == null || Map.Clusters.Count == 0)
             {
@@ -61,7 +67,15 @@ namespace GameInstance
                 
                 _Die = true;
             }
+            if (!_Die)
+                LoadSettings();
             return Map;
+        }
+
+        void LoadSettings()
+        {
+            ServerScripting.Script.Init(Program.Config.ScriptPath);
+            ServerScripting.Script.GetGameInfo(GameInfo.Info);
         }
 
         protected bool _Die = false;

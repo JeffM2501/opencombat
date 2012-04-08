@@ -27,6 +27,8 @@ namespace InstanceConfig
 
         public int MaxPlayers = 100;
 
+        public string ScriptPath = "../../../server_data/test";
+
         public static Configuration Read(string path)
         {
             FileInfo file = new FileInfo(path);

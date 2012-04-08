@@ -31,7 +31,9 @@ namespace GameInstance
             Identified,
             Loaded,
             Joined, // player has an actor
-            
+            Limbo, // player has an actor but that actor is inactive.
+            Disconnecting,
+            Parted,
         }
 
         public PlayerStatus Status = PlayerStatus.New;
@@ -39,6 +41,11 @@ namespace GameInstance
         public Player(NetConnection con)
         {
             Connection = con;
+        }
+
+        public void SendReliable(NetOutgoingMessage msg)
+        {
+            Connection.SendMessage(msg, NetDeliveryMethod.ReliableOrdered, 2);
         }
 
         protected static Dictionary<UInt64, Player> Players = new Dictionary<UInt64, Player>();
