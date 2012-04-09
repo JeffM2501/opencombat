@@ -25,8 +25,6 @@ namespace Client
 
             InputSystem.GetBindingFilePath += GetBindingFile;
 
-            LoadPlugins();
-
             bool done = false;
 
             bool runOnce = false;
@@ -47,14 +45,6 @@ namespace Client
                 else
                     done = true;
             }
-        }
-
-        static void LoadPlugins()
-        {
-            DirectoryInfo dir = new DirectoryInfo(Path.Combine(FileLocations.Locations.ThisExePath, "plugins"));
-            foreach (FileInfo file in dir.GetFiles())
-                Client.API.ClientAPI.LoadPlugin(Assembly.LoadFile(file.FullName));
-
         }
 
         static string GetBindingFile()

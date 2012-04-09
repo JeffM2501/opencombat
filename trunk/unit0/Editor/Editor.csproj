@@ -134,7 +134,7 @@
   <ItemGroup>
     <ProjectReference Include="..\client\Client.csproj">
       <Project>{12BA1FC0-8904-44E3-AEB2-AB4D25D91993}</Project>
-      <Name>Client</Name>
+      <Name>Client %28Game Client\Client%29</Name>
     </ProjectReference>
     <ProjectReference Include="..\components\Math\Math3D.csproj">
       <Project>{0BC4671F-FF72-4D3E-9889-44382F6C64F2}</Project>

@@ -14,9 +14,6 @@ using GridWorld;
 using WorldDrawing;
 using Math3D;
 
-using Client.API;
-// brings all the bits together into a game client
-
 namespace Client
 {
     class MainWindow : IDisposable
@@ -291,18 +288,9 @@ namespace Client
             {
                 double time = now - 0.25f;
 
-                playerActor.LogUpdates = true;
-
-                Client.API.ProjectionErrorData data = new Client.API.ProjectionErrorData();
-
                 GameState.BoundableActor.Location locNowBefore = playerActor.GetLocationAtTime(now);
-                data.FinalPositionLogBeforeTruncation = playerActor.UpdateLog;
-                playerActor.UpdateLog = new List<string>();
-
+               
                 GameState.BoundableActor.Location loc = playerActor.GetLocationAtTime(time);
-
-                data.TruncationPositionLogBeforeRemoval = playerActor.UpdateLog;
-                playerActor.UpdateLog = new List<string>();
 
                 playerActor.SetKnownState(time, loc.Position, loc.Rotation);
 
@@ -313,19 +301,12 @@ namespace Client
                 if (playerActor.ClearHistoryBeforeTime(time)) // if there were enough updates to clear any
                 {
                     GameState.BoundableActor.Location locAfter = playerActor.GetLocationAtTime(time);
-                    data.TruncationPositionLogAfterRemoval = playerActor.UpdateLog;
-                    playerActor.UpdateLog = new List<string>();
 
                     GameState.BoundableActor.Location locNowAfter = playerActor.GetLocationAtTime(now);
-                    data.FinalPositionLogAfterTruncation = playerActor.UpdateLog;
-                    playerActor.UpdateLog = new List<string>();
-
-                    data.Now = now;
-                    data.TruncationTime = time;
 
                     Vector3 d = locNowBefore.Position - locNowAfter.Position;
                   //  if (d.LengthFast > 0.0001)
-                    //    ClientAPI.CallDebugDisplay("MovementProjectionError", data);
+                    // An error happend, do some debugin
                 }
 
                 playerActor.LogUpdates = false;
