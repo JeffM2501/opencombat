@@ -40,8 +40,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lidgren.Network", "Lidgren.Network\Lidgren.Network.csproj", "{49BA1C69-6104-41AC-A5D8-B54FA9F696E8}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TestGameScripts", "TestGameScripts", "{2F0633DC-09BE-47A0-82C5-3CA2A370A9FC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "server", "server", "{1286E704-FB20-4ACF-A720-AB407429F32C}"
 	ProjectSection(SolutionItems) = preProject
-		server_data\test\Game.py = server_data\test\Game.py
+		server_data\test\server\Game.py = server_data\test\server\Game.py
 	EndProjectSection
 EndProject
 Global
@@ -128,5 +130,6 @@ Global
 		{C9F5C679-1EA3-4A08-B56E-5F70D77C47D8} = {281C51E6-0BD6-4443-989F-0BFFE8C3D9B8}
 		{2F0633DC-09BE-47A0-82C5-3CA2A370A9FC} = {281C51E6-0BD6-4443-989F-0BFFE8C3D9B8}
 		{A7C85432-B8E1-46DD-9501-9F289DABD6BB} = {37D1A7E4-7DF4-498D-A11A-75471F4A3144}
+		{1286E704-FB20-4ACF-A720-AB407429F32C} = {2F0633DC-09BE-47A0-82C5-3CA2A370A9FC}
 	EndGlobalSection
 EndGlobal
