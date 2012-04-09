@@ -12,13 +12,13 @@ namespace Game
     public class GameMessage
     {
         public static string ConnectionName = "Unit0GameConnection";
+        public static string ConnectionMagic = ConnectionName + ":1";
 
         public enum MessageCode
         {
             Null = 0,
             Hail,
             ConnectInfo,
-
             OptionSelect,
 
             ResourceRequest,

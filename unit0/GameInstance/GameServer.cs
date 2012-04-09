@@ -74,7 +74,7 @@ namespace GameInstance
 
         void LoadSettings()
         {
-            ServerScripting.Script.Init(Program.Config.ScriptPath);
+            ServerScripting.Script.Init(Program.Config.ScriptPath, State);
             ServerScripting.Script.GetGameInfo(GameInfo.Info);
         }
 
