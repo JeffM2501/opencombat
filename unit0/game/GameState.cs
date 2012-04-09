@@ -204,6 +204,14 @@ namespace Game
             return actor;
         }
 
+        public void RemoveActor(UInt64 GUID)
+        {
+            Actor actor = FindActor(GUID);
+            if (actor == null)
+                return;
+            RemoveActor(actor);
+        }
+
         public void RemoveActor(Actor actor)
         {
             lock (Actors)

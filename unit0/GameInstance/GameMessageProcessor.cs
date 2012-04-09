@@ -20,7 +20,6 @@ namespace GameInstance
         public GameMessageProcessor(GameState state)
         {
             State = state;
-            
 
             NetPeerConfiguration netConfig = new NetPeerConfiguration(GameMessage.ConnectionName);
             netConfig.Port = Program.Config.Port;
@@ -52,6 +51,40 @@ namespace GameInstance
                 return Server.CreateMessage();
         }
 
+        protected void RegisterMessageHandlers()
+        {
+            GameMessage.AddMessageCallback(GameMessage.MessageCode.AnyUnhandled, AnyUnhandled);
+            GameMessage.AddMessageCallback(GameMessage.MessageCode.OptionSelect, OptionSelect);
+            GameMessage.AddMessageCallback(GameMessage.MessageCode.ChatMessage, ChatMessage);
+            GameMessage.AddMessageCallback(GameMessage.MessageCode.StateChange, StateChange);
+            GameMessage.AddMessageCallback(GameMessage.MessageCode.ResourceRequest, ResourceRequest);
+        }
+
+        void AnyUnhandled(GameMessage.MessageCode code, GameMessage messageData, NetConnection sender)
+        {
+
+        }
+
+        void OptionSelect(GameMessage.MessageCode code, GameMessage messageData, NetConnection sender)
+        {
+
+        }
+
+        void ChatMessage(GameMessage.MessageCode code, GameMessage messageData, NetConnection sender)
+        {
+
+        }
+
+        void StateChange(GameMessage.MessageCode code, GameMessage messageData, NetConnection sender)
+        {
+
+        }
+
+        void ResourceRequest(GameMessage.MessageCode code, GameMessage messageData, NetConnection sender)
+        {
+
+        }
+
         public void Run()
         {
             while (true)
@@ -73,30 +106,17 @@ namespace GameInstance
                                 break;
                             }
                             else
-                            {
-                                // add them
-                                Player player = new Player(im.SenderConnection);
-                                player.PID = Player.NewPlayerID();
+                                NewPlayerConnection(im.SenderConnection);
+                            break;
 
-                                // check token against one sent from master hail.Token = 
-                                // this should have come from the master, but fake it for now
-                                player.UID = player.PID;
-                                player.Name = "Player_" + player.UID.ToString();
+                        case NetIncomingMessageType.StatusChanged:
+                            if (im.SenderConnection.Status == NetConnectionStatus.Disconnected)
+                                PlayerDisconnect(im.SenderConnection.Tag as Player);
 
-                                Player.AddPlayer(player);
+                            break;
 
-                                ConnectInfo info = new ConnectInfo();
-                                info.GameStyle = GameInfo.Info.GameStyle;
-                                info.Options = GameInfo.Info.UserOptions;
-                                info.PID = player.PID;
-                                info.UID = player.UID;
-                                info.Name = player.Name;
-                                info.TeamID = -1;
-                                info.TeamName = string.Empty;
-                                info.ScriptPack = ServerScripting.Script.ScriptPackName;
-
-                                player.SendReliable(info.Pack(NewMessage()));
-                            }
+                        case NetIncomingMessageType.Data:
+                            GameMessage.Process(im);
                             break;
                     }
 
@@ -106,6 +126,47 @@ namespace GameInstance
 
                 Thread.Sleep(10);
             }
+        }
+
+        void NewPlayerConnection( NetConnection con)
+        {
+            // add them
+            Player player = new Player(con);
+            player.PID = Player.NewPlayerID();
+
+            con.Tag = player;
+
+            // check token against one sent from master hail.Token = 
+            // this should have come from the master, but fake it for now
+            player.UID = player.PID;
+            player.Name = "Player_" + player.UID.ToString();
+
+            Player.AddPlayer(player);
+
+            ConnectInfo info = new ConnectInfo();
+            info.GameStyle = GameInfo.Info.GameStyle;
+            info.Options = GameInfo.Info.UserOptions;
+            info.PID = player.PID;
+            info.UID = player.UID;
+            info.Name = player.Name;
+            info.TeamID = -1;
+            info.TeamName = string.Empty;
+            info.ScriptPack = ServerScripting.Script.ScriptPackName;
+
+            player.SendReliable(info.Pack(NewMessage()));
+        }
+
+        public void PlayerDisconnect(Player player)
+        {
+            if (player == null)
+                return;
+            lock (player)
+            {
+                player.Status = Player.PlayerStatus.Disconnecting;
+                ServerScripting.Script.PlayerParted(player);
+            }
+
+            Player.RemovePlayer(player);
         }
     }
 }

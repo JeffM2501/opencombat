@@ -12,7 +12,7 @@ namespace GameInstance
     {
         public delegate void PlayerEvent(Player player);
         public static event PlayerEvent NewPlayer;
-        public static event PlayerEvent RemovePlayer;
+        public static event PlayerEvent DeletedPlayer;
 
         public UInt64 UID = UInt64.MaxValue;
         public UInt64 PID = UInt64.MaxValue;
@@ -22,6 +22,8 @@ namespace GameInstance
         public NetConnection Connection = null;
         public TeamInfo Team = TeamInfo.Empty;
         public RemotePlayer SimPlayer = null;
+
+        public UInt64 AvatarID = UInt64.MaxValue;
 
         public static Player Empty = new Player(null);
 
@@ -111,6 +113,21 @@ namespace GameInstance
             }
 
             return true;
+        }
+
+        public static void RemovePlayer(Player player)
+        {
+            lock (Players)
+            {
+                if (!Players.ContainsKey(player.PID))
+                  Players.Remove(player.PID);
+
+                if (PlayersUID.ContainsKey(player.UID))
+                    PlayersUID.Remove(player.UID);
+
+                if (DeletedPlayer != null)
+                    DeletedPlayer(player);
+            }
         }
     }
 }

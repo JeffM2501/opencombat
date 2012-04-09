@@ -8,6 +8,10 @@ using IronPython.Hosting;
 using Microsoft.Scripting;
 using Microsoft.Scripting.Hosting;
 
+using Game;
+using OpenTK;
+using OpenTK.Graphics;
+
 namespace GameInstance
 {
     public class ServerScripting
@@ -20,7 +24,9 @@ namespace GameInstance
 
         public string ScriptPackName = string.Empty;
 
-        public void Init(string scriptPath)
+        GameState State = null;
+
+        public void Init(string scriptPath, GameState state)
         {
             // TODO, put an app domain here that dosn't give access to the disk
             Engine = Python.CreateEngine();
@@ -32,11 +38,17 @@ namespace GameInstance
             }
 
             ScriptPackName = Path.GetDirectoryName(scriptPath);
+
+            State = state;
         }
 
         protected ScriptScope GetScope(ScriptSource source)
         {
             ScriptScope scope = Engine.CreateScope();
+
+            scope.SetVariable("World", State.GameWorld);
+            scope.SetVariable("State", State);
+
             source.Execute(scope);
             return scope;
         }
@@ -57,6 +69,36 @@ namespace GameInstance
 
             dynamic func = scope.GetVariable("SetGameInfo");
             return func(info);
+        }
+
+        public bool NewPlayer(Player player)
+        {
+            ScriptScope scope = GetScope("Game");
+            if (scope == null)
+                return false;
+
+            dynamic func = scope.GetVariable("SetNewPlayerInfo");
+            return func(player);
+        }
+
+        public void PlayerParted(Player player)
+        {
+            ScriptScope scope = GetScope("Game");
+            if (scope == null)
+                return;
+
+            dynamic func = scope.GetVariable("PlayerParted");
+            func(player);
+        }
+
+        public Vector4 GetSpawn(Player player)
+        {
+            ScriptScope scope = GetScope("Game");
+            if (scope == null)
+                return Vector4.Zero;
+
+            dynamic func = scope.GetVariable("GetPlayerSpawn");
+            return func(player);
         }
     }
 }

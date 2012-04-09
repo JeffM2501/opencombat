@@ -181,6 +181,11 @@ namespace GridWorld
         [XmlIgnore]
         public Dictionary<Cluster.ClusterPos, Cluster> Clusters = new Dictionary<Cluster.ClusterPos, Cluster>();
 
+        public BoundingBox GetBounds()
+        {
+            return octree.bounds;
+        }
+
         public void Serialize(FileInfo location)
         {
             if (location.Exists)
