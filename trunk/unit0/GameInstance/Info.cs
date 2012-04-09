@@ -14,6 +14,12 @@ namespace GameInstance
         public List<ConnectInfo.OptionInfo> UserOptions = new List<ConnectInfo.OptionInfo>();
         public string GameStyle = string.Empty;
 
+        public List<string> Avatars = new List<string>();
+
+        public double DefaultLinSpeed = 10;
+        public double DefaultRotSpeed = 90;
+        public double DefaultGravity = -10;
+
         public ConnectInfo.OptionInfo NewOption(string name, int defaultValue)
         {
             ConnectInfo.OptionInfo opt = new ConnectInfo.OptionInfo();

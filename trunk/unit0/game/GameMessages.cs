@@ -23,17 +23,24 @@ namespace Game
 
             ResourceRequest,
             ResourceResponce,
+
+            StateChange,
+
             ChatMessage,
+
             ActorUpdate,
             ActorInput,
+
             Quit,
+
+            AnyUnhandled,
         }
 
         public MessageCode Code = MessageCode.Null;
 
         public static Dictionary<MessageCode, Type> MessageClasses = new Dictionary<MessageCode, Type>();
 
-        public delegate void MessageReceived(MessageCode code, GameMessage messageData, NetClient sender);
+        public delegate void MessageReceived(MessageCode code, GameMessage messageData, NetConnection sender);
 
         public static Dictionary<MessageCode, List<MessageReceived>> ReceivedCallbacks = new Dictionary<MessageCode, List<MessageReceived>>();
 
@@ -45,17 +52,29 @@ namespace Game
             ReceivedCallbacks[code].Add(callback);
         }
 
-        public static void Process(NetIncomingMessage msg, NetClient sender)
+        protected static void CallHandlers(GameMessage messageData, NetConnection sender)
+        {
+            
+        }
+        public static void Process(NetIncomingMessage msg)
         {
             GameMessage messageData = Unpack(msg);
             if (ReceivedCallbacks.ContainsKey(messageData.Code))
             {
                 foreach (MessageReceived cb in ReceivedCallbacks[messageData.Code])
-                    cb(messageData.Code, messageData, sender);
+                    cb(messageData.Code, messageData, msg.SenderConnection);
+            }
+            else
+            {
+                if (ReceivedCallbacks.ContainsKey(GameMessage.MessageCode.AnyUnhandled))
+                {
+                    foreach (MessageReceived cb in ReceivedCallbacks[GameMessage.MessageCode.AnyUnhandled])
+                        cb(messageData.Code, messageData, msg.SenderConnection);
+                }
             }
         }
 
-        public static void Register()
+        public static void RegisterMessageClasses()
         {
             foreach (Type t in Assembly.GetExecutingAssembly().GetTypes())
             {
@@ -77,8 +96,8 @@ namespace Game
 
         public static GameMessage Unpack(NetIncomingMessage msg)
         {
-            if (MessageClasses.Count == -0)
-                Register();
+            if (MessageClasses.Count == 0)
+                RegisterMessageClasses();
 
             byte c = msg.ReadByte();
             MessageCode code = (MessageCode)Enum.ToObject(typeof(MessageCode),c);

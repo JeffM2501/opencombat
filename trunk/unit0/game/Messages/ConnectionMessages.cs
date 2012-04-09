@@ -39,6 +39,8 @@ namespace Game.Messages
 
         public List<OptionInfo> Options = new List<OptionInfo>();
 
+        public List<string> Avatars = new List<string>();
+
         public ConnectInfo()
         {
             Code = GameMessage.MessageCode.ConnectInfo;
