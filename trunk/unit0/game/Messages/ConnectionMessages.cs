@@ -7,7 +7,9 @@ namespace Game.Messages
 {
     public class HailMessage : GameMessage
     {
-        public string Magic = "Unit0Proto1";
+        public static string MagicMessage = "Unit0Proto1";
+
+        public string Magic = MagicMessage;
         public string RequestedName = string.Empty;
         public string Token = string.Empty;
 
@@ -44,6 +46,22 @@ namespace Game.Messages
         public ConnectInfo()
         {
             Code = GameMessage.MessageCode.ConnectInfo;
+        }
+    }
+
+    public class OptionSelectMessage : GameMessage
+    {
+        public class Selection
+        {
+            public int ID = -1;
+            public int Pick = -1;
+        }
+
+        public List<Selection> Selections = new List<Selection>();
+        
+        public OptionSelectMessage()
+        {
+            Code = GameMessage.MessageCode.OptionSelect;
         }
     }
 }

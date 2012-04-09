@@ -8,11 +8,15 @@ using Game;
 
 namespace GameInstance
 {
-    class Player
+    public class Player
     {
         public delegate void PlayerEvent(Player player);
+        public delegate void PlayerOptionEvent(Player player, int option);
+
         public static event PlayerEvent NewPlayer;
         public static event PlayerEvent DeletedPlayer;
+
+        public static event PlayerOptionEvent OptionChanged;
 
         public UInt64 UID = UInt64.MaxValue;
         public UInt64 PID = UInt64.MaxValue;
@@ -24,6 +28,8 @@ namespace GameInstance
         public RemotePlayer SimPlayer = null;
 
         public UInt64 AvatarID = UInt64.MaxValue;
+
+        public int[] Options = null;
 
         public static Player Empty = new Player(null);
 
@@ -96,6 +102,21 @@ namespace GameInstance
             }
 
             return Player.Empty;
+        }
+
+        public static bool SetOption(Player player, int optionIndex, int value)
+        {
+            lock (player)
+            {
+                if (optionIndex >= 0 && optionIndex < player.Options.Length)
+                {
+                    player.Options[optionIndex] = value;
+                    if (OptionChanged != null)
+                        OptionChanged(player, value);
+                    return true;
+                }
+            }
+            return false;
         }
 
         public static bool AddPlayer(Player player)

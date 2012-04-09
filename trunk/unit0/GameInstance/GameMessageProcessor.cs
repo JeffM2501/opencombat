@@ -67,7 +67,20 @@ namespace GameInstance
 
         void OptionSelect(GameMessage.MessageCode code, GameMessage messageData, NetConnection sender)
         {
+            OptionSelectMessage msg = messageData as OptionSelectMessage;
+            Player player = sender.Tag as Player;
+            if (msg == null || player == null)
+                return;
 
+            OptionSelectMessage outMsg = new OptionSelectMessage();
+
+            foreach (OptionSelectMessage.Selection option in msg.Selections)
+            {
+                if (Player.SetOption(player, option.ID, option.Pick))
+                    outMsg.Selections.Add(option);
+            }
+
+            player.SendReliable(outMsg.Pack(NewMessage()));
         }
 
         void ChatMessage(GameMessage.MessageCode code, GameMessage messageData, NetConnection sender)
@@ -100,7 +113,7 @@ namespace GameInstance
                         case NetIncomingMessageType.ConnectionApproval:
 
                             HailMessage hail = GameMessage.Unpack(im.SenderConnection.RemoteHailMessage) as HailMessage;
-                            if (hail == null || hail.Code != GameMessage.MessageCode.Hail)
+                            if (hail == null || hail.Code != GameMessage.MessageCode.Hail || hail.Magic != HailMessage.MagicMessage)
                             {
                                 im.SenderConnection.Deny();
                                 break;
@@ -140,6 +153,9 @@ namespace GameInstance
             // this should have come from the master, but fake it for now
             player.UID = player.PID;
             player.Name = "Player_" + player.UID.ToString();
+            player.Options = new int[GameInfo.Info.UserOptions.Count];
+            for (int i = 0; i < player.Options.Length; i++)
+                player.Options[i] = GameInfo.Info.UserOptions[i].Default;
 
             Player.AddPlayer(player);
 
