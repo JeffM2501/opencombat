@@ -65,8 +65,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="API\API.cs" />
-    <Compile Include="ClientGame.cs" />
+    <Compile Include="Game\ClientGame.Avatars.cs" />
+    <Compile Include="Game\ClientGame.cs" />
     <Compile Include="ClientScripting.cs" />
+    <Compile Include="Game\ClientGame.Updates.cs" />
     <Compile Include="Hasher.cs" />
     <Compile Include="Input.cs" />
     <Compile Include="MainWindow.cs" />
@@ -86,8 +88,9 @@
     <Compile Include="UpdateProgress.Designer.cs">
       <DependentUpon>UpdateProgress.cs</DependentUpon>
     </Compile>
-    <Compile Include="View.cs" />
-    <Compile Include="ViewDebug.cs" />
+    <Compile Include="View\View.cs" />
+    <Compile Include="View\View.Hud.cs" />
+    <Compile Include="View\ViewDebug.cs" />
     <EmbeddedResource Include="PreGame.resx">
       <DependentUpon>PreGame.cs</DependentUpon>
     </EmbeddedResource>
@@ -104,6 +107,7 @@
     <EmbeddedResource Include="UpdateProgress.resx">
       <DependentUpon>UpdateProgress.cs</DependentUpon>
     </EmbeddedResource>
+    <Compile Include="Game\ClientGame.Events.cs" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

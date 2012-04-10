@@ -36,6 +36,8 @@ namespace Client
             Game = new ClientGame(InputTracker);
             Game.ToggleDrawing += new EventHandler<EventArgs>(ToggleDebugDrawing_Changed);
             Game.AddDebugLogItem += new ClientGame.DebugValueCallback(DebugValueCallback);
+
+            Game.StatusChanged += new EventHandler<EventArgs>(Game_StatusChanged);
            
             Window.UpdateFrame += new EventHandler<FrameEventArgs>(Window_UpdateFrame);
             Window.Closed += new EventHandler<EventArgs>(Window_Closed);
@@ -45,6 +47,31 @@ namespace Client
 
             // so it will hopefully bet called after the view has had it's time to load the window
             Window.Load += new EventHandler<EventArgs>(Window_Load);
+        }
+
+        void Game_StatusChanged(object sender, EventArgs e)
+        {
+            switch(Game.Status)
+            {
+                case ServerConnection.ConnectionStatus.New:
+                    GameView.Status = View.ViewStatus.New;
+                    break;
+                case ServerConnection.ConnectionStatus.Connecting:
+                    GameView.Status = View.ViewStatus.Connecting;
+                    break;
+                case ServerConnection.ConnectionStatus.Loading:
+                    GameView.Status = View.ViewStatus.Loading;
+                    break;
+
+                case ServerConnection.ConnectionStatus.WaitOptions:
+                case ServerConnection.ConnectionStatus.Playing:
+                    GameView.Status = View.ViewStatus.Playing;
+                    if (Game.Status == ServerConnection.ConnectionStatus.WaitOptions)
+                    {
+                        // show some dialog shit!
+                    }
+                    break;
+            }
         }
 
         void DebugValueCallback(string name, string value)
@@ -86,6 +113,7 @@ namespace Client
 
         void Window_Load(object sender, EventArgs e)
         {
+            Game.Load();
         }
 
         void Window_Closed(object sender, EventArgs e)
@@ -99,7 +127,9 @@ namespace Client
                 InputTracker.UpdateAxes();
 
             Game.Update();
-            // see if it's time to remove any old player history
+
+            if (Game.IsDone())
+                Window.Exit();
         }
 
         public void Run()
