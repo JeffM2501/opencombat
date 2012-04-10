@@ -26,7 +26,12 @@ namespace Client
 
         GameState State = null;
 
-        public void Init(string scriptPath, GameState state)
+        public void SetState(GameState state)
+        {
+            State = state;
+        }
+
+        public void Init(string scriptPath)
         {
             // TODO, put an app domain here that dosn't give access to the disk
             Engine = Python.CreateEngine();
@@ -38,8 +43,6 @@ namespace Client
             }
 
             ScriptPackName = Path.GetDirectoryName(scriptPath);
-
-            State = state;
         }
 
         protected ScriptScope GetScope(ScriptSource source)
@@ -61,14 +64,14 @@ namespace Client
             return GetScope(CachedScripts[name]);
         }
 
-        public bool InitGameScript()
+        public bool InitGameScript( string gameType )
         {
             ScriptScope scope = GetScope("Game");
             if (scope == null)
                 return false;
 
             dynamic func = scope.GetVariable("InitGame");
-            return func();
+            return func(gameType);
         }
     }
 }
