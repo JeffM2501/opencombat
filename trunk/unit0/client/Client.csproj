@@ -65,6 +65,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="API\API.cs" />
+    <Compile Include="ClientGame.cs" />
     <Compile Include="ClientScripting.cs" />
     <Compile Include="Hasher.cs" />
     <Compile Include="Input.cs" />

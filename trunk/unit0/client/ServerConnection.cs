@@ -35,6 +35,14 @@ namespace Client
 
         PlayerInfo player = new PlayerInfo();
 
+        public class ScriptInfo
+        {
+            public string GameStyle = string.Empty;
+            public string ScriptSet = string.Empty;
+        }
+
+        public ScriptInfo ScriptingInfo = new ScriptInfo();
+
         public PlayerInfo Player
         {
             get
@@ -119,6 +127,8 @@ namespace Client
                 return;
             }
 
+            ClientScripting.Script.Init(info.ScriptPack);
+
             Player.UID = info.UID;
             Player.PID = info.PID;
 
@@ -128,6 +138,9 @@ namespace Client
             Player.OptionChoices = new List<int>;
             foreach (ConnectInfo.OptionInfo option in info.Options)
                 Player.OptionChoices.Add(option.Default);
+
+            ScriptingInfo.GameStyle = info.GameStyle;
+            ScriptingInfo.ScriptSet = info.ScriptPack;
 
             if (Connected != null)
                 Connected(this,EventArgs.Empty);
