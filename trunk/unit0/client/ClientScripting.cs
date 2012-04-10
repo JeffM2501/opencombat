@@ -24,11 +24,11 @@ namespace Client
 
         public string ScriptPackName = string.Empty;
 
-        GameState State = null;
+        ClientGame Game = null;
 
-        public void SetState(GameState state)
+        public void SetState(ClientGame game)
         {
-            State = state;
+            Game = game;
         }
 
         public void Init(string scriptPath)
@@ -49,8 +49,8 @@ namespace Client
         {
             ScriptScope scope = Engine.CreateScope();
 
-            scope.SetVariable("World", State.GameWorld);
-            scope.SetVariable("State", State);
+            scope.SetVariable("Game", Game);
+            scope.SetVariable("State", Game.State);
 
             source.Execute(scope);
             return scope;

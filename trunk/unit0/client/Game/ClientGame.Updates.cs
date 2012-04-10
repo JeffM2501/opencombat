@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 
 using Game;
-using GridWorld;
+using Game.Messages;
 
 using OpenTK;
 using OpenTK.Graphics;
@@ -12,84 +12,9 @@ using OpenTK.Input;
 
 namespace Client
 {
-    public class ClientGame
+    public partial class ClientGame
     {
-        public EventHandler<EventArgs> ToggleDrawing;
-
-        public delegate void DebugValueCallback (string name, string value);
-        public event DebugValueCallback AddDebugLogItem;
-
-        protected void CallDebugLogItem(string name, string value)
-        {
-            if (AddDebugLogItem != null)
-                AddDebugLogItem(name, value);
-        }
-
-        public GameState State = null;
-        protected InputSystem InputTracker = null;
-
-        ServerConnection Connection = null;
-
-        public ClientGame(InputSystem input)
-        {
-            InputTracker = input;
-            State = new GameState();
-
-            ClientScripting.Script.SetState(State);
-
-            State.GetWorld = GetSimpleWorld;
-            State.MapLoaded += new EventHandler<EventArgs>(State_MapLoaded);
-
-            InputTracker.RegisterControls += new EventHandler<EventArgs>(InputTracker_RegisterControls);
-            InputTracker.LoadDefaultBindings += new EventHandler<EventArgs>(InputTracker_LoadDefaultBindings);
-        }
-
-        public void Connect(string host, int port)
-        {
-            Connection = new ServerConnection(host, port);
-            Connection.Connected += new EventHandler<EventArgs>(ConnectionComplete);
-            Connection.Failed += new EventHandler<EventArgs>(ConnectionError);
-            Connection.Disconnected += new EventHandler<EventArgs>(ConnectionEnded);
-        }
-
-        void ConnectionComplete (object sender, EventArgs args)
-        {
-            ClientScripting.Script.Init(Connection.ScriptingInfo.ScriptSet);
-            ClientScripting.Script.InitGameScript(Connection.ScriptingInfo.GameStyle);
-        }
-
-        void ConnectionError(object sender, EventArgs args)
-        {
-
-        }
-
-        void ConnectionEnded(object sender, EventArgs args)
-        {
-
-        }
-
         public LocalPlayer PlayerActor = null;
-
-        void State_MapLoaded(object sender, EventArgs e)
-        {
-            Vector3 pos = SetCameraZ(new Vector3(3, 3, 1));
-
-            PlayerActor = State.AddActor(StandardActors.LocalPlayer) as LocalPlayer;
-
-            PlayerActor.LastUpdatePostion = new Vector3(pos);
-            PlayerActor.LastUpdateRotation = new Vector3(0, 0, 0);
-            PlayerActor.LastUpdateTime = State.Now;
-        }
-
-        World GetSimpleWorld()
-        {
-            return WorldBuilder.NewWorld(string.Empty, null);
-        }
-
-        public void Load()
-        {
-            State.Load();
-        }
 
         protected Vector3 SetCameraZ(Vector3 pos)
         {
@@ -99,7 +24,6 @@ namespace Client
 
             return pos;
         }
-
 
         public InputSystem.Axis SpinAxis = null;
         public InputSystem.Axis TiltAxis = null;
@@ -137,6 +61,10 @@ namespace Client
         public void Update()
         {
             double now = State.Now;
+
+            if (PlayerActor == null)
+                return;
+
             UpdatePlayerInput(now);
 
             double delta = now - lastFlushTime;
@@ -200,12 +128,12 @@ namespace Client
 
             ToggleDebugDrawing = InputTracker.AddButton("ToggleDebugDraw", new EventHandler<EventArgs>(ToggleDebugDrawing_Changed));
 
-//             MoveDebugRayXPos = InputTracker.AddButton("DX+", new EventHandler<EventArgs>(MoveDebugRay));
-//             MoveDebugRayYPos = InputTracker.AddButton("DY+", new EventHandler<EventArgs>(MoveDebugRay));
-//             MoveDebugRayXNeg = InputTracker.AddButton("DX-", new EventHandler<EventArgs>(MoveDebugRay));
-//             MoveDebugRayYNeg = InputTracker.AddButton("DY-", new EventHandler<EventArgs>(MoveDebugRay));
-//             MoveDebugRayZPos = InputTracker.AddButton("DZ+", new EventHandler<EventArgs>(MoveDebugRay));
-//             MoveDebugRayZNeg = InputTracker.AddButton("DZ-", new EventHandler<EventArgs>(MoveDebugRay));
+            //             MoveDebugRayXPos = InputTracker.AddButton("DX+", new EventHandler<EventArgs>(MoveDebugRay));
+            //             MoveDebugRayYPos = InputTracker.AddButton("DY+", new EventHandler<EventArgs>(MoveDebugRay));
+            //             MoveDebugRayXNeg = InputTracker.AddButton("DX-", new EventHandler<EventArgs>(MoveDebugRay));
+            //             MoveDebugRayYNeg = InputTracker.AddButton("DY-", new EventHandler<EventArgs>(MoveDebugRay));
+            //             MoveDebugRayZPos = InputTracker.AddButton("DZ+", new EventHandler<EventArgs>(MoveDebugRay));
+            //             MoveDebugRayZNeg = InputTracker.AddButton("DZ-", new EventHandler<EventArgs>(MoveDebugRay));
 
             TankLinearAxis = InputTracker.AddAxis("TankLinear", true, false);
             TankRotaryAxis = InputTracker.AddAxis("TankRotary", true, false);

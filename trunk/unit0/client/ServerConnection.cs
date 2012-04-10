@@ -27,13 +27,15 @@ namespace Client
     {
         NetClient Client = null;
 
+        protected object locker = new object();
+
         public EventHandler<EventArgs> Connected;
         public EventHandler<EventArgs> Failed;
         public EventHandler<EventArgs> Disconnected;
 
-        Thread worker = null;
+        public EventHandler<EventArgs> StatusChanged;
 
-        PlayerInfo player = new PlayerInfo();
+        Thread worker = null;
 
         public class ScriptInfo
         {
@@ -43,6 +45,7 @@ namespace Client
 
         public ScriptInfo ScriptingInfo = new ScriptInfo();
 
+        PlayerInfo player = new PlayerInfo();
         public PlayerInfo Player
         {
             get
@@ -51,6 +54,19 @@ namespace Client
                     return player;
             }
         }
+
+        public enum ConnectionStatus
+        {
+            New,
+            Connecting,
+            Loading,
+            WaitOptions,
+            Playing,
+            Limboed,
+        }
+        ConnectionStatus conStatus;
+
+        public ConnectionStatus Status { get { lock (locker)return conStatus; } protected set { lock (locker)conStatus = value; if (StatusChanged != null) StatusChanged(this, EventArgs.Empty); } }
 
         public ServerConnection(string address, int port)
         {
@@ -135,12 +151,14 @@ namespace Client
             Player.Name = info.Name;
 
             Player.Options = info.Options;
-            Player.OptionChoices = new List<int>;
+            Player.OptionChoices = new List<int>();
             foreach (ConnectInfo.OptionInfo option in info.Options)
                 Player.OptionChoices.Add(option.Default);
 
             ScriptingInfo.GameStyle = info.GameStyle;
             ScriptingInfo.ScriptSet = info.ScriptPack;
+
+            Status = ConnectionStatus.Connecting;
 
             if (Connected != null)
                 Connected(this,EventArgs.Empty);

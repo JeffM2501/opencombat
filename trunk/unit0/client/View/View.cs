@@ -30,6 +30,17 @@ namespace Client
 
         public Dictionary<string, string> DebugLogLines = new Dictionary<string, string>();
 
+        public enum ViewStatus
+        {
+            New,
+            Connecting,
+            Loading,
+            Playing,
+            Errored,
+        }
+
+        public ViewStatus Status = ViewStatus.New;
+
         public View(GameWindow window, GameState state)
         {
             Window = window;
