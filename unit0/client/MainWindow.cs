@@ -54,18 +54,18 @@ namespace Client
             switch(Game.Status)
             {
                 case ServerConnection.ConnectionStatus.New:
-                    GameView.Status = View.ViewStatus.New;
+                    GameView.SetStatus(View.ViewStatus.New);
                     break;
                 case ServerConnection.ConnectionStatus.Connecting:
-                    GameView.Status = View.ViewStatus.Connecting;
+                    GameView.SetStatus(View.ViewStatus.Connecting);
                     break;
                 case ServerConnection.ConnectionStatus.Loading:
-                    GameView.Status = View.ViewStatus.Loading;
+                    GameView.SetStatus(View.ViewStatus.Loading);
                     break;
 
                 case ServerConnection.ConnectionStatus.WaitOptions:
                 case ServerConnection.ConnectionStatus.Playing:
-                    GameView.Status = View.ViewStatus.Playing;
+                    GameView.SetStatus(View.ViewStatus.Playing);
                     if (Game.Status == ServerConnection.ConnectionStatus.WaitOptions)
                     {
                         // show some dialog shit!
