@@ -14,7 +14,7 @@ using WorldDrawing;
 
 namespace Client
 {
-    partial class View
+    public partial class View
     {
         public GameWindow Window = null;
         protected GameState State = null;
@@ -41,12 +41,13 @@ namespace Client
             Errored,
         }
 
-        protected ViewStatus Status = ViewStatus.New;
+        protected ViewStatus _Status = ViewStatus.New;
+        public ViewStatus Status { get { return _Status; } }
 
         public void SetStatus(ViewStatus status)
         {
-            Status = status;
-            HudProcessor.StatusChange(Status);
+            _Status = status;
+            HudProcessor.StatusChange(_Status);
         }
 
         public View(GameWindow window, GameState state)
@@ -100,8 +101,9 @@ namespace Client
 
         void Window_Load(object sender, EventArgs e)
         {
+
             Window.MakeCurrent();
-            HudProcessor.StatusChange(Status);
+           
 
             GL.Enable(EnableCap.CullFace);
             GL.CullFace(CullFaceMode.Back);
@@ -123,6 +125,9 @@ namespace Client
             lightInfo = new Vector4(0.7f, 0.7f, 0.7f, 1.0f);
             GL.Light(LightName.Light0, LightParameter.Diffuse, lightInfo);
             GL.Light(LightName.Light0, LightParameter.Specular, lightInfo);
+
+            HudProcessor.Init();
+            HudProcessor.StatusChange(Status);
 
             camera = new SimpleCamera();
 
