@@ -175,6 +175,7 @@ namespace Textures
         protected bool mipMapped = true;
         protected bool clamped = false;
         protected Size imageSize = Size.Empty;
+        protected Vector2 imageBounds = Vector2.Zero;
 
         protected FileInfo file = null;
         protected Image image = null;
@@ -211,6 +212,24 @@ namespace Textures
             {
                 CheckSize();
                 return imageSize.Height;
+            }
+        }
+
+        public Vector2 Bounds
+        {
+            get
+            {
+                CheckSize();
+                return imageBounds;
+            }
+        }
+
+        public Size Size
+        {
+            get
+            {
+                CheckSize();
+                return imageSize;
             }
         }
 
@@ -336,7 +355,10 @@ namespace Textures
             if (imageSize == Size.Empty)
             {
                 if (image != null)
+                {
                     imageSize = new Size(image.Width, image.Height);
+                    imageBounds = new Vector2(image.Width, image.Height);
+                }
                 else
                 {
                     if (CacheFilesToImage)
@@ -345,7 +367,10 @@ namespace Textures
                     {
                         Image pic = Image.FromFile(file.FullName);
                         if (pic != null)
+                        {
                             imageSize = new Size(pic.Width, pic.Height);
+                            imageBounds = new Vector2(image.Width, image.Height);
+                        }
                     }
                 }
             }
