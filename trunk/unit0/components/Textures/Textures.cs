@@ -53,20 +53,20 @@ namespace Textures
 
         public static Texture Get ( string imageFile )
         {
-            return Get(imageFile, true, false);
+            return Get(imageFile, SmoothType.NearestMip, false);
         }
 
-        public static Texture Get(string imageFile, bool miped, bool clamped)
+        public static Texture Get(string imageFile, SmoothType smoothing, bool clamped)
         {
             string name = (string)imageFile.Clone();
-            name += "M" + miped.ToString() + "C" + clamped.ToString();
+            name += "S" + smoothing.ToString() + "C" + clamped.ToString();
             lock (TextureCaches)
             {
                 if (TextureCache().ContainsKey(name))
                     return TextureCache()[name];
             }
 
-            return new Texture(name, new FileInfo(imageFile), miped, clamped);
+            return new Texture(name, new FileInfo(imageFile), smoothing, clamped);
         }
 
         public static Texture Get(Image image)
@@ -76,18 +76,18 @@ namespace Textures
 
         public static Texture Get(Image image, string name)
         {
-            return Get(image, name, true, false);
+            return Get(image, name, SmoothType.NearestMip, false);
         }
 
-        public static Texture Get(Image image, string name, bool miped, bool clamped)
+        public static Texture Get(Image image, string name, SmoothType smoothing, bool clamped)
         {
-            name += "M" + miped.ToString() + "C" + clamped.ToString();
+            name += "S" + smoothing.ToString() + "C" + clamped.ToString();
             lock (TextureCaches)
             {
                 if (TextureCache().ContainsKey(name))
                     return TextureCache()[name];
             }
-            return new Texture(name, image, miped, clamped);
+            return new Texture(name, image, smoothing, clamped);
         }
 
         public static void FlushGL()
@@ -172,7 +172,15 @@ namespace Textures
         protected static Dictionary<int, int> LastBoundIDs = InitLastUsed();
 
         protected int BoundID = InvalidID;
-        protected bool mipMapped = true;
+
+        public enum SmoothType
+        {
+            Nearest,
+            NearestMip,
+            SmoothMip,
+        }
+
+        protected SmoothType Smoothing = SmoothType.NearestMip;
         protected bool clamped = false;
         protected Size imageSize = Size.Empty;
         protected Vector2 imageBounds = Vector2.Zero;
@@ -189,7 +197,12 @@ namespace Textures
 
         public bool MipMapped
         {
-            get { return mipMapped; }
+            get { return Smoothing != SmoothType.Nearest; }
+        }
+
+        public bool Smoothed
+        {
+            get { return Smoothing != SmoothType.SmoothMip; }
         }
 
         public bool Clamped
@@ -233,11 +246,11 @@ namespace Textures
             }
         }
 
-        protected Texture(string name, FileInfo info, bool mip, bool clamp)
+        protected Texture(string name, FileInfo info, SmoothType smoothed, bool clamp)
         {
             Name = name;
             file = info;
-            mipMapped = mip;
+            Smoothing = smoothed;
             clamped = clamp;
             lock (TextureCaches)
             {
@@ -245,11 +258,11 @@ namespace Textures
             }
         }
 
-        protected Texture(string name, Image img, bool mip, bool clamp)
+        protected Texture(string name, Image img, SmoothType smoothed, bool clamp)
         {
             Name = name;
             image = img;
-            mipMapped = mip;
+            Smoothing = smoothed;
             clamped = clamp; 
             lock (TextureCaches)
             {
@@ -292,31 +305,24 @@ namespace Textures
 
             GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, data.Width, data.Height, 0, OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, data.Scan0);
 
-            if (mipMapped)
-            {
-                if (UseAnisometricFiltering)
-                {
-                    //GL.TexParameter(TextureTarget.Texture2D, (TextureParameterName)0x84FF, 2f);
 
-                    float maxAniso;
-                    GL.GetFloat((GetPName)ExtTextureFilterAnisotropic.MaxTextureMaxAnisotropyExt, out maxAniso);
-                    GL.TexParameter(TextureTarget.Texture2D, (TextureParameterName)ExtTextureFilterAnisotropic.TextureMaxAnisotropyExt, maxAniso);
-                }
-                GL.GenerateMipmap(GenerateMipmapTarget.Texture2D);
-            }
-            
-            bitmap.UnlockBits(data);
-            bitmap.Dispose();
-
-            if (!mipMapped)
+            if (Smoothing == SmoothType.Nearest)
             {
                 GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
                 GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
             }
             else
             {
-                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.LinearClipmapLinearSgix);
-                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.LinearDetailSgis);
+                if (Smoothing == SmoothType.NearestMip)
+                {
+                    GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.LinearClipmapLinearSgix);
+                    GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.LinearDetailSgis);
+                }
+                else
+                {
+                    GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.LinearMipmapLinear);
+                    GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
+                }
             }
 
             if (clamped)
@@ -329,6 +335,22 @@ namespace Textures
                 GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.Repeat);
                 GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.Repeat);
             }
+
+            if (Smoothing != SmoothType.Nearest)
+            {
+                if (UseAnisometricFiltering)
+                {
+                    //GL.TexParameter(TextureTarget.Texture2D, (TextureParameterName)0x84FF, 2f);
+
+                    float maxAniso;
+                    GL.GetFloat((GetPName)ExtTextureFilterAnisotropic.MaxTextureMaxAnisotropyExt, out maxAniso);
+                    GL.TexParameter(TextureTarget.Texture2D, (TextureParameterName)ExtTextureFilterAnisotropic.TextureMaxAnisotropyExt, maxAniso);
+                }
+                GL.GenerateMipmap(GenerateMipmapTarget.Texture2D);
+            }
+
+            bitmap.UnlockBits(data);
+            bitmap.Dispose();
 
             GL.BindTexture(TextureTarget.Texture2D, BoundID);
         }
@@ -369,11 +391,53 @@ namespace Textures
                         if (pic != null)
                         {
                             imageSize = new Size(pic.Width, pic.Height);
-                            imageBounds = new Vector2(image.Width, image.Height);
+                            imageBounds = new Vector2(pic.Width, pic.Height);
                         }
                     }
                 }
             }
+        }
+
+        public void Draw()
+        {
+            Draw(Color.White, 1, 1);
+        }
+
+        public void Draw(float scale)
+        {
+            Draw(Color.White, 1, scale);
+        }
+
+        public void Draw(Color color)
+        {
+            Draw(color, 1, 1);
+        }
+
+        public void Draw(Color color, float scale)
+        {
+            Draw(color, 1, scale);
+        }
+
+        public void Draw(Color color, float alpha, float scale )
+        {
+            this.Bind();
+            GL.Color4(1, 1, 1, alpha);
+            GL.Color3(color);
+
+            float w = (Bounds.X / 2) * scale;
+            float h = (Bounds.Y / 2) * scale;
+
+            GL.Begin(BeginMode.Quads);
+            GL.Normal3(Vector3.UnitZ);
+            GL.TexCoord2(0, 0);
+            GL.Vertex2(-w, -h);
+            GL.TexCoord2(1, 0);
+            GL.Vertex2(w, -h);
+            GL.TexCoord2(1, 1);
+            GL.Vertex2(w, h);
+            GL.TexCoord2(0, 1);
+            GL.Vertex2(-w, h);
+            GL.End();
         }
     }
 }
