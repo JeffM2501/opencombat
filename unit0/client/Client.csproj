@@ -90,7 +90,7 @@
     </Compile>
     <Compile Include="View\View.cs" />
     <Compile Include="View\View.Hud.cs" />
-    <Compile Include="View\ViewDebug.cs" />
+    <Compile Include="View\View.Debug.cs" />
     <EmbeddedResource Include="PreGame.resx">
       <DependentUpon>PreGame.cs</DependentUpon>
     </EmbeddedResource>
