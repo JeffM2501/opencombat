@@ -30,6 +30,8 @@ namespace Client
 
         public Dictionary<string, string> DebugLogLines = new Dictionary<string, string>();
 
+        protected HUD HudProcessor = null;
+
         public enum ViewStatus
         {
             New,
@@ -39,7 +41,13 @@ namespace Client
             Errored,
         }
 
-        public ViewStatus Status = ViewStatus.New;
+        protected ViewStatus Status = ViewStatus.New;
+
+        public void SetStatus(ViewStatus status)
+        {
+            Status = status;
+            HudProcessor.StatusChange(Status);
+        }
 
         public View(GameWindow window, GameState state)
         {
@@ -54,6 +62,8 @@ namespace Client
             Window.Unload += new EventHandler<EventArgs>(Window_Unload);
             Window.Load += new EventHandler<EventArgs>(Window_Load);
             Window.VisibleChanged += new EventHandler<EventArgs>(Window_VisibleChanged);
+
+            HudProcessor = new HUD(this);
         }
 
         void state_ActorDeleted(GameState sender, GameState.Actor actor)
@@ -91,7 +101,7 @@ namespace Client
         void Window_Load(object sender, EventArgs e)
         {
             Window.MakeCurrent();
-            GL.ClearColor(Color.SkyBlue);
+            HudProcessor.StatusChange(Status);
 
             GL.Enable(EnableCap.CullFace);
             GL.CullFace(CullFaceMode.Back);
@@ -139,6 +149,8 @@ namespace Client
             GL.Viewport(0, 0, Window.Width, Window.Height);
             camera.Resize(Window.Width, Window.Height);
             fCamera.Resize(Window.Width, Window.Height);
+            if (HudProcessor != null)
+                HudProcessor.Resize();
         }
 
         void DrawActors()
@@ -158,52 +170,62 @@ namespace Client
 
             if (camera != null)
             {
-                // camera translation
-             
-                if (ModifyCamera != null)
-                    ModifyCamera(camera);
-
                 fCamera.set(camera.ViewPosition, (float)-camera.Tilt, (float)camera.Spin);
-                fCamera.SetPersective();
-                fCamera.Execute();
-
-                GL.Enable(EnableCap.Texture2D);
-
-                if (renderer != null)
-                    renderer.DrawSky(fCamera);
-
-                // lighting
-                GL.Enable(EnableCap.Lighting);
-                GL.Enable(EnableCap.Light0);
-                Vector4 lightInfo = new Vector4(State.GameWorld.Info.SunPosition.X, State.GameWorld.Info.SunPosition.Y, State.GameWorld.Info.SunPosition.Z, 1.0f);
-                GL.Light(LightName.Light0, LightParameter.Position, lightInfo);
-
-
-                // draw world
-                if (renderer != null)
-                {
-                    renderer.DrawVisible(fCamera.ViewFrustum, DrawDebugInfo);//fCamera.SnapshotFrusum());
-
-                    DrawActors();
-                }
-
-                DrawDebugCrap();
-
-                GL.PushMatrix();
-
-                GL.Clear(ClearBufferMask.DepthBufferBit);
-                DrawDebugPerspectiveGUI();
-
-                fCamera.SetOrthographic();
-                GL.LoadIdentity();
-
-                DrawDebugOrthoGUI();
-                // draw gui
-                GL.PopMatrix();
+                
+                if (Status == ViewStatus.Playing)
+                    DrawPlayField();
+                else
+                    HudProcessor.Draw(fCamera);            
             }
 
             GL.PopMatrix();
             Window.SwapBuffers();
+        }
+
+        protected void DrawPlayField()
+        {
+            if (camera == null)
+                return;
+
+            if (ModifyCamera != null)
+                ModifyCamera(camera);
+
+            fCamera.SetPersective();
+            fCamera.Execute();
+
+            GL.Enable(EnableCap.Texture2D);
+
+            if (renderer != null)
+                renderer.DrawSky(fCamera);
+
+            // lighting
+            GL.Enable(EnableCap.Lighting);
+            GL.Enable(EnableCap.Light0);
+            Vector4 lightInfo = new Vector4(State.GameWorld.Info.SunPosition.X, State.GameWorld.Info.SunPosition.Y, State.GameWorld.Info.SunPosition.Z, 1.0f);
+            GL.Light(LightName.Light0, LightParameter.Position, lightInfo);
+
+
+            // draw world
+            if (renderer != null)
+            {
+                renderer.DrawVisible(fCamera.ViewFrustum, DrawDebugInfo);//fCamera.SnapshotFrusum());
+
+                DrawActors();
+            }
+
+            DrawDebugCrap();
+
+            GL.PushMatrix();
+
+            GL.Clear(ClearBufferMask.DepthBufferBit);
+            DrawDebugPerspectiveGUI();
+
+            fCamera.SetOrthographic();
+            GL.LoadIdentity();
+
+            DrawDebugOrthoGUI();
+            // draw gui
+            GL.PopMatrix();
         }
     }
 }
