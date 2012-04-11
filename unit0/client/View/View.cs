@@ -44,10 +44,11 @@ namespace Client
         protected ViewStatus _Status = ViewStatus.New;
         public ViewStatus Status { get { return _Status; } }
 
-        public void SetStatus(ViewStatus status)
+        public void SetStatus(ViewStatus status, string message)
         {
             _Status = status;
             HudProcessor.StatusChange(_Status);
+            HudProcessor.StateMessage = message;
         }
 
         public View(GameWindow window, GameState state)
@@ -101,10 +102,8 @@ namespace Client
 
         void Window_Load(object sender, EventArgs e)
         {
-
             Window.MakeCurrent();
            
-
             GL.Enable(EnableCap.CullFace);
             GL.CullFace(CullFaceMode.Back);
             GL.FrontFace(FrontFaceDirection.Ccw);

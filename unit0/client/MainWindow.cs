@@ -54,22 +54,26 @@ namespace Client
             switch(Game.Status)
             {
                 case ServerConnection.ConnectionStatus.New:
-                    GameView.SetStatus(View.ViewStatus.New);
+                    GameView.SetStatus(View.ViewStatus.New, "Please Wait");
                     break;
                 case ServerConnection.ConnectionStatus.Connecting:
-                    GameView.SetStatus(View.ViewStatus.Connecting);
+                    GameView.SetStatus(View.ViewStatus.Connecting, "Some_SERVER");
                     break;
                 case ServerConnection.ConnectionStatus.Loading:
-                    GameView.SetStatus(View.ViewStatus.Loading);
+                    GameView.SetStatus(View.ViewStatus.Loading, "Checking Resources");
                     break;
 
                 case ServerConnection.ConnectionStatus.WaitOptions:
                 case ServerConnection.ConnectionStatus.Playing:
-                    GameView.SetStatus(View.ViewStatus.Playing);
+                    GameView.SetStatus(View.ViewStatus.Playing, string.Empty);
                     if (Game.Status == ServerConnection.ConnectionStatus.WaitOptions)
                     {
                         // show some dialog shit!
                     }
+                    break;
+
+                case ServerConnection.ConnectionStatus.Disconnected:
+                    GameView.SetStatus(View.ViewStatus.Errored, Game.GetLastError());
                     break;
             }
         }
@@ -108,12 +112,18 @@ namespace Client
             Vector2 rot = VectorHelper2.FromAngle(cam.Spin);
             cam.ViewPosition.X -= rot.X * offset;
             cam.ViewPosition.Y -= rot.Y * offset;
-
         }
 
         void Window_Load(object sender, EventArgs e)
         {
-            Game.Load();
+            GameView.SetStatus(View.ViewStatus.New, "Please Wait");
+
+            string server = "localhost";
+            int port = 2501;
+
+            Game.Connect(server, port);
+
+            GameView.SetStatus(View.ViewStatus.Connecting, server + ":" + port.ToString());
         }
 
         void Window_Closed(object sender, EventArgs e)

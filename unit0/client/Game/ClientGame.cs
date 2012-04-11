@@ -83,6 +83,9 @@ namespace Client
             {
                 Done = true;
                 LastError = "Connection Failure";
+
+                Status = ServerConnection.ConnectionStatus.Disconnected;
+                AddPendingEvents(StatusChanged);
             }
         }
 
@@ -92,6 +95,9 @@ namespace Client
             {
                 Done = true;
                 LastError = "Connection Terminated";
+
+                Status = ServerConnection.ConnectionStatus.Disconnected;
+                AddPendingEvents(StatusChanged);
             }
         }
        
@@ -115,7 +121,5 @@ namespace Client
         {
             State.Load();
         }
-
-        
     }
 }

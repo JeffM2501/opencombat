@@ -62,10 +62,10 @@ namespace WorldDrawing
         {
             TextureLookup.Clear();
             foreach (World.TextureInfo texture in GameWorld.Info.Textures)
-                TextureLookup.Add(Texture.Get(Locations.FindDataFile(texture.FileName), false, true));
+                TextureLookup.Add(Texture.Get(Locations.FindDataFile(texture.FileName), Texture.SmoothType.Nearest, true));
 
             Sun = Texture.Get(Locations.FindDataFile("world/daystar.png"));
-            Skybox = Texture.Get(Locations.FindDataFile("world/big_skybox.png"), false, true);
+            Skybox = Texture.Get(Locations.FindDataFile("world/big_skybox.png"), Texture.SmoothType.Nearest, true);
 
             SkyList = new DisplayList(GenSkyBox);
         }

@@ -68,7 +68,7 @@ namespace Editor.Dialogs
             TextureCache.Clear();
 
             foreach (World.TextureInfo info in TheWorld.Info.Textures)
-                TextureCache.Add(Texture.Get(Locations.FindDataFile(info.FileName),false,true));
+                TextureCache.Add(Texture.Get(Locations.FindDataFile(info.FileName),Texture.SmoothType.Nearest,true));
         }
 
         private void glControl1_Load(object sender, EventArgs e)

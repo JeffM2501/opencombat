@@ -63,6 +63,7 @@ namespace Client
             WaitOptions,
             Playing,
             Limboed,
+            Disconnected,
         }
         ConnectionStatus conStatus;
 
