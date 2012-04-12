@@ -163,6 +163,9 @@ namespace Client
 
             if (Connected != null)
                 Connected(this,EventArgs.Empty);
+
+             // ask for a list of resources with an empty request
+            SendReliable(new ResourceRequestMessage());
         }
 
         public bool Die = false;

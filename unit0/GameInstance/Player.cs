@@ -33,6 +33,8 @@ namespace GameInstance
 
         public static Player Empty = new Player(null);
 
+        public bool Valid = true;
+
         public enum PlayerStatus
         {
             New,
@@ -53,6 +55,9 @@ namespace GameInstance
 
         public void SendReliable(NetOutgoingMessage msg)
         {
+            if (!Valid || Connection.Status == NetConnectionStatus.Disconnecting || Connection.Status == NetConnectionStatus.Disconnected)
+                return;
+
             Connection.SendMessage(msg, NetDeliveryMethod.ReliableOrdered, 2);
         }
 
@@ -140,6 +145,9 @@ namespace GameInstance
         {
             lock (Players)
             {
+                lock (player)
+                    player.Valid = false;
+
                 if (!Players.ContainsKey(player.PID))
                   Players.Remove(player.PID);
 
