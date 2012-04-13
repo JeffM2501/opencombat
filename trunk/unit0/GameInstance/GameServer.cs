@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using System.IO.Compression;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Runtime.Serialization;
 
 using InstanceConfig;
 using Lidgren.Network;
@@ -69,6 +72,10 @@ namespace GameInstance
             }
             if (!_Die)
                 LoadSettings();
+
+            ResourceProcessor.AddResource("Map", Map.SaveWorldWithGeometry().Serialize()); ;
+            Map.FlushGeometry();
+
             return Map;
         }
 

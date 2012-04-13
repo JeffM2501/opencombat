@@ -29,6 +29,8 @@ namespace InstanceConfig
 
         public string ScriptPath = "../../../server_data/test/server/";
 
+        public string ResourceHost = string.Empty;
+
         public static Configuration Read(string path)
         {
             FileInfo file = new FileInfo(path);

@@ -31,7 +31,7 @@ namespace GameInstance
 
         public int[] Options = null;
 
-        public static Player Empty = new Player(null);
+        public static Player Empty = new Player(null,null);
 
         public bool Valid = true;
 
@@ -48,8 +48,12 @@ namespace GameInstance
 
         public PlayerStatus Status = PlayerStatus.New;
 
-        public Player(NetConnection con)
+
+        protected NetServer Server = null;
+
+        public Player(NetConnection con, NetServer server)
         {
+            Server = server;
             Connection = con;
         }
 
@@ -59,6 +63,15 @@ namespace GameInstance
                 return;
 
             Connection.SendMessage(msg, NetDeliveryMethod.ReliableOrdered, 2);
+        }
+
+        public void SendReliable(GameMessage msg)
+        {
+            if (!Valid || Server.Status != NetPeerStatus.Running || Connection.Status == NetConnectionStatus.Disconnecting || Connection.Status == NetConnectionStatus.Disconnected)
+                return;
+
+            lock (Server)
+                Connection.SendMessage(msg.Pack(Server.CreateMessage()), NetDeliveryMethod.ReliableOrdered, 2);
         }
 
         protected static Dictionary<UInt64, Player> Players = new Dictionary<UInt64, Player>();
