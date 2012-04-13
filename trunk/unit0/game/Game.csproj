@@ -49,6 +49,7 @@
     <Compile Include="Messages\ResourceMessages.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Teams.cs" />
+    <Compile Include="Utilities.cs" />
     <Compile Include="VectorActor.cs" />
   </ItemGroup>
   <ItemGroup>
