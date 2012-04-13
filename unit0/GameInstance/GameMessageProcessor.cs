@@ -34,6 +34,8 @@ namespace GameInstance
 
         public void Kill()
         {
+            ResourceProcessor.Kill();
+
             if (worker != null && worker.IsAlive)
                 worker.Abort();
 
@@ -95,7 +97,11 @@ namespace GameInstance
 
         void ResourceRequest(GameMessage.MessageCode code, GameMessage messageData, NetConnection sender)
         {
+            ResourceRequestMessage req = messageData as ResourceRequestMessage;
+            if (req == null)
+                return;
 
+            ResourceProcessor.AddReqest(req, sender.Tag as Player);
         }
 
         public void Run()
@@ -144,7 +150,7 @@ namespace GameInstance
         void NewPlayerConnection( NetConnection con)
         {
             // add them
-            Player player = new Player(con);
+            Player player = new Player(con,Server);
             player.PID = Player.NewPlayerID();
 
             con.Tag = player;
