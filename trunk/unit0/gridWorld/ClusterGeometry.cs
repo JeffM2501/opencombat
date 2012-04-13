@@ -81,11 +81,8 @@ namespace GridWorld
             return meshes[id];
         }
 
-        public void Serialize(FileInfo location)
+        protected void Write(Stream fs)
         {
-            if (location.Exists)
-                location.Delete();
-            FileStream fs = location.OpenWrite();
             XmlSerializer XML = new XmlSerializer(typeof(ClusterGeometry));
             if (World.CompressFileIO)
             {
@@ -95,8 +92,44 @@ namespace GridWorld
             }
             else
                 XML.Serialize(fs, this);
+        }
+
+        public void Serialize(FileInfo location)
+        {
+            if (location.Exists)
+                location.Delete();
+            FileStream fs = location.OpenWrite();
+            Write(fs);
             
             fs.Close();
+        }
+
+        public byte[] Serialize()
+        {
+            MemoryStream fs = new MemoryStream();
+            Write(fs);
+            return fs.GetBuffer();
+        }
+
+        protected static ClusterGeometry Read(Stream fs)
+        {
+            XmlSerializer XML = new XmlSerializer(typeof(ClusterGeometry));
+
+            ClusterGeometry geo = null;
+
+            if (World.CompressFileIO)
+            {
+                GZipStream gz = new GZipStream(fs, CompressionMode.Decompress);
+                geo = (ClusterGeometry)XML.Deserialize(gz);
+                gz.Close();
+            }
+            else
+                geo = (ClusterGeometry)XML.Deserialize(fs);
+            fs.Close();
+
+            geo.Rebind();
+
+            return geo;
         }
 
         public static ClusterGeometry Deserialize(FileInfo location)
@@ -106,22 +139,26 @@ namespace GridWorld
             try
             {
                 FileStream fs = location.OpenRead();
-                
-                XmlSerializer XML = new XmlSerializer(typeof(ClusterGeometry));
-                
-                ClusterGeometry geo = null;
-
-                if (World.CompressFileIO)
-                {
-                    GZipStream gz = new GZipStream(fs, CompressionMode.Decompress);
-                    geo = (ClusterGeometry)XML.Deserialize(gz);
-                    gz.Close();
-                }
-                else
-                    geo = (ClusterGeometry)XML.Deserialize(fs);
+                ClusterGeometry geo = Read(fs);
                 fs.Close();
+                return geo;
+            }
+            catch (System.Exception /*ex*/)
+            {
+            }
 
-                geo.Rebind();
+            return ClusterGeometry.Empty;
+        }
+
+        public static ClusterGeometry Deserialize(byte[] buffer)
+        {
+            if (buffer == null || buffer.Length == 0)
+                return ClusterGeometry.Empty;
+            try
+            {
+                MemoryStream fs = new MemoryStream(buffer);
+                ClusterGeometry geo = Read(fs);
+                fs.Close();
                 return geo;
             }
             catch (System.Exception /*ex*/)

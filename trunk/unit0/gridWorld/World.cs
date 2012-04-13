@@ -19,7 +19,8 @@ namespace GridWorld
         public static string ClusterFileExtension = "cluster";
         public static string GeometryFileExtension = "Geom";
 
-        public static bool CompressFileIO = true;
+        protected static bool _CompressFileIO = true;
+        public static bool CompressFileIO {get {return _CompressFileIO;}}
 
         public static World Empty = new World();
 
@@ -186,11 +187,8 @@ namespace GridWorld
             return octree.bounds;
         }
 
-        public void Serialize(FileInfo location)
+        protected void Write(Stream fs)
         {
-            if (location.Exists)
-                location.Delete();
-            FileStream fs = location.OpenWrite();
             XmlSerializer XML = new XmlSerializer(typeof(World));
             if (CompressFileIO)
             {
@@ -200,8 +198,39 @@ namespace GridWorld
             }
             else
                 XML.Serialize(fs, this);
+        }
+
+        public void Serialize(FileInfo location)
+        {
+            if (location.Exists)
+                location.Delete();
             
+            FileStream fs = location.OpenWrite();
+            Write(fs);
             fs.Close();
+        }
+
+        public byte[] Serialize()
+        {
+            MemoryStream fs = new MemoryStream();
+            Write(fs);
+            fs.Close();
+            return fs.GetBuffer();
+        }
+
+        protected static World Read(Stream fs)
+        {
+            XmlSerializer XML = new XmlSerializer(typeof(World));
+            World world = null;
+            if (CompressFileIO)
+            {
+                GZipStream gz = new GZipStream(fs, CompressionMode.Decompress);
+                world = (World)XML.Deserialize(gz);
+                gz.Close();
+            }
+            else
+                world = (World)XML.Deserialize(fs);
+            return world;
         }
 
         public static World Deserialize(FileInfo location)
@@ -212,17 +241,8 @@ namespace GridWorld
             try
             {
                 FileStream fs = location.OpenRead();
-                XmlSerializer XML = new XmlSerializer(typeof(World));
-                World world = null;
-                if (CompressFileIO)
-                {
-                    GZipStream gz = new GZipStream(fs, CompressionMode.Decompress);
-                    world = (World)XML.Deserialize(gz);
-                    gz.Close();
-                }
-                else
-                    world = (World)XML.Deserialize(fs);
 
+                World world = Read(fs);
                 fs.Close();
                 return world;
             }
@@ -231,6 +251,66 @@ namespace GridWorld
             }
 
             return World.Empty;
+        }
+
+        public static World Deserialize(byte[] buffer)
+        {
+            if (buffer == null || buffer.Length == 0)
+                return World.Empty;
+
+            try
+            {
+                MemoryStream fs = new MemoryStream(buffer);
+                World world = Read(fs);
+                fs.Close();
+                return world;
+            }
+            catch (System.Exception /*ex*/)
+            {
+            }
+
+            return World.Empty;
+        }
+
+        public class WorldDefData
+        {
+            public byte[] WorldData = null;
+            public List<byte[]> Clusters = new List<byte[]>();
+            public List<byte[]> Geometries = new List<byte[]>();
+
+            public byte[] Serialize()
+            {
+                MemoryStream fs = new MemoryStream();
+
+                XmlSerializer XML = new XmlSerializer(typeof(WorldDefData));
+                if (CompressFileIO)
+                {
+                    GZipStream gz = new GZipStream(fs, CompressionMode.Compress);
+                    XML.Serialize(gz, this);
+                    gz.Close();
+                }
+                else
+                    XML.Serialize(fs, this);
+                fs.Close();
+                return fs.GetBuffer();
+            }
+
+            public static WorldDefData Deserialize(byte[] buffer)
+            {
+                MemoryStream fs = new MemoryStream(buffer);
+
+                XmlSerializer XML = new XmlSerializer(typeof(WorldDefData));
+                WorldDefData data = null;
+                if (CompressFileIO)
+                {
+                    GZipStream gz = new GZipStream(fs, CompressionMode.Decompress);
+                    data = (WorldDefData)XML.Deserialize(gz);
+                    gz.Close();
+                }
+                else
+                    data = (WorldDefData)XML.Deserialize(fs);
+                return data;
+            }
         }
 
         public static World ReadWorldAndClusters(FileInfo location)
@@ -244,19 +324,29 @@ namespace GridWorld
             {
                 try
                 {
-                    FileStream fs = file.OpenRead();
-                    XmlSerializer XML = new XmlSerializer(typeof(Cluster));
-                    Cluster cluster = null;
-                    if (CompressFileIO)
-                    {
-                        GZipStream gz = new GZipStream(fs, CompressionMode.Decompress);
-                        cluster = (Cluster)XML.Deserialize(gz);
-                        gz.Close();
-                    }
-                    else
-                        cluster = (Cluster)XML.Deserialize(fs);
-                    fs.Close();
+                    Cluster cluster = Cluster.Deserialize(file);
+                    world.Clusters.Add(cluster.Origin, cluster);
+                }
+                catch (System.Exception /*ex*/)
+                {
 
+                }
+            }
+            world.Finailize();
+            return world;
+        }
+
+        public static World ReadWorldAndClusters(WorldDefData data)
+        {
+            World world = Deserialize(data.WorldData);
+            if (world == World.Empty)
+                return World.Empty;
+
+            foreach (byte[] buffer in data.Clusters)
+            {
+                try
+                {
+                    Cluster cluster = Cluster.Deserialize(buffer);
                     world.Clusters.Add(cluster.Origin, cluster);
                 }
                 catch (System.Exception /*ex*/)
@@ -291,6 +381,28 @@ namespace GridWorld
             return world;
         }
 
+        public static World ReadWorldWithGeometry(WorldDefData data)
+        {
+            World world = ReadWorldAndClusters(data);
+            if (world == World.Empty)
+                return World.Empty;
+
+            foreach (byte[] buffer in data.Geometries)
+            {
+                try
+                {
+                    ClusterGeometry geometry = ClusterGeometry.Deserialize(buffer);
+                    if (world.Clusters.ContainsKey(geometry.ClusterOrigin))
+                        world.Clusters[geometry.ClusterOrigin].Geometry = geometry;
+                }
+                catch (System.Exception /*ex*/)
+                {
+
+                }
+            }
+            return world;
+        }
+
         public void SaveWorldAndClusters(FileInfo location)
         {
             Serialize(location);
@@ -302,20 +414,16 @@ namespace GridWorld
             foreach (Cluster c in Clusters.Values)
             {
                 FileInfo file = new FileInfo(Path.Combine(location.DirectoryName,c.Origin.ToString() + "." + ClusterFileExtension));
-                FileStream fs = file.OpenWrite();
-                
-                XmlSerializer XML = new XmlSerializer(typeof(Cluster));
-                if (CompressFileIO)
-                {
-                    GZipStream gz = new GZipStream(fs, CompressionMode.Compress);
-                    XML.Serialize(gz, c);
-                    gz.Close();
-                }
-                else
-                    XML.Serialize(fs, c);
-                
-                fs.Close();
+                c.Serialize(file);
             }
+        }
+
+        public void SaveWorldAndClusters(WorldDefData data)
+        {
+            data.WorldData = Serialize();
+
+            foreach (Cluster c in Clusters.Values)
+                data.Clusters.Add(c.Serialize());
         }
 
         public void SaveWorldWithGeometry(FileInfo location)
@@ -328,6 +436,14 @@ namespace GridWorld
 
             foreach (Cluster c in Clusters.Values)
                 c.Geometry.Serialize(new FileInfo(Path.Combine(location.DirectoryName, c.Origin.ToString() + "." + GeometryFileExtension)));
+        }
+
+        public void SaveWorldWithGeometry(WorldDefData data)
+        {
+            SaveWorldAndClusters(data);
+
+            foreach (Cluster c in Clusters.Values)
+                data.Geometries.Add(c.Geometry.Serialize());
         }
 
         public List<Cluster> ClustersInFrustum(BoundingFrustum frustum, bool useOctree)
@@ -352,6 +468,12 @@ namespace GridWorld
         {
             octree = new Octree();
             octree.Add(Clusters.Values);
+        }
+
+        public void FlushGeometry()
+        {
+            foreach (Cluster c in Clusters.Values)
+                c.Geometry = null;
         }
 
         public void AddObject(IOctreeObject obj)

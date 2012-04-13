@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
+using System.IO;
+using System.IO.Compression;
 using System.Xml;
 using System.Xml.Serialization;
 
@@ -212,5 +213,66 @@ namespace GridWorld
 
         [XmlIgnore]
         public ClusterGeometry Geometry = null;
+
+
+        protected static Cluster Read(Stream fs)
+        {
+            XmlSerializer XML = new XmlSerializer(typeof(Cluster));
+            Cluster cluster = null;
+            if (World.CompressFileIO)
+            {
+                GZipStream gz = new GZipStream(fs, CompressionMode.Decompress);
+                cluster = (Cluster)XML.Deserialize(gz);
+                gz.Close();
+            }
+            else
+                cluster = (Cluster)XML.Deserialize(fs);
+
+            return cluster;
+        }
+
+        public static Cluster Deserialize(FileInfo file)
+        {
+            FileStream fs = file.OpenRead();
+            Cluster cluster = Read(fs);
+            fs.Close();
+            return cluster;
+        }
+
+        public static Cluster Deserialize(byte[] buffer)
+        {
+            MemoryStream fs = new MemoryStream(buffer);
+            Cluster cluster = Read(fs);
+            fs.Close();
+            return cluster;
+        }
+
+        public void Write(Stream fs)
+        {
+            XmlSerializer XML = new XmlSerializer(typeof(Cluster));
+            if (World.CompressFileIO)
+            {
+                GZipStream gz = new GZipStream(fs, CompressionMode.Compress);
+                XML.Serialize(gz, this);
+                gz.Close();
+            }
+            else
+                XML.Serialize(fs, this);
+        }
+
+        public void Serialize(FileInfo file)
+        {
+            FileStream fs = file.OpenWrite();
+            Write(fs);
+            fs.Close();
+        }
+
+        public byte[] Serialize()
+        {
+            MemoryStream fs = new MemoryStream();
+            Write(fs);
+            fs.Close();
+            return fs.GetBuffer();
+        }
     }
 }
