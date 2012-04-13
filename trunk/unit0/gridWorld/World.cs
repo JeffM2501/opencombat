@@ -418,12 +418,16 @@ namespace GridWorld
             }
         }
 
-        public void SaveWorldAndClusters(WorldDefData data)
+        public WorldDefData SaveWorldAndClusters()
         {
+            WorldDefData data = new WorldDefData();
+
             data.WorldData = Serialize();
 
             foreach (Cluster c in Clusters.Values)
                 data.Clusters.Add(c.Serialize());
+
+            return data;
         }
 
         public void SaveWorldWithGeometry(FileInfo location)
@@ -438,12 +442,14 @@ namespace GridWorld
                 c.Geometry.Serialize(new FileInfo(Path.Combine(location.DirectoryName, c.Origin.ToString() + "." + GeometryFileExtension)));
         }
 
-        public void SaveWorldWithGeometry(WorldDefData data)
+        public WorldDefData SaveWorldWithGeometry()
         {
-            SaveWorldAndClusters(data);
+            WorldDefData data = SaveWorldAndClusters();
 
             foreach (Cluster c in Clusters.Values)
                 data.Geometries.Add(c.Geometry.Serialize());
+
+            return data;
         }
 
         public List<Cluster> ClustersInFrustum(BoundingFrustum frustum, bool useOctree)
