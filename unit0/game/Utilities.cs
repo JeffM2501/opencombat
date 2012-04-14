@@ -14,8 +14,8 @@ namespace Game
             MD5 md5 = MD5.Create();
             byte[] hash = md5.ComputeHash(buffer);
             StringBuilder sBuilder = new StringBuilder();
-            for (int i = 0; i < buffer.Length; i++)
-                sBuilder.Append(buffer[i].ToString("x2"));
+            for (int i = 0; i < hash.Length; i++)
+                sBuilder.Append(hash[i].ToString("x2"));
 
             return sBuilder.ToString();
         }
