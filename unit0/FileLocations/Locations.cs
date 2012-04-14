@@ -212,7 +212,7 @@ namespace FileLocations
                     if (!Directory.Exists(subPath))
                         Directory.CreateDirectory(subPath);
                 }
-                catch (System.Exception ex)
+                catch (System.Exception /*ex*/)
                 {
                     return false;
                 }
