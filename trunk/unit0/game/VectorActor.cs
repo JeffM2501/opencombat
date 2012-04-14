@@ -46,7 +46,7 @@ namespace Game
             return bbox;
         }
 
-        public virtual Location GetLocationAtTime(double time)
+        public override Location GetLocationAtTime(double time)
         {
             return new Location(StartPosition + (Vector * (float)(time - Birthday)));
         }

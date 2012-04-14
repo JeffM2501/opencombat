@@ -386,7 +386,8 @@ namespace Editor
             blockEditor.ShowDialog(this);
 
             if (blockEditor.NeedGeoRebuild)
-                TheEditor.RebuildStaticGeometry();
+                TheEditor.DefsUpdated();
+
             Redraw();
         }
     }

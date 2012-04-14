@@ -159,6 +159,11 @@ namespace Game
 
             if (MapLoaded != null)
                 MapLoaded(this,EventArgs.Empty);
+
+            // do any other init stuff
+
+            if (Ready != null)
+                Ready(this, EventArgs.Empty);
         }
 
         public Actor AddActor(string className)

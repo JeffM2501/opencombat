@@ -164,7 +164,7 @@ namespace Client
                     {
                           entry.Hash = GetMD5HashFromFile(file.FullName);
                     }
-                    catch (System.Exception ex)
+                    catch (System.Exception /*ex*/)
                     {
                         OneDidntWork = true;
                     }
