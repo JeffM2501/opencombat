@@ -8,8 +8,6 @@ using OpenTK;
 using GridWorld;
 using FileLocations;
 
-using GridWorld;
-
 namespace Editor
 {
     public class EditorConfig
@@ -45,6 +43,14 @@ namespace Editor
             SelectedBlockDef = ID;
             if (SelectedBlockChanged != null)
                 SelectedBlockChanged(this, EventArgs.Empty);
+        }
+
+        public void DefsUpdated()
+        {
+            if (BlockDefsChanged != null)
+                BlockDefsChanged(this, EventArgs.Empty);
+
+            RebuildStaticGeometry();
         }
 
         public Edit(EditorConfig config)

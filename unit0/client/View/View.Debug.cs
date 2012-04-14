@@ -59,8 +59,7 @@ namespace Client
             GL.Disable(EnableCap.Texture2D);
             GL.DepthMask(false);
 
-            if (false)
-                DrawDebugRay();
+//          DrawDebugRay();
 
             GL.Enable(EnableCap.DepthTest);
             GL.DepthMask(true);
