@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.IO;
 
 using Game;
 using GridWorld;
@@ -9,6 +10,7 @@ using GridWorld;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Input;
+using FileLocations;
 
 namespace Client
 {
@@ -32,6 +34,8 @@ namespace Client
 
         protected object locker = new object();
 
+        protected World MapWorld = null;
+
         protected bool Done = false;
         protected string LastError = string.Empty;
 
@@ -54,11 +58,19 @@ namespace Client
 
             ClientScripting.Script.SetState(this);
 
-            State.GetWorld = GetSimpleWorld;
+            State.GetWorld = GetWorld;
             State.MapLoaded += new EventHandler<EventArgs>(State_MapLoaded);
 
             InputTracker.RegisterControls += new EventHandler<EventArgs>(InputTracker_RegisterControls);
             InputTracker.LoadDefaultBindings += new EventHandler<EventArgs>(InputTracker_LoadDefaultBindings);
+
+            ResourceProcessor.Client = this;
+            ResourceProcessor.ResourcesComplete += new EventHandler<EventArgs>(ResourceProcessor_ResourcesComplete);
+        }
+
+        void ResourceProcessor_ResourcesComplete(object sender, EventArgs e)
+        {
+            Load();
         }
 
         public void Connect(string host, int port)
@@ -112,14 +124,57 @@ namespace Client
             PlayerActor.LastUpdateTime = State.Now;
         }
 
-        World GetSimpleWorld()
+        World GetWorld()
         {
+            lock (locker)
+            {
+                if (MapWorld != null)
+                    return MapWorld;
+            }
             return WorldBuilder.NewWorld(string.Empty, null);
         }
 
         public void Load()
         {
             State.Load();
+        }
+
+        public bool HaveWorld(string hash)
+        {
+            string dir = Path.Combine(Locations.GetChacheFolder(),"maps");
+            if (!Directory.Exists(dir))
+                Directory.CreateDirectory(dir);
+
+            string mapCache = Path.Combine(dir, hash);
+            if (!Directory.Exists(mapCache))
+                return false;
+
+            lock (locker)
+            {
+                MapWorld = World.ReadWorldWithGeometry(new FileInfo(Path.Combine(mapCache, "world.world")));
+
+                if (MapWorld == null || MapWorld == World.Empty)
+                    return false;
+            }
+
+            return true;   
+        }
+
+        public void CacheWorld(World.WorldDefData buffer, string hash)
+        {
+            string dir = Path.Combine(Locations.GetChacheFolder(), "maps");
+            if (!Directory.Exists(dir))
+                Directory.CreateDirectory(dir);
+
+            string mapCache = Path.Combine(dir, hash);
+            if (!Directory.Exists(mapCache))
+                Directory.CreateDirectory(mapCache);
+
+            lock (locker)
+            {
+                MapWorld = World.ReadWorldWithGeometry(buffer);
+                MapWorld.SaveWorldWithGeometry(new FileInfo(Path.Combine(mapCache, "world.world")));
+            }
         }
 
         public void Kill()

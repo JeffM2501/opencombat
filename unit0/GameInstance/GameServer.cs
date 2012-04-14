@@ -11,7 +11,7 @@ using InstanceConfig;
 using Lidgren.Network;
 
 using Game;
-
+using Game.Messages;
 using GridWorld;
 
 namespace GameInstance
@@ -73,7 +73,7 @@ namespace GameInstance
             if (!_Die)
                 LoadSettings();
 
-            ResourceProcessor.AddResource("Map", Map.SaveWorldWithGeometry().Serialize()); ;
+            ResourceProcessor.AddResource(ResourceRequestMessage.MapResourceName, Map.SaveWorldWithGeometry().Serialize()); ;
             Map.FlushGeometry();
 
             return Map;

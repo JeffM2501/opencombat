@@ -13,7 +13,7 @@ using Game.Messages;
 
 namespace GameInstance
 {
-    public class ResourceProcessor
+    internal class ResourceProcessor
     {
         protected static List<ResourceResponceMessage.Resource> Resources = new List<ResourceResponceMessage.Resource>();
         protected static List<ResourceResponceMessage.Resource> ResourcesPendingHash = new List<ResourceResponceMessage.Resource>();
