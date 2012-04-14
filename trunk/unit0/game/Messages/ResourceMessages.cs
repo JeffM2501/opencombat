@@ -9,6 +9,8 @@ namespace Game.Messages
 {
     public class ResourceRequestMessage : GameMessage
     {
+        public static string MapResourceName = "WorldMap";
+
         public List<string> ResourceNames = new List<string>();
 
         public ResourceRequestMessage()

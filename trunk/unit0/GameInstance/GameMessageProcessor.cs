@@ -21,6 +21,7 @@ namespace GameInstance
         public GameMessageProcessor(GameState state)
         {
             State = state;
+            RegisterMessageHandlers();
 
             NetPeerConfiguration netConfig = new NetPeerConfiguration(GameMessage.ConnectionName);
             netConfig.Port = Program.Config.Port;

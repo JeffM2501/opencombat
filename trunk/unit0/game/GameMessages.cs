@@ -26,7 +26,10 @@ namespace Game
 
             StateChange,
 
+            ChatUserInfo,
             ChatMessage,
+
+            ScoreInfo,
 
             ActorUpdate,
             ActorInput,

@@ -81,6 +81,7 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ResourceProcessor.cs" />
     <Compile Include="ServerConnection.cs" />
     <Compile Include="UpdateProgress.cs">
       <SubType>Form</SubType>

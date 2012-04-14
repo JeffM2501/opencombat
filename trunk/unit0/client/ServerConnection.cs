@@ -85,10 +85,20 @@ namespace Client
 
             worker = new Thread(new ThreadStart(Run));
             worker.Start();
+
+            ResourceProcessor.Connection = this;
+            ResourceProcessor.ResourcesComplete += new EventHandler<EventArgs>(ResourceProcessor_ResourcesComplete);
+        }
+
+        void ResourceProcessor_ResourcesComplete(object sender, EventArgs e)
+        {
+            Status = ConnectionStatus.Playing;
         }
 
         public void Kill()
         {
+            ResourceProcessor.Kill();
+
             if (worker != null)
                 worker.Abort();
 
@@ -126,11 +136,20 @@ namespace Client
         {
             GameMessage.AddMessageCallback(GameMessage.MessageCode.AnyUnhandled,AnyUnhandled);
             GameMessage.AddMessageCallback(GameMessage.MessageCode.ConnectInfo, ConnectionInfo);
+            GameMessage.AddMessageCallback(GameMessage.MessageCode.ResourceResponce, ResourceResponce);
         }
 
         void AnyUnhandled(GameMessage.MessageCode code, GameMessage messageData, NetConnection sender)
         {
 
+        }
+
+        void ResourceResponce(GameMessage.MessageCode code, GameMessage messageData, NetConnection sender)
+        {
+            if (Status != ConnectionStatus.Loading)
+                Status = ConnectionStatus.Loading;
+
+            ResourceProcessor.NewResponce(messageData as ResourceResponceMessage);
         }
 
         void ConnectionInfo(GameMessage.MessageCode code, GameMessage messageData, NetConnection sender)
