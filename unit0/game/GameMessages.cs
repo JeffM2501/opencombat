@@ -58,7 +58,7 @@ namespace Game
         }
         public static void Process(NetIncomingMessage msg)
         {
-            GameMessage messageData = Unpack(msg);
+            GameMessage messageData = UnpackUnknown(msg);
             if (ReceivedCallbacks.ContainsKey(messageData.Code))
             {
                 foreach (MessageReceived cb in ReceivedCallbacks[messageData.Code])
@@ -87,14 +87,13 @@ namespace Game
             }
         }
 
-        public NetOutgoingMessage Pack(NetOutgoingMessage msg)
+        public virtual NetOutgoingMessage Pack(NetOutgoingMessage msg)
         {
             msg.Write((byte)Code);
-            msg.WriteAllFields(this);
             return msg;
         }
 
-        public static GameMessage Unpack(NetIncomingMessage msg)
+        public static GameMessage UnpackUnknown(NetIncomingMessage msg)
         {
             if (MessageClasses.Count == 0)
                 RegisterMessageClasses();
@@ -105,11 +104,16 @@ namespace Game
             if (MessageClasses.ContainsKey(code))
             {
                 GameMessage dataClass = (GameMessage)Activator.CreateInstance(MessageClasses[code]);
-                msg.ReadAllFields(dataClass);
+                dataClass.Unpack(msg);
                 return dataClass;
             }
 
             return new CodeOnlyMessage(code);
+        }
+
+        public virtual void Unpack(NetIncomingMessage msg)
+        {
+
         }
     }
 

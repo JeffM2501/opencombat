@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+using Lidgren.Network;
+
 namespace Game.Messages
 {
     public class HailMessage : GameMessage
@@ -16,6 +18,23 @@ namespace Game.Messages
         public HailMessage()
         {
             Code = GameMessage.MessageCode.Hail;
+        }
+
+        public override NetOutgoingMessage Pack(NetOutgoingMessage msg)
+        {
+            NetOutgoingMessage outMsg = base.Pack(msg);
+            outMsg.Write(Magic);
+            outMsg.Write(RequestedName);
+            outMsg.Write(Token);
+            return outMsg;
+        }
+
+        public override void Unpack(Lidgren.Network.NetIncomingMessage msg)
+        {
+            base.Unpack(msg);
+            Magic = msg.ReadString();
+            RequestedName = msg.ReadString();
+            Token = msg.ReadString();
         }
     }
 
@@ -37,6 +56,33 @@ namespace Game.Messages
             public string Name = string.Empty;
             public int Default = -1;
             public List<string> Options = new List<string>();
+
+            public OptionInfo()
+            {
+            }
+
+            public OptionInfo(NetIncomingMessage msg)
+            {
+                Unpack(msg);
+            }
+
+            public void Pack(NetOutgoingMessage msg)
+            {
+                msg.Write(Name);
+                msg.Write(Default);
+                msg.Write(Options.Count);
+                foreach (string option in Options)
+                    msg.Write(option);
+            }
+
+            public void Unpack(NetIncomingMessage msg)
+            {
+                Name = msg.ReadString();
+                Default = msg.ReadInt32();
+                int count = msg.ReadInt32();
+                for (int i = 0; i < count; i++)
+                    Options.Add(msg.ReadString());
+            }
         }
 
         public List<OptionInfo> Options = new List<OptionInfo>();
@@ -47,6 +93,55 @@ namespace Game.Messages
         {
             Code = GameMessage.MessageCode.ConnectInfo;
         }
+
+        public override NetOutgoingMessage Pack(NetOutgoingMessage msg)
+        {
+            NetOutgoingMessage outMsg = base.Pack(msg);
+            outMsg.Write(UID);
+            outMsg.Write(PID);
+            outMsg.Write(Name);
+
+            outMsg.Write(TeamID);
+            outMsg.Write(TeamName);
+
+            outMsg.Write(GameStyle);
+            outMsg.Write(ScriptPack);
+            outMsg.Write(ScriptPackHash);
+
+            outMsg.Write(Options.Count);
+            foreach (OptionInfo option in Options)
+                option.Pack(outMsg);
+
+            outMsg.Write(Avatars.Count);
+            foreach (string a in Avatars)
+                outMsg.Write(a);
+
+            return outMsg;
+        }
+
+        public override void Unpack(NetIncomingMessage msg)
+        {
+            base.Unpack(msg);
+
+            UID = msg.ReadUInt64();
+            PID = msg.ReadUInt64();
+            Name = msg.ReadString();
+
+            TeamID = msg.ReadInt32();
+            TeamName = msg.ReadString();;
+
+            GameStyle = msg.ReadString();
+            ScriptPack = msg.ReadString();
+            ScriptPackHash = msg.ReadString();
+
+            int count = msg.ReadInt32();
+            for (int i = 0; i < count; i++)
+                Options.Add(new OptionInfo(msg));
+
+            count = msg.ReadInt32();
+            for (int i = 0; i < count; i++)
+                Avatars.Add(msg.ReadString());
+        }
     }
 
     public class OptionSelectMessage : GameMessage
@@ -55,6 +150,27 @@ namespace Game.Messages
         {
             public int ID = -1;
             public int Pick = -1;
+
+            public Selection()
+            {
+            }
+
+            public Selection(NetIncomingMessage msg)
+            {
+                Unpack(msg);
+            }
+
+            public void Pack(NetOutgoingMessage msg)
+            {
+                msg.Write(ID);
+                msg.Write(Pick);
+            }
+
+            public void Unpack(NetIncomingMessage msg)
+            {
+                ID = msg.ReadInt32();
+                Pick = msg.ReadInt32();
+            }
         }
 
         public List<Selection> Selections = new List<Selection>();
@@ -62,6 +178,26 @@ namespace Game.Messages
         public OptionSelectMessage()
         {
             Code = GameMessage.MessageCode.OptionSelect;
+        }
+
+        public override NetOutgoingMessage Pack(NetOutgoingMessage msg)
+        {
+            NetOutgoingMessage outMsg = base.Pack(msg);
+
+
+            outMsg.Write(Selections.Count);
+            foreach (Selection sel in Selections)
+                sel.Pack(outMsg);
+            return outMsg;
+        }
+
+        public override void Unpack(NetIncomingMessage msg)
+        {
+            base.Unpack(msg);
+
+            int count = msg.ReadInt32();
+            for (int i = 0; i < count; i++)
+                Selections.Add(new Selection(msg));
         }
     }
 }

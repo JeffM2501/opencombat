@@ -19,7 +19,7 @@ namespace InstanceConfig
 
         public string GameMode = string.Empty;
 
-        public int Port = -1;
+        public int Port = 2501;
         public string ManagerAddress = string.Empty;
 
         public string Name = string.Empty;

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+using Lidgren.Network;
+
 namespace Game.Messages
 {
     public class ResourceRequestMessage : GameMessage
@@ -12,6 +14,25 @@ namespace Game.Messages
         public ResourceRequestMessage()
         {
             Code = GameMessage.MessageCode.ResourceRequest;
+        }
+
+        public override NetOutgoingMessage Pack(NetOutgoingMessage msg)
+        {
+            NetOutgoingMessage outMsg = base.Pack(msg);
+
+            outMsg.Write(ResourceNames.Count);
+            foreach (string name in ResourceNames)
+                outMsg.Write(name);
+            return outMsg;
+        }
+
+        public override void Unpack(NetIncomingMessage msg)
+        {
+            base.Unpack(msg);
+
+            int count = msg.ReadInt32();
+            for (int i = 0; i < count; i++)
+                ResourceNames.Add(msg.ReadString());
         }
     }
 
@@ -23,6 +44,37 @@ namespace Game.Messages
             public string Hash = string.Empty;
             public string URL = string.Empty;
             public byte[] data = new byte[0];
+
+            public Resource()
+            {
+            }
+
+            public Resource(NetIncomingMessage msg)
+            {
+                Unpack(msg);
+            }
+
+            public void Pack(NetOutgoingMessage msg)
+            {
+                msg.Write(Name);
+                msg.Write(Hash);
+                msg.Write(URL);
+
+                msg.Write(data.Length);
+                if (data.Length > 0)
+                    msg.Write(data);
+            }
+
+            public void Unpack(NetIncomingMessage msg)
+            {
+                Name = msg.ReadString();
+                Hash = msg.ReadString();
+                URL = msg.ReadString();
+
+                int size = msg.ReadInt32();
+                if (size > 0)
+                    data = msg.ReadBytes(size);
+            }
         }
 
         public List<Resource> Resources = new List<Resource>();
@@ -30,6 +82,25 @@ namespace Game.Messages
         public ResourceResponceMessage()
         {
             Code = GameMessage.MessageCode.ResourceResponce;
+        }
+
+        public override NetOutgoingMessage Pack(NetOutgoingMessage msg)
+        {
+            NetOutgoingMessage outMsg = base.Pack(msg);
+
+            outMsg.Write(Resources.Count);
+            foreach (Resource rez in Resources)
+                rez.Pack(outMsg);
+            return outMsg;
+        }
+
+        public override void Unpack(NetIncomingMessage msg)
+        {
+            base.Unpack(msg);
+
+            int count = msg.ReadInt32();
+            for (int i = 0; i < count; i++)
+                Resources.Add(new Resource(msg));
         }
     }
 }
