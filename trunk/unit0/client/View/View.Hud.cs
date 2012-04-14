@@ -13,7 +13,6 @@ using Game;
 using Renderer;
 using Textures;
 using FileLocations;
-using Textures;
 
 namespace Client
 {

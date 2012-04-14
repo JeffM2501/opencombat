@@ -22,8 +22,9 @@ using System.Xml;
 using System.Xml.Serialization;
 
 using OpenTK;
+using Math3D;
 
-namespace Math3D
+namespace GridWorld
 {
 //     public class OctreeObject
 //     {

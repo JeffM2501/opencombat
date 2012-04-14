@@ -398,7 +398,7 @@ namespace Client
                 writer.Close();
                 fs.Close();
             }
-            catch (System.Exception ex)
+            catch (System.Exception /*ex*/)
             {
             	
             }
