@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Net;
 
 using Game;
 using Game.Messages;
@@ -23,6 +24,7 @@ namespace GameInstance
 
             NetPeerConfiguration netConfig = new NetPeerConfiguration(GameMessage.ConnectionName);
             netConfig.Port = Program.Config.Port;
+            netConfig.LocalAddress = IPAddress.Any;
             netConfig.MaximumConnections = Program.Config.MaxPlayers + 2;
 
             Server = new NetServer(netConfig);
@@ -106,6 +108,7 @@ namespace GameInstance
 
         public void Run()
         {
+            Console.WriteLine("Listening");
             while (true)
             {
                 NetIncomingMessage im = null;
@@ -117,21 +120,32 @@ namespace GameInstance
                     switch (im.MessageType)
                     {
                         case NetIncomingMessageType.ConnectionApproval:
-
-                            HailMessage hail = GameMessage.Unpack(im.SenderConnection.RemoteHailMessage) as HailMessage;
-                            if (hail == null || hail.Code != GameMessage.MessageCode.Hail || hail.Magic != HailMessage.MagicMessage)
                             {
-                                im.SenderConnection.Deny();
-                                break;
+                                HailMessage hail = GameMessage.UnpackUnknown(im.SenderConnection.RemoteHailMessage) as HailMessage;
+                                if (hail == null || hail.Code != GameMessage.MessageCode.Hail || hail.Magic != HailMessage.MagicMessage)
+                                {
+                                    im.SenderConnection.Deny();
+                                    break;
+                                }
+                                else
+                                    NewPlayerConnection(im.SenderConnection);
                             }
-                            else
-                                NewPlayerConnection(im.SenderConnection);
                             break;
 
                         case NetIncomingMessageType.StatusChanged:
                             if (im.SenderConnection.Status == NetConnectionStatus.Disconnected)
                                 PlayerDisconnect(im.SenderConnection.Tag as Player);
-
+                            else if (im.SenderConnection.Status == NetConnectionStatus.Connected)
+                            {
+                                HailMessage hail = GameMessage.UnpackUnknown(im.SenderConnection.RemoteHailMessage) as HailMessage;
+                                if (hail == null || hail.Code != GameMessage.MessageCode.Hail || hail.Magic != HailMessage.MagicMessage)
+                                {
+                                    im.SenderConnection.Deny();
+                                    break;
+                                }
+                                else
+                                    NewPlayerConnection(im.SenderConnection);
+                            }
                             break;
 
                         case NetIncomingMessageType.Data:

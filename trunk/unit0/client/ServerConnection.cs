@@ -19,8 +19,8 @@ namespace Client
         public string Name = string.Empty;
         public int TeamID = -1;
 
-        public List<ConnectInfo.OptionInfo> Options = new List<ConnectInfo.OptionInfo>();
-        public List<int> OptionChoices = new List<int>();
+        public ConnectInfo.OptionInfo[] Options = new ConnectInfo.OptionInfo[0];
+        public int[] OptionChoices = new int[0];
     }
 
     public class ServerConnection
@@ -80,6 +80,7 @@ namespace Client
             HailMessage hail = new HailMessage();
             hail.RequestedName = "SlartyBartFast";
 
+            Client.Start();
             Client.Connect(address, port, hail.Pack(Client.CreateMessage()));
 
             worker = new Thread(new ThreadStart(Run));
@@ -151,10 +152,12 @@ namespace Client
 
             Player.Name = info.Name;
 
-            Player.Options = info.Options;
-            Player.OptionChoices = new List<int>();
+            Player.Options = info.Options.ToArray();
+            List<int> temp = new List<int>();
             foreach (ConnectInfo.OptionInfo option in info.Options)
-                Player.OptionChoices.Add(option.Default);
+                temp.Add(option.Default);
+
+            Player.OptionChoices = temp.ToArray();
 
             ScriptingInfo.GameStyle = info.GameStyle;
             ScriptingInfo.ScriptSet = info.ScriptPack;

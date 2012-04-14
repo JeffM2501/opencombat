@@ -121,5 +121,11 @@ namespace Client
         {
             State.Load();
         }
+
+        public void Kill()
+        {
+            if (Connection != null)
+                Connection.Kill();
+        }
     }
 }

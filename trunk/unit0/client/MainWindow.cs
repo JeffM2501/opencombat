@@ -129,6 +129,8 @@ namespace Client
         void Window_Closed(object sender, EventArgs e)
         {
             QuitOnExit = true;
+            if (Game != null)
+                Game.Kill();
         }
 
         void Window_UpdateFrame(object sender, FrameEventArgs e)
