@@ -7,12 +7,12 @@ namespace Client
 {
     public partial class ClientGame
     {
-        public class AvatarDescriptor
+        public class PlayerModelDescriptor
         {
             public string Model = string.Empty;
             public List<string> TeamSkin = new List<string>();
 
-            public AvatarDescriptor(string model)
+            public PlayerModelDescriptor(string model)
             {
                 Model = model; 
             }
@@ -23,14 +23,14 @@ namespace Client
             }
         }
 
-        public List<AvatarDescriptor> Avatars = new List<AvatarDescriptor>();
+        public List<PlayerModelDescriptor> PlayerModels = new List<PlayerModelDescriptor>();
 
-        public AvatarDescriptor AddAvatar(string model)
+        public PlayerModelDescriptor AddModel(string model)
         {
-            lock (Avatars)
+            lock (PlayerModels)
             {
-                AvatarDescriptor a = new AvatarDescriptor(model);
-                Avatars.Add(a);
+                PlayerModelDescriptor a = new PlayerModelDescriptor(model);
+                PlayerModels.Add(a);
                 return a;
             }
         }
