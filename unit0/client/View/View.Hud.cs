@@ -14,6 +14,8 @@ using Renderer;
 using Textures;
 using FileLocations;
 
+using Client.Hud;
+
 namespace Client
 {
     public class HUD
@@ -23,6 +25,8 @@ namespace Client
         Font WaitFont = new Font(FontFamily.GenericSansSerif, 72);
         Font WaitInfoFont = new Font(FontFamily.GenericSansSerif, 14);
         public TextPrinter TextPrinter = new TextPrinter(TextQuality.High);
+
+        protected HudRenderer GUIRenderer;
 
         protected Stopwatch Clock = new Stopwatch();
 
@@ -42,12 +46,15 @@ namespace Client
             Spinners = new Texture[2];
             Spinners[0] = Texture.Get(Locations.FindDataFile("ui/outer_spinner.png"), Texture.SmoothType.SmoothMip, false);
             Spinners[1] = Texture.Get(Locations.FindDataFile("ui/inner_spinner.png"), Texture.SmoothType.SmoothMip, false);
+
+            GUIRenderer = new HudRenderer(new ViewBounds(TheView.Window.Size));
+
             Clock.Start();
         }
 
         public void Resize()
         {
-
+            GUIRenderer.WindowBounds.Bounds = TheView.Window.Size;
         }
 
         protected bool ShowWait = false;
@@ -66,6 +73,8 @@ namespace Client
 
             if (ShowWait)
                 DrawWaitScreen();
+            else
+                GUIRenderer.Render(Now, Delta);
         }
 
         double lastDotTime = -1;

@@ -1,0 +1,86 @@
+<?xml version="1.0"?>
+<PannelElement xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<alignment>LeftBottom</alignment>
+<origin>LeftBottom</origin>
+  <pos>
+    <X>10</X>
+    <Y>300</Y>
+  </pos>
+  <size>
+    <Width>300</Width>
+    <Height>100</Height>
+  </size>
+  <color>
+    <red>1</red>
+    <green>1</green>
+    <blue>1</blue>
+  </color>
+  <alpha>1</alpha>
+  <text />
+  <name>button window</name>
+  <pannelType>window</pannelType>
+  <updateFunction />
+  <enabled>true</enabled>
+  <children>
+      <PannelElement>
+          <pos>
+              <X>100</X>
+              <Y>10</Y>
+          </pos>
+          <color>
+              <red>1</red>
+              <green>1</green>
+              <blue>1</blue>
+          </color>
+          <alpha>1</alpha>
+		  <name>sample image</name>
+          <text>ui/core.png</text>
+          <pannelType>image</pannelType>
+          <enabled>true</enabled>
+          <children />
+      </PannelElement>
+    <PannelElement>
+      <pos>
+        <X>25</X>
+        <Y>25</Y>
+      </pos>
+      <size>
+        <Width>50</Width>
+        <Height>30</Height>
+      </size>
+      <color>
+        <red>1</red>
+        <green>1</green>
+        <blue>1</blue>
+      </color>
+      <alpha>1</alpha>
+      <text />
+      <pannelType>button</pannelType>
+      <updateFunction />
+      <enabled>true</enabled>
+      <children>
+        <PannelElement>
+          <pos>
+            <X>5</X>
+            <Y>5</Y>
+          </pos>
+          <size>
+            <Width>40</Width>
+            <Height>25</Height>
+          </size>
+          <color>
+            <red>1</red>
+            <green>0</green>
+            <blue>0</blue>
+          </color>
+          <alpha>1</alpha>
+          <text>blah</text>
+          <pannelType>chatFontLabel</pannelType>
+          <updateFunction>FPS</updateFunction>
+          <enabled>true</enabled>
+          <children />
+        </PannelElement>
+      </children>
+    </PannelElement>
+  </children>
+</PannelElement>

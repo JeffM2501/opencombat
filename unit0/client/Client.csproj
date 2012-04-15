@@ -89,6 +89,8 @@
     <Compile Include="UpdateProgress.Designer.cs">
       <DependentUpon>UpdateProgress.cs</DependentUpon>
     </Compile>
+    <Compile Include="View\Hud\HudElements.cs" />
+    <Compile Include="View\Hud\HudRenderer.cs" />
     <Compile Include="View\View.cs" />
     <Compile Include="View\View.Hud.cs" />
     <Compile Include="View\View.Debug.cs" />

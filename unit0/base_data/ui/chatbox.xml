@@ -1,0 +1,94 @@
+<?xml version="1.0"?>
+<PannelElement xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<alignment>LeftBottom</alignment>
+  <pos>
+    <X>10</X>
+    <Y>10</Y>
+  </pos>
+  <size>
+    <Width>300</Width>
+    <Height>150</Height>
+  </size>
+  <color>
+    <red>1</red>
+    <green>1</green>
+    <blue>1</blue>
+  </color>
+  <alpha>1</alpha>
+  <text />
+  <name>ChatWindow</name>
+  <pannelType>frame</pannelType>
+  <updateFunction />
+  <enabled>true</enabled>
+  <children>
+  <PannelElement>
+	  <pos>
+		<X>5</X>
+		<Y>30</Y>
+	  </pos>
+	  <size>
+		<Width>284</Width>
+		<Height>120</Height>
+	  </size>
+	  <color>
+		<red>0</red>
+		<green>1</green>
+		<blue>0</blue>
+	  </color>
+	  <alpha>1</alpha>
+	  <text />
+	  <name>ChatOutputBox</name>
+	  <pannelType>chatWindow</pannelType>
+	  <updateFunction>CHAT_LOG</updateFunction>
+	  <enabled>true</enabled>
+	  <children>
+	  </children>
+	</PannelElement>
+    <PannelElement>
+      <pos>
+        <X>5</X>
+        <Y>5</Y>
+      </pos>
+      <size>
+        <Width>290</Width>
+        <Height>28</Height>
+      </size>
+      <color>
+        <red>1</red>
+        <green>1</green>
+        <blue>1</blue>
+      </color>
+      <alpha>1</alpha>
+      <text />
+	  <name>ChatFrame</name>
+      <pannelType>button</pannelType>
+      <updateFunction />
+      <enabled>true</enabled>
+      <children>
+	   <PannelElement>
+		  <pos>
+			<X>2</X>
+			<Y>2</Y>
+		  </pos>
+		  <size>
+			<Width>284</Width>
+			<Height>24</Height>
+		  </size>
+		  <color>
+			<red>0</red>
+			<green>0</green>
+			<blue>0</blue>
+		  </color>
+		  <alpha>1</alpha>
+		  <text />
+		  <name>ChatEntryBox</name>
+		  <pannelType>chatFontTextEdit</pannelType>
+		  <updateFunction />
+		  <enabled>true</enabled>
+		  <children>
+		  </children>
+		</PannelElement>
+      </children>
+    </PannelElement>
+  </children>
+</PannelElement>

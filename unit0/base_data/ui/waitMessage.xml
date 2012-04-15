@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<PannelElement xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <pos>
+	<X>0</X>
+	<Y>0</Y>
+  </pos>
+  <alignment>Centered</alignment>
+  <origin>Centered</origin>
+  <color>
+	<red>1</red>
+	<green>1</green>
+	<blue>1</blue>
+  </color>
+  <alpha>1</alpha>
+  <name>WaitMessage</name>
+  <updateFunction>WAIT_MESSAGE</updateFunction>
+  <pannelType>anouncementFontLabel</pannelType>
+  <enabled>true</enabled>
+  <children />
+</PannelElement>
