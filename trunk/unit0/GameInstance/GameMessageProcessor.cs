@@ -17,6 +17,7 @@ namespace GameInstance
         protected Thread worker;
 
         protected NetServer Server = null;
+        protected ChatProcessor Chat = null;
 
         public GameMessageProcessor(GameState state)
         {
@@ -27,6 +28,8 @@ namespace GameInstance
             netConfig.Port = Program.Config.Port;
             netConfig.LocalAddress = IPAddress.Any;
             netConfig.MaximumConnections = Program.Config.MaxPlayers + 2;
+
+            Chat = new ChatProcessor();
 
             Server = new NetServer(netConfig);
             Server.Start();
@@ -60,7 +63,8 @@ namespace GameInstance
         {
             GameMessage.AddMessageCallback(GameMessage.MessageCode.AnyUnhandled, AnyUnhandled);
             GameMessage.AddMessageCallback(GameMessage.MessageCode.OptionSelect, OptionSelect);
-            GameMessage.AddMessageCallback(GameMessage.MessageCode.ChatMessage, ChatMessage);
+            GameMessage.AddMessageCallback(GameMessage.MessageCode.ChatUserInfo, ChatMessage);
+            GameMessage.AddMessageCallback(GameMessage.MessageCode.ChatText, ChatMessage); 
             GameMessage.AddMessageCallback(GameMessage.MessageCode.StateChange, StateChange);
             GameMessage.AddMessageCallback(GameMessage.MessageCode.ResourceRequest, ResourceRequest);
         }
@@ -90,7 +94,7 @@ namespace GameInstance
 
         void ChatMessage(GameMessage.MessageCode code, GameMessage messageData, NetConnection sender)
         {
-
+            Chat.AddMessage(messageData, sender.Tag as Player);
         }
 
         void StateChange(GameMessage.MessageCode code, GameMessage messageData, NetConnection sender)

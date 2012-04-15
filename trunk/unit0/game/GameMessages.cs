@@ -27,7 +27,7 @@ namespace Game
             StateChange,
 
             ChatUserInfo,
-            ChatMessage,
+            ChatText,
 
             ScoreInfo,
 
