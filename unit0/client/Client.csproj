@@ -68,6 +68,7 @@
     <Compile Include="Game\ClientGame.Avatars.cs" />
     <Compile Include="Game\ClientGame.cs" />
     <Compile Include="ClientScripting.cs" />
+    <Compile Include="Game\ClientGame.Input.cs" />
     <Compile Include="Game\ClientGame.Updates.cs" />
     <Compile Include="Hasher.cs" />
     <Compile Include="Input.cs" />
