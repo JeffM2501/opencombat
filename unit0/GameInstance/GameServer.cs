@@ -105,7 +105,6 @@ namespace GameInstance
             }
 
             State.UpdateActors();
-           
         }
 
         protected void HandleManagerMeessages(string msg)

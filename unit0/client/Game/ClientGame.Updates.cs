@@ -60,6 +60,8 @@ namespace Client
 
         public void Update()
         {
+            CallPendingEvents();
+
             double now = State.Now;
 
             if (PlayerActor == null)

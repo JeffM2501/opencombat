@@ -55,6 +55,8 @@ namespace Client
             if (worker != null && worker.IsAlive)
                 return;
 
+            Done = false;
+
             worker = new Thread(new ThreadStart(Run));
             worker.Start();
         }
@@ -96,8 +98,13 @@ namespace Client
             CheckDone();
         }
 
-        protected static void CheckDone()
+        static bool Done = false;
+
+        protected static bool CheckDone()
         {
+            if (Done)
+                return true;
+
             int count = 0;
             lock (ResourcesToProcess)
                 count += ResourcesToProcess.Count;
@@ -110,11 +117,15 @@ namespace Client
 
             if (count == 0 && ResourcesComplete != null)
                 ResourcesComplete(Client, EventArgs.Empty);
+
+            Done = count == 0;
+            return Done;
         }
 
         protected static void Run()
         {
-            while (true)
+            bool done = false;
+            while (!done)
             {
                 ResourceResponceMessage.Resource res = NextToProcess();
                 while (res != null)
@@ -133,16 +144,20 @@ namespace Client
                         }
                         else
                         {
+                            bool processMe = true;
                             if (res.Name == ResourceRequestMessage.MapResourceName)
                             {
                                 if (Client.HaveWorld(res.Hash))
-                                    continue;
+                                    processMe = false;
                             }
-                            
-                            ResourceRequestMessage msg = new ResourceRequestMessage();
-                            msg.ResourceNames.Add(res.Name);
-                            Connection.SendReliable(msg);
-                            ResourcesToProtoGet.Add(res.Name);
+
+                            if (processMe)
+                            {
+                                ResourceRequestMessage msg = new ResourceRequestMessage();
+                                msg.ResourceNames.Add(res.Name);
+                                Connection.SendReliable(msg);
+                                ResourcesToProtoGet.Add(res.Name);
+                            }
                         }
                     }
                     else
@@ -162,7 +177,7 @@ namespace Client
 
                     res = NextToProcess();
                 }
-                CheckDone();
+                done = CheckDone();
                 Thread.Sleep(10);
             }
         }

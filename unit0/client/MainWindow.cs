@@ -95,23 +95,36 @@ namespace Client
 
         void GameView_ModifyCamera(Renderer.SimpleCamera cam)
         {
-            GameState.BoundableActor.Location loc = Game.PlayerActor.GetLocation();
+            if (Game.PlayerActor != null)
+            {
+                GameState.BoundableActor.Location loc = Game.PlayerActor.GetLocation();
 
-            cam.Spin = loc.Rotation.Z;
-            cam.Tilt = Game.TiltAxis.Value;
+                cam.Spin = loc.Rotation.Z;
+                cam.Tilt = Game.TiltAxis.Value;
 
-            if (cam.Tilt > 85)
-                cam.Tilt = 85;
-            if (cam.Tilt < -85)
-                cam.Tilt = -85;
+                if (cam.Tilt > 85)
+                    cam.Tilt = 85;
+                if (cam.Tilt < -85)
+                    cam.Tilt = -85;
 
-            cam.ViewPosition = loc.Position;// camPos;// SetCameraZ(camPos);
-            cam.ViewPosition.Z += 1;
+                cam.ViewPosition = loc.Position;// camPos;// SetCameraZ(camPos);
+                cam.ViewPosition.Z += 1;
 
-            float offset = 2;
-            Vector2 rot = VectorHelper2.FromAngle(cam.Spin);
-            cam.ViewPosition.X -= rot.X * offset;
-            cam.ViewPosition.Y -= rot.Y * offset;
+                float offset = 2;
+                Vector2 rot = VectorHelper2.FromAngle(cam.Spin);
+                cam.ViewPosition.X -= rot.X * offset;
+                cam.ViewPosition.Y -= rot.Y * offset;
+            }
+            else
+            {
+                cam.ViewPosition.X = 0;
+                cam.ViewPosition.Y = 0;
+                cam.ViewPosition.Z = 18;
+
+                cam.Spin = -Game.SpinAxis.Value;
+                cam.Tilt = Game.TiltAxis.Value;
+            }
+           
         }
 
         void Window_Load(object sender, EventArgs e)
