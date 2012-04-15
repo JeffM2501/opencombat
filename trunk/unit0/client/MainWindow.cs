@@ -149,7 +149,7 @@ namespace Client
         void Window_UpdateFrame(object sender, FrameEventArgs e)
         {
             if (InputTracker != null)
-                InputTracker.UpdateAxes();
+                InputTracker.Update();
 
             Game.Update();
 

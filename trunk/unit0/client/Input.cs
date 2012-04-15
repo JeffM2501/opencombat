@@ -48,6 +48,8 @@ namespace Client
 
             public int useCount = 0;
             public int ID = -1;
+
+            public Key LastKeyUsed = Key.Unknown;
         }
 
         public class BindingElement
@@ -295,6 +297,8 @@ namespace Client
         protected int Width = 0;
         protected int Height = 0;
 
+        protected bool TextMode = false;
+
         public InputSystem(GameWindow window)
         {
             window.Load += new EventHandler<EventArgs>(window_Load);
@@ -309,6 +313,8 @@ namespace Client
             window.Mouse.WheelChanged += new EventHandler<MouseWheelEventArgs>(Mouse_WheelChanged);
 
             MouseButtonStates = new bool[window.Mouse.NumberOfButtons];
+
+            TextMode = false;
 
             window_Resize(window, EventArgs.Empty);
         }
@@ -486,32 +492,41 @@ namespace Client
             MouseButtonStates[(int)e.Button] = false;
         }
 
-        void window_KeyPress(object sender, KeyPressEventArgs e)
-        {
-           // use this for text entry mode?
-        }
-
         void Keyboard_KeyUp(object sender, KeyboardKeyEventArgs e)
         {
-            // check the buttons for events
-            foreach (KeyButton binding in KeyboardButtonBindings)
-            {
-                if (binding.ButtonKey == e.Key)
-                {
-                    int oldCount = binding.ControlButton.useCount;
-                    binding.ControlButton.useCount--;
-                    if (binding.ControlButton.useCount <= 0)
-                    {
-                        binding.ControlButton.Down = false;
+            if (e.Key == Key.CapsLock)
+                CapsLock = false;
+            if (e.Key == Key.RShift || e.Key == Key.LShift || e.Key == Key.ShiftLeft || e.Key == Key.ShiftRight)
+                ShiftCount--;
 
-                        if (binding.ControlButton.Changed != null)
-                            binding.ControlButton.Changed(binding.ControlButton, EventArgs.Empty);
+            if (TextMode && e.Key != IngnoredUp)
+                ProcessTextModeKey(e.Key, false);
+            else
+            {
+                // check the buttons for events
+                foreach (KeyButton binding in KeyboardButtonBindings)
+                {
+                    if (binding.ButtonKey == e.Key)
+                    {
+                        int oldCount = binding.ControlButton.useCount;
+                        if (oldCount != 0) // we will get an extra keyup for the key that is used to end text mode so just ignore it
+                        {
+                            binding.ControlButton.useCount--;
+                            if (binding.ControlButton.useCount <= 0)
+                            {
+                                binding.ControlButton.Down = false;
+                                binding.ControlButton.LastKeyUsed = e.Key;
+
+                                if (e.Key != IngnoredUp && binding.ControlButton.Changed != null) // the client can ignore the next keyup for the chat init key if it cares about keyups
+                                    binding.ControlButton.Changed(binding.ControlButton, EventArgs.Empty);
+                            }
+                        }
                     }
                 }
-            }
 
-            foreach (AxisBinding binding in KeyboardAxisBindings)
-                DoAxisKeyEvent(binding, e.Key, false);
+                foreach (AxisBinding binding in KeyboardAxisBindings)
+                    DoAxisKeyEvent(binding, e.Key, false);
+            }
         }
 
         protected void DoAxisKeyEvent(AxisBinding binding, Key key, bool down)
@@ -581,23 +596,41 @@ namespace Client
             }
         }
 
+        Key IngnoredUp = Key.Unknown;
+
+        public void IgnoreNextUp(Key key)
+        {
+            IngnoredUp = key;
+        }
+
         void Keyboard_KeyDown(object sender, KeyboardKeyEventArgs e)
         {
-            // check all the buttons
-            foreach (KeyButton binding in KeyboardButtonBindings)
-            {
-                if (binding.ButtonKey == e.Key)
-                {
-                    int oldCount = binding.ControlButton.useCount;
-                    binding.ControlButton.useCount++;
-                    binding.ControlButton.Down = true;
-                    if (oldCount == 0 && binding.ControlButton.Changed != null)
-                        binding.ControlButton.Changed(binding.ControlButton,EventArgs.Empty);
-                }
-            }
+            if (e.Key == Key.CapsLock)
+                CapsLock = true;
+            if (e.Key == Key.RShift || e.Key == Key.LShift || e.Key == Key.ShiftLeft || e.Key == Key.ShiftRight)
+                ShiftCount++;
 
-            foreach (AxisBinding binding in KeyboardAxisBindings)
-                DoAxisKeyEvent(binding, e.Key, true);
+            if (TextMode)
+                ProcessTextModeKey(e.Key, true);
+            else
+            {
+                // check all the buttons
+                foreach (KeyButton binding in KeyboardButtonBindings)
+                {
+                    if (binding.ButtonKey == e.Key)
+                    {
+                        int oldCount = binding.ControlButton.useCount;
+                        binding.ControlButton.useCount++;
+                        binding.ControlButton.Down = true;
+                        binding.ControlButton.LastKeyUsed = e.Key;
+                        if (oldCount == 0 && binding.ControlButton.Changed != null)
+                            binding.ControlButton.Changed(binding.ControlButton, EventArgs.Empty);
+                    }
+                }
+
+                foreach (AxisBinding binding in KeyboardAxisBindings)
+                    DoAxisKeyEvent(binding, e.Key, true);
+            }
         }
 
         public Axis AddAxis(string name)
@@ -653,15 +686,129 @@ namespace Client
             Bindings.Add(element);
         }
 
-        Stopwatch AxisTimer = new Stopwatch();
+        public event EventHandler<EventArgs> TextModeEnded;
+        public event EventHandler<EventArgs> TextChanged;
+        protected string TextModeString = string.Empty;
+
+        Button TextModeEndButton;
+
+        public bool InTextMode()
+        {
+            return TextMode;
+        }
+
+        public string GetTextModeString()
+        {
+            return TextModeString;
+        }
+
+        public void EnterTextMode(Button EndButton)
+        {
+            if (TextMode)
+                return;
+
+            TextModeString = "";
+            TextModeEndButton = EndButton;
+        }
+
+        public static double TextKeyRepeatTime = 1;
+
+        Dictionary<Key, double> LastCharacterTime = new Dictionary<Key, double>();
+
+        int ShiftCount = 0;
+        bool CapsLock = false;
+
+        protected bool CapsChar()
+        {
+            return ShiftCount > 0 || CapsLock;
+        }
+
+        protected void ProcessTextModeKey(Key key, bool down)
+        {
+            if (down)
+            {
+                TextModeKeyPress(key);
+                if (LastCharacterTime.ContainsKey(key))
+                    LastCharacterTime[key] = Now();
+                else
+                    LastCharacterTime.Add(key, Now());
+            }
+            else
+            {
+                if (LastCharacterTime.ContainsKey(key))
+                    LastCharacterTime.Remove(key);
+            }
+        }
+
+        void window_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!TextMode || e.KeyChar.ToString() == string.Empty)
+                return;
+
+            if (CapsChar())
+                TextModeString += e.KeyChar.ToString().ToUpper();
+            else
+                TextModeString += e.KeyChar.ToString().ToLower();
+
+            if (TextChanged != null)
+                TextChanged(this, EventArgs.Empty);
+        }
+
+        protected void TextModeKeyPress(Key key)
+        {
+            // is this the end key?
+            foreach (KeyButton binding in KeyboardButtonBindings)
+            {
+                if (binding.ControlButton == TextModeEndButton && binding.ButtonKey == key)
+                {
+                    LastCharacterTime.Clear();
+                    if (TextModeEnded != null)
+                        TextModeEnded(this, EventArgs.Empty);
+                    TextMode = false;
+
+                    return;
+                }
+            }
+
+            // was it a delete character?
+            if (key == Key.Delete || key == Key.BackSpace)
+            {
+                if (TextModeString.Length > 0)
+                {
+                    TextModeString.Remove(TextModeString.Length - 1);
+                    if (TextChanged != null)
+                        TextChanged(this, EventArgs.Empty);
+                }
+            }
+        }
+
+        protected void CheckForKeyRepeats()
+        {
+            if (!InTextMode())
+                return;
+
+            double now = Now();
+        }
+
+        Stopwatch InputTimer = new Stopwatch();
         double LastAxistime = 0;
+
+        protected double Now()
+        {
+             if (!InputTimer.IsRunning)
+                InputTimer.Start();
+             return InputTimer.ElapsedMilliseconds / 1000.0;
+        }
+
+        public void Update()
+        {
+            UpdateAxes();
+            CheckForKeyRepeats();
+        }
 
         public void UpdateAxes()
         {
-            if (!AxisTimer.IsRunning)
-                AxisTimer.Start();
-
-            double now = AxisTimer.ElapsedMilliseconds / 1000.0;
+            double now = Now();
             float delta = (float)(now - LastAxistime);
             LastAxistime = now;
 
@@ -739,7 +886,6 @@ namespace Client
 
                 if (axis.Value != lastValue && axis.Changed != null)
                     axis.Changed(axis, EventArgs.Empty);
-
             }
 
             MouseDelta.X = 0;
