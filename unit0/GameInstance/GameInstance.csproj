@@ -51,6 +51,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ChatProcessor.cs" />
     <Compile Include="GameMessageProcessor.cs" />
     <Compile Include="GameServer.cs" />
     <Compile Include="Info.cs" />

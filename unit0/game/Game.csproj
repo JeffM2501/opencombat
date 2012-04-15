@@ -45,6 +45,7 @@
     <Compile Include="ControledActor.cs" />
     <Compile Include="GameMessages.cs" />
     <Compile Include="GameState.cs" />
+    <Compile Include="Messages\ChatMessages.cs" />
     <Compile Include="Messages\ConnectionMessages.cs" />
     <Compile Include="Messages\ResourceMessages.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

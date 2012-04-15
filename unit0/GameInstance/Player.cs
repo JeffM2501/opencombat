@@ -48,7 +48,6 @@ namespace GameInstance
 
         public PlayerStatus Status = PlayerStatus.New;
 
-
         protected NetServer Server = null;
 
         public Player(NetConnection con, NetServer server)
@@ -67,12 +66,18 @@ namespace GameInstance
 
         public void SendReliable(GameMessage msg)
         {
+            SendReliable(msg, 2);
+        }
+
+        public void SendReliable(GameMessage msg, int channel)
+        {
             if (!Valid || Server.Status != NetPeerStatus.Running || Connection.Status == NetConnectionStatus.Disconnecting || Connection.Status == NetConnectionStatus.Disconnected)
                 return;
 
             lock (Server)
-                Connection.SendMessage(msg.Pack(Server.CreateMessage()), NetDeliveryMethod.ReliableOrdered, 2);
+                Connection.SendMessage(msg.Pack(Server.CreateMessage()), NetDeliveryMethod.ReliableOrdered, channel);
         }
+
 
         protected static Dictionary<UInt64, Player> Players = new Dictionary<UInt64, Player>();
         protected static Dictionary<UInt64, Player> PlayersUID = new Dictionary<UInt64, Player>();
@@ -85,6 +90,18 @@ namespace GameInstance
                 LastPlayerID++;
                 return LastPlayerID;
             }
+        }
+
+        public static UInt64[] PlayerIDList()
+        {
+            lock (Players)
+                return Players.Keys.ToArray();
+        }
+
+        public static UInt64[] UserIDList()
+        {
+            lock (Players)
+                return PlayersUID.Keys.ToArray();
         }
 
         public static Player PlayerByPID(UInt64 id)
