@@ -324,5 +324,53 @@ namespace FileLocations
             PathCache.Add(localPath, path);
             return path;
         }
+
+        protected static void AddFilesInDirToList(string path, List<string> list, string filter)
+        {
+            foreach (FileInfo file in new DirectoryInfo(path).GetFiles(filter))
+            {
+                if (!list.Contains(file.Name))
+                    list.Add(file.Name);
+            }
+        }
+
+        public static string[] FindFilesInDataDirs(string localPath)
+        {
+            return FindFilesInDataDirs(localPath, "*.*");
+        }
+
+        public static string[] FindFilesInDataDirs(string localPath, string filter)
+        {
+            List<string> files = new List<string>();
+
+            if (DataPathOveride != string.Empty)
+            {
+                string dir = GetCleanPath(Path.Combine(DataPathOveride, localPath));
+                if (Directory.Exists(dir))
+                    AddFilesInDirToList(dir, files, filter);
+            }
+
+            if (ApplicationDataDir == string.Empty)
+                BuildDataDirs();
+
+            // check the user dir
+            string path = GetCleanPath(Path.Combine(UserDataDir, localPath));
+
+            if (Directory.Exists(path))
+                AddFilesInDirToList(path, files, filter);
+
+            if (CommonDataDir != string.Empty)
+            {
+                path = GetCleanPath(Path.Combine(CommonDataDir, localPath));
+                if (Directory.Exists(path))
+                    AddFilesInDirToList(path, files, filter);
+            }
+
+            path = GetCleanPath(Path.Combine(ApplicationDataDir, localPath));
+            if (!Directory.Exists(path))
+                AddFilesInDirToList(path, files, filter);
+
+            return files.ToArray();
+        }
     }
 }
