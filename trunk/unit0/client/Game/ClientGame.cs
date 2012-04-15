@@ -35,6 +35,7 @@ namespace Client
         protected object locker = new object();
 
         protected World MapWorld = null;
+        protected object MapLocker = new object();
 
         protected bool Done = false;
         protected string LastError = string.Empty;
@@ -65,12 +66,14 @@ namespace Client
             InputTracker.LoadDefaultBindings += new EventHandler<EventArgs>(InputTracker_LoadDefaultBindings);
 
             ResourceProcessor.Client = this;
-            ResourceProcessor.ResourcesComplete += new EventHandler<EventArgs>(ResourceProcessor_ResourcesComplete);
+            ResourceProcessor.ResourcesComplete += new EventHandler<EventArgs>(ResourceLoadComplete);
+
+            this.ResourcesComplete += new EventHandler<EventArgs>(LoadGame);
         }
 
-        void ResourceProcessor_ResourcesComplete(object sender, EventArgs e)
+        public void LoadGame(object sender, EventArgs e)
         {
-            Load();
+            State.Load();
         }
 
         public void Connect(string host, int port)
@@ -116,27 +119,22 @@ namespace Client
         void State_MapLoaded(object sender, EventArgs e)
         {
             Vector3 pos = SetCameraZ(new Vector3(3, 3, 1));
-
-            PlayerActor = State.AddActor(StandardActors.LocalPlayer) as LocalPlayer;
-
-            PlayerActor.LastUpdatePostion = new Vector3(pos);
-            PlayerActor.LastUpdateRotation = new Vector3(0, 0, 0);
-            PlayerActor.LastUpdateTime = State.Now;
+// 
+//             PlayerActor = State.AddActor(StandardActors.LocalPlayer) as LocalPlayer;
+//  
+//             PlayerActor.LastUpdatePostion = new Vector3(pos);
+//             PlayerActor.LastUpdateRotation = new Vector3(0, 0, 0);
+//             PlayerActor.LastUpdateTime = State.Now;
         }
 
         World GetWorld()
         {
-            lock (locker)
+            lock (MapLocker)
             {
                 if (MapWorld != null)
                     return MapWorld;
             }
-            return WorldBuilder.NewWorld(string.Empty, null);
-        }
-
-        public void Load()
-        {
-            State.Load();
+            return null;// WorldBuilder.NewWorld(string.Empty, null);
         }
 
         public bool HaveWorld(string hash)
@@ -149,7 +147,7 @@ namespace Client
             if (!Directory.Exists(mapCache))
                 return false;
 
-            lock (locker)
+            lock (MapLocker)
             {
                 MapWorld = World.ReadWorldWithGeometry(new FileInfo(Path.Combine(mapCache, "world.world")));
 
@@ -170,7 +168,7 @@ namespace Client
             if (!Directory.Exists(mapCache))
                 Directory.CreateDirectory(mapCache);
 
-            lock (locker)
+            lock (MapLocker)
             {
                 MapWorld = World.ReadWorldWithGeometry(buffer);
                 MapWorld.SaveWorldWithGeometry(new FileInfo(Path.Combine(mapCache, "world.world")));

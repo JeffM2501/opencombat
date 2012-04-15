@@ -174,8 +174,6 @@ namespace Client
 
             if (camera != null)
             {
-                fCamera.set(camera.ViewPosition, (float)-camera.Tilt, (float)camera.Spin);
-                
                 if (Status == ViewStatus.Playing)
                     DrawPlayField();
                 else
@@ -193,6 +191,8 @@ namespace Client
 
             if (ModifyCamera != null)
                 ModifyCamera(camera);
+
+            fCamera.set(camera.ViewPosition, (float)-camera.Tilt, (float)camera.Spin);
 
             fCamera.SetPersective();
             fCamera.Execute();

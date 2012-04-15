@@ -9,6 +9,8 @@ namespace Client
 	{
         public event EventHandler<EventArgs> StatusChanged;
 
+        public event EventHandler<EventArgs> ResourcesComplete;
+
         public ServerConnection.ConnectionStatus Status = ServerConnection.ConnectionStatus.New;
 
         protected List<EventHandler<EventArgs>> PendingArgEvents = new List<EventHandler<EventArgs>>();
@@ -28,7 +30,7 @@ namespace Client
             }
             
             lock(PendingArgEvents)
-                PendingArgEvents.RemoveRange(0,count-1);
+                PendingArgEvents.RemoveRange(0,count);
         }
 
         protected void AddPendingEvents(EventHandler<EventArgs> evt)
@@ -44,6 +46,12 @@ namespace Client
         {
             Status = Connection.Status;
             AddPendingEvents(StatusChanged);
+        }
+
+        void ResourceLoadComplete(object sender, EventArgs args)
+        {
+            Status = Connection.Status;
+            AddPendingEvents(ResourcesComplete);
         }
 	}
 }
