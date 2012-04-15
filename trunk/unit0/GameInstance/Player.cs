@@ -27,7 +27,8 @@ namespace GameInstance
         public TeamInfo Team = TeamInfo.Empty;
         public RemotePlayer SimPlayer = null;
 
-        public UInt64 AvatarID = UInt64.MaxValue;
+        public UInt64 ModelID = UInt64.MaxValue;
+        public int AvatarID = -1;
 
         public int[] Options = null;
 

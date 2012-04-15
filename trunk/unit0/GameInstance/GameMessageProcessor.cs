@@ -190,6 +190,7 @@ namespace GameInstance
             info.PID = player.PID;
             info.UID = player.UID;
             info.Name = player.Name;
+            info.AvatarID = player.AvatarID;
             info.TeamID = -1;
             info.TeamName = string.Empty;
             info.ScriptPack = ServerScripting.Script.ScriptPackName;

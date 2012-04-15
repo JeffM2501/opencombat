@@ -13,6 +13,8 @@ namespace Game.Messages
         {
             public string Name = string.Empty;
             public string TeamName = string.Empty;
+            public int AvatarID = -1;
+
             public UInt64 UID = UInt64.MaxValue;
 
             public Info()
@@ -29,6 +31,7 @@ namespace Game.Messages
                 msg.Write(Name);
                 msg.Write(TeamName);
                 msg.Write(UID);
+                msg.Write(AvatarID);
             }
 
             public void Unpack(NetIncomingMessage msg)
@@ -36,6 +39,7 @@ namespace Game.Messages
                 Name = msg.ReadString();
                 TeamName = msg.ReadString();
                 UID = msg.ReadUInt64();
+                AvatarID = msg.ReadInt32();
             }
         }
 

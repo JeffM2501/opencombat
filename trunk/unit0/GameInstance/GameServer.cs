@@ -35,8 +35,17 @@ namespace GameInstance
 
             State.Load();
 
+            Player.NewPlayer += new Player.PlayerEvent(Player_NewPlayer);
+
             // TODO, start the net message thread here
             // that will update sim, process chat, and handle resource requests
+        }
+
+        void Player_NewPlayer(Player player)
+        {
+            ServerScripting.Script.NewPlayer(player);
+            if (player.AvatarID < 0 && GameInfo.Info.PlayerAvatars.Count > 0) // give em a random one
+                player.AvatarID = new Random().Next(GameInfo.Info.PlayerAvatars.Count-1);
         }
 
         void State_Ready(object sender, EventArgs e)

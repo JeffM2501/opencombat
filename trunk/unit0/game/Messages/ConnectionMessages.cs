@@ -51,6 +51,8 @@ namespace Game.Messages
         public string ScriptPack = string.Empty;
         public string ScriptPackHash = string.Empty;
 
+        public int AvatarID = -1;
+
         public class OptionInfo
         {
             public string Name = string.Empty;
@@ -87,7 +89,8 @@ namespace Game.Messages
 
         public List<OptionInfo> Options = new List<OptionInfo>();
 
-        public List<string> Avatars = new List<string>();
+        public List<string> PlayerModels = new List<string>();
+        public List<string> PlayerAvatars = new List<string>();
 
         public ConnectInfo()
         {
@@ -100,6 +103,7 @@ namespace Game.Messages
             outMsg.Write(UID);
             outMsg.Write(PID);
             outMsg.Write(Name);
+            outMsg.Write(AvatarID);
 
             outMsg.Write(TeamID);
             outMsg.Write(TeamName);
@@ -112,8 +116,12 @@ namespace Game.Messages
             foreach (OptionInfo option in Options)
                 option.Pack(outMsg);
 
-            outMsg.Write(Avatars.Count);
-            foreach (string a in Avatars)
+            outMsg.Write(PlayerModels.Count);
+            foreach (string a in PlayerModels)
+                outMsg.Write(a);
+
+            outMsg.Write(PlayerAvatars.Count);
+            foreach (string a in PlayerAvatars)
                 outMsg.Write(a);
 
             return outMsg;
@@ -126,6 +134,7 @@ namespace Game.Messages
             UID = msg.ReadUInt64();
             PID = msg.ReadUInt64();
             Name = msg.ReadString();
+            AvatarID = msg.ReadInt32();
 
             TeamID = msg.ReadInt32();
             TeamName = msg.ReadString();;
@@ -140,7 +149,11 @@ namespace Game.Messages
 
             count = msg.ReadInt32();
             for (int i = 0; i < count; i++)
-                Avatars.Add(msg.ReadString());
+                PlayerModels.Add(msg.ReadString());
+
+            count = msg.ReadInt32();
+            for (int i = 0; i < count; i++)
+                PlayerAvatars.Add(msg.ReadString());
         }
     }
 
