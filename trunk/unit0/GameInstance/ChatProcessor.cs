@@ -65,6 +65,11 @@ namespace GameInstance
             }
         }
 
+        public void SendNewPlayerChatInfo( UInt64 playerID )
+        {
+            Player.SendToAllReliable(AddPlayerToInfo(new ChatUserInfoMessage(), playerID), 3);
+        }
+
         public void ServerMessageToInstance( string text )
         {
             ChatTextMessage message = new ChatTextMessage();
@@ -129,6 +134,22 @@ namespace GameInstance
             }
         }
 
+        protected ChatUserInfoMessage AddPlayerToInfo(ChatUserInfoMessage message, UInt64 playerID)
+        {
+            ChatUserInfoMessage.Info user = new ChatUserInfoMessage.Info();
+
+            Player player = Player.PlayerByPID(playerID);
+            lock (player)
+            {
+                user.UID = player.UID;
+                user.TeamName = player.Team.Name;
+                user.AvatarID = player.AvatarID;
+                user.Name = player.Name;
+            }
+            message.Users.Add(user);
+            return message;
+        }
+
         protected void Run()
         {
             while (true)
@@ -142,18 +163,7 @@ namespace GameInstance
 
                         // this means they want a list of users
                         foreach (UInt64 pid in Player.PlayerIDList())
-                        {
-                            ChatUserInfoMessage.Info user = new ChatUserInfoMessage.Info();
-
-                            Player player = Player.PlayerByPID(pid);
-                            lock (player)
-                            {
-                                user.UID = player.UID;
-                                user.TeamName = player.Team.Name;
-                                user.Name = player.Name;
-                            }
-                            message.Users.Add(user);
-                        }
+                            AddPlayerToInfo(message, pid);
 
                         msg.player.SendReliable(message);
                     }

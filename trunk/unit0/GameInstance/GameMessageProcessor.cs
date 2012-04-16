@@ -196,6 +196,8 @@ namespace GameInstance
             info.ScriptPack = ServerScripting.Script.ScriptPackName;
 
             player.SendReliable(info.Pack(NewMessage()));
+
+            Chat.SendNewPlayerChatInfo(info.PID);
         }
 
         public void PlayerDisconnect(Player player)
