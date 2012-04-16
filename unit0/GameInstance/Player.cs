@@ -189,5 +189,14 @@ namespace GameInstance
                     DeletedPlayer(player);
             }
         }
+
+        public static void SendToAllReliable(GameMessage msg, int channel)
+        {
+            lock (Players)
+            {
+                foreach (Player player in Players.Values)
+                    player.SendReliable(msg, channel);
+            }
+        }
     }
 }
