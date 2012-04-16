@@ -186,6 +186,9 @@ namespace Client
             }
         }
 
+        SizeF WaitHeaderSize = SizeF.Empty;
+        string WaitHeaderPlaceholder = "XXXXXXXXXX";
+
         protected void DrawWaitScreen()
         {
             GL.Disable(EnableCap.DepthTest);
@@ -210,14 +213,16 @@ namespace Client
                 d += ".";
 
             TextPrinter.Begin();
-            SizeF s = TextPrinter.Measure(WaitHeader, WaitFont).BoundingBox.Size;
 
-            float buffer = TheView.Window.Width - s.Width;
-            RectangleF r = new RectangleF(buffer / 2, (TheView.Window.Height / 2) - (s.Height / 2), TheView.Window.Width - (buffer / 2), s.Height);
+            if (WaitHeaderSize == SizeF.Empty)
+                WaitHeaderSize = TextPrinter.Measure(WaitHeaderPlaceholder, WaitFont).BoundingBox.Size;
+
+            float buffer = TheView.Window.Width - WaitHeaderSize.Width;
+            RectangleF r = new RectangleF(buffer / 2, (TheView.Window.Height / 2) - (WaitHeaderSize.Height / 2), TheView.Window.Width - (buffer / 2), WaitHeaderSize.Height);
 
             TextPrinter.Print(WaitHeader + d, WaitFont, Color.White, r, TextPrinterOptions.Default, TextAlignment.Near);
 
-            r = new RectangleF(buffer/2 + 10, (TheView.Window.Height / 2) + (s.Height/2) - 10, TheView.Window.Width - (buffer / 2), 40);
+            r = new RectangleF(buffer / 2 + 10, (TheView.Window.Height / 2) + (WaitHeaderSize.Height / 2) - 10, TheView.Window.Width - (buffer / 2), 40);
             TextPrinter.Print(StateMessage, WaitInfoFont, Color.White, r, TextPrinterOptions.Default, TextAlignment.Near);
             TextPrinter.End();
 
