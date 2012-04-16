@@ -65,6 +65,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="API\API.cs" />
+    <Compile Include="ChatProcessor.cs" />
     <Compile Include="Game\ClientGame.Avatars.cs" />
     <Compile Include="Game\ClientGame.cs" />
     <Compile Include="ClientScripting.cs" />

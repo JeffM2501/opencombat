@@ -35,6 +35,8 @@ namespace Client
 
         public EventHandler<EventArgs> StatusChanged;
 
+        protected ChatProcessor Chat = null;
+
         Thread worker = null;
 
         public class ScriptInfo
@@ -88,6 +90,8 @@ namespace Client
 
             ResourceProcessor.Connection = this;
             ResourceProcessor.ResourcesComplete += new EventHandler<EventArgs>(ResourceProcessor_ResourcesComplete);
+
+            Chat = new ChatProcessor(this);
         }
 
         void ResourceProcessor_ResourcesComplete(object sender, EventArgs e)
@@ -97,6 +101,7 @@ namespace Client
 
         public void Kill()
         {
+            Chat.Kill();
             ResourceProcessor.Kill();
 
             if (worker != null)
@@ -112,23 +117,33 @@ namespace Client
 
         public void SendReliable(GameMessage message)
         {
-            if (Client == null)
-                return;
-
-            lock (Client)
-            {
-                Client.SendMessage(message.Pack(Client.CreateMessage()), NetDeliveryMethod.ReliableOrdered, 1);
-            }
+            SendReliable(message, 1);
         }
 
-        public void SendUnreliable(GameMessage message)
+        public void SendReliable(GameMessage message, int channel)
         {
             if (Client == null)
                 return;
 
             lock (Client)
             {
-                Client.SendMessage(message.Pack(Client.CreateMessage()), NetDeliveryMethod.Unreliable, 1);
+                Client.SendMessage(message.Pack(Client.CreateMessage()), NetDeliveryMethod.ReliableOrdered, channel);
+            }
+        }
+
+        public void SendUnreliable(GameMessage message)
+        {
+            SendUnreliable(message, 1);
+        }
+
+        public void SendUnreliable(GameMessage message, int channel)
+        {
+            if (Client == null)
+                return;
+
+            lock (Client)
+            {
+                Client.SendMessage(message.Pack(Client.CreateMessage()), NetDeliveryMethod.Unreliable, channel);
             }
         }
 
@@ -137,11 +152,18 @@ namespace Client
             GameMessage.AddMessageCallback(GameMessage.MessageCode.AnyUnhandled,AnyUnhandled);
             GameMessage.AddMessageCallback(GameMessage.MessageCode.ConnectInfo, ConnectionInfo);
             GameMessage.AddMessageCallback(GameMessage.MessageCode.ResourceResponce, ResourceResponce);
+            GameMessage.AddMessageCallback(GameMessage.MessageCode.ChatText, ChatPacket);
+            GameMessage.AddMessageCallback(GameMessage.MessageCode.ChatUserInfo, ChatPacket);
         }
 
         void AnyUnhandled(GameMessage.MessageCode code, GameMessage messageData, NetConnection sender)
         {
 
+        }
+
+        void ChatPacket(GameMessage.MessageCode code, GameMessage messageData, NetConnection sender)
+        {
+            Chat.ProcessChatMessage(messageData);
         }
 
         void ResourceResponce(GameMessage.MessageCode code, GameMessage messageData, NetConnection sender)
