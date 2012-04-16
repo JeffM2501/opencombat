@@ -198,6 +198,7 @@ namespace GameInstance
             player.SendReliable(info.Pack(NewMessage()));
 
             Chat.SendNewPlayerChatInfo(info.PID);
+            Chat.SendUserList(info.PID);
         }
 
         public void PlayerDisconnect(Player player)

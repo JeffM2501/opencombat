@@ -95,14 +95,29 @@ namespace GameInstance
             ComposeChatMessage(msg, msg.From);
         }
 
+        public class ChatMessageArgs : EventArgs
+        {
+            public ChatTextMessage message = null;
+            public ChatMessageArgs(ChatTextMessage msg)
+                : base()
+            {
+                message = msg;
+            }
+        }
+
+        public event EventHandler<ChatMessageArgs> FilterChatMessage;
+
         protected void ComposeChatMessage( ChatTextMessage msg, UInt64 sender)
         {
             if (msg == null)
                 return;
+            msg.From = sender;
+
+            if (FilterChatMessage != null)
+                FilterChatMessage(this, new ChatMessageArgs(msg));
 
             List<UInt64> WhoGetsIt = new List<UInt64>();
 
-            msg.From = sender;
             WhoGetsIt.Add(sender);
 
             if (msg.ChatType == ChatTextMessage.MessageType.Personal)
@@ -150,6 +165,18 @@ namespace GameInstance
             return message;
         }
 
+        public void SendUserList(UInt64 playerID)
+        {
+            ChatUserInfoMessage message = new ChatUserInfoMessage();
+
+            foreach (UInt64 pid in Player.PlayerIDList())
+                AddPlayerToInfo(message, pid);
+
+            Player player = Player.PlayerByPID(playerID);
+            lock(player)
+                player.SendReliable(message,3);
+        }
+
         protected void Run()
         {
             while (true)
@@ -158,15 +185,7 @@ namespace GameInstance
                 while (msg != null)
                 {
                     if (msg.message.Code == GameMessage.MessageCode.ChatUserInfo)
-                    {
-                        ChatUserInfoMessage message = new ChatUserInfoMessage();
-
-                        // this means they want a list of users
-                        foreach (UInt64 pid in Player.PlayerIDList())
-                            AddPlayerToInfo(message, pid);
-
-                        msg.player.SendReliable(message);
-                    }
+                        SendUserList(msg.player.UID);
                     else if (msg.message.Code == GameMessage.MessageCode.ChatText)
                     {
                         ChatTextMessage message = msg.message as ChatTextMessage;
