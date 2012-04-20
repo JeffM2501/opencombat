@@ -42,6 +42,14 @@ namespace Game.Messages
     {
         public class Resource
         {
+            public enum ResourceType
+            {
+                Unknown,
+                Map,
+                Script
+            }
+            public ResourceType ResType = ResourceType.Unknown;
+
             public string Name = string.Empty;
             public string Hash = string.Empty;
             public string URL = string.Empty;
@@ -61,6 +69,7 @@ namespace Game.Messages
                 msg.Write(Name);
                 msg.Write(Hash);
                 msg.Write(URL);
+                msg.Write((byte)ResType);
 
                 msg.Write(data.Length);
                 if (data.Length > 0)
@@ -72,6 +81,7 @@ namespace Game.Messages
                 Name = msg.ReadString();
                 Hash = msg.ReadString();
                 URL = msg.ReadString();
+                ResType = (ResourceType)Enum.ToObject(typeof(ResourceType), msg.ReadByte());
 
                 int size = msg.ReadInt32();
                 if (size > 0)

@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading;
 using System.Net;
 using System.Web;
+using System.IO;
+using System.IO.Compression;
 
 using Lidgren.Network;
 
@@ -15,12 +17,13 @@ namespace GameInstance
 {
     internal class ResourceProcessor
     {
+        // todo: cache these out to disk if they are too big?
         protected static List<ResourceResponceMessage.Resource> Resources = new List<ResourceResponceMessage.Resource>();
         protected static List<ResourceResponceMessage.Resource> ResourcesPendingHash = new List<ResourceResponceMessage.Resource>();
 
         protected static Dictionary<string, int> ResourceNames = new Dictionary<string, int>();
 
-        public static void AddResource(string name, string url)
+        public static void AddResource(string name, string url, ResourceResponceMessage.Resource.ResourceType resType)
         {
             lock (Resources)
             {
@@ -30,6 +33,7 @@ namespace GameInstance
             ResourceResponceMessage.Resource res = new ResourceResponceMessage.Resource();
             res.Name = name;
             res.URL = url;
+            res.ResType = resType;
 
             if (Program.Config.ResourceHost != string.Empty)
             {
@@ -39,7 +43,6 @@ namespace GameInstance
                 WebClient client = new WebClient();
                 client.DownloadStringCompleted += new DownloadStringCompletedEventHandler(client_DownloadStringCompleted);
                 client.DownloadStringAsync(new Uri(Program.Config.ResourceHost + "?action=hash&path=" + HttpUtility.UrlEncode(url)), res);
-            
             }
             else
             {
@@ -74,7 +77,7 @@ namespace GameInstance
             }
         }
 
-        public static void AddResource (string name, byte[] data)
+        public static void AddResource(string name, byte[] data, ResourceResponceMessage.Resource.ResourceType resType)
         {
             lock (Resources)
             {
@@ -85,6 +88,8 @@ namespace GameInstance
             ResourceResponceMessage.Resource res = new ResourceResponceMessage.Resource();
             res.Name = name;
             res.data = data;
+            res.ResType = resType;
+
             if (data != null && data.Length > 0)
                 res.Hash = Utilities.GetMD5Hash(data);
             lock (Resources)
@@ -93,6 +98,31 @@ namespace GameInstance
                 ResourceNames.Add(res.Name, Resources.Count - 1);
             }
         }
+
+        public static void AddResource(string name, byte[] data, bool compress, ResourceResponceMessage.Resource.ResourceType resType)
+         {
+             if (!compress)
+                 AddResource(name, data, resType);
+             else
+             {
+                 MemoryStream inStream = new MemoryStream(data);
+                 GZipStream gs = new GZipStream(inStream, CompressionMode.Compress);
+
+                 byte[] buffer = new byte[0];
+                 byte[] readBuffer = new byte[1024];
+                 int read = gs.Read(readBuffer,0,1024);
+                 while (read > 0)
+                 {
+                     int len = buffer.Length;
+                     Array.Resize(ref buffer, buffer.Length + read);
+                     Array.Copy(readBuffer, 0, buffer, len, read);
+                     read = gs.Read(readBuffer, 0, 1024);
+                 }
+                 gs.Close();
+                 inStream.Close();
+                 AddResource(name, buffer,resType);
+             }
+         }
 
         public static void AddReqest(ResourceRequestMessage msg, Player player)
         {
@@ -173,6 +203,7 @@ namespace GameInstance
                                 resInfo.Name = res.Name;
                                 resInfo.URL = res.URL;
                                 resInfo.Hash = res.Hash;
+                                resInfo.ResType = res.ResType;
 
                                 msg.Resources.Add(resInfo);
                             }

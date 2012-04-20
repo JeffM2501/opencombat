@@ -91,6 +91,23 @@ namespace GameInstance
         void LoadSettings()
         {
             ServerScripting.Script.Init(Program.Config.ScriptPath, State);
+
+            // compute 
+            GameInfo.Info.ClientScriptPack = Path.GetDirectoryName(Program.Config.ClientScripts);
+            DirectoryInfo clientScriptDir = new DirectoryInfo(Program.Config.ClientScripts);
+
+            GameInfo.Info.ClientScriptsHash = Utilities.GetMD5Hash(clientScriptDir);
+
+            foreach (FileInfo file in clientScriptDir.GetFiles())
+            {
+                FileStream fs = file.OpenRead();
+                byte[] buffer = new byte[file.Length];
+                fs.Read(buffer, 0, (int)file.Length);
+                fs.Close();
+
+                ResourceProcessor.AddResource("Script:" + file.Name, buffer, true);
+            }
+
             ServerScripting.Script.GetGameInfo(GameInfo.Info);
         }
 
