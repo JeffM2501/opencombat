@@ -12,6 +12,8 @@ using Game;
 using OpenTK;
 using OpenTK.Graphics;
 
+using Client.Hud;
+
 namespace Client
 {
     public class ClientScripting
@@ -72,6 +74,16 @@ namespace Client
 
             dynamic func = scope.GetVariable("InitGame");
             return func(gameType);
+        }
+
+        public bool LoadHudElements(HudRenderer renderer)
+        {
+            ScriptScope scope = GetScope("GUI");
+            if (scope == null)
+                return false;
+
+            dynamic func = scope.GetVariable("LoadHud");
+            return func(renderer);
         }
     }
 }
