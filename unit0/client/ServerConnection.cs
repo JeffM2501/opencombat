@@ -43,6 +43,7 @@ namespace Client
         {
             public string GameStyle = string.Empty;
             public string ScriptSet = string.Empty;
+            public string ScriptHash = string.Empty;
         }
 
         public ScriptInfo ScriptingInfo = new ScriptInfo();
@@ -202,6 +203,7 @@ namespace Client
 
             ScriptingInfo.GameStyle = info.GameStyle;
             ScriptingInfo.ScriptSet = info.ScriptPack;
+            ScriptingInfo.ScriptHash = info.ScriptPackHash;
 
             Status = ConnectionStatus.Connecting;
 

@@ -21,6 +21,9 @@ namespace GameInstance
         public double DefaultRotSpeed = 90;
         public double DefaultGravity = -10;
 
+        public string ClientScriptPack = string.Empty;
+        public string ClientScriptsHash = string.Empty;
+
         public ConnectInfo.OptionInfo NewOption(string name, int defaultValue)
         {
             ConnectInfo.OptionInfo opt = new ConnectInfo.OptionInfo();

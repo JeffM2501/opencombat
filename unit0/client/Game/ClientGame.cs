@@ -158,6 +158,23 @@ namespace Client
             return true;   
         }
 
+        public bool HaveScript(string name, string hash)
+        {
+            string dir = Path.Combine(Locations.GetChacheFolder(), "scripts");
+            if (!Directory.Exists(dir))
+                Directory.CreateDirectory(dir);
+
+            string scriptCacheDir = Path.Combine(dir, Connection.ScriptingInfo.ScriptHash);
+            if (!Directory.Exists(scriptCacheDir))
+                return false;
+
+            string scriptPath = Path.Combine(scriptCacheDir,hash);
+            
+            // check script file here!
+
+            return true;
+        }
+
         public void CacheWorld(World.WorldDefData buffer, string hash)
         {
             string dir = Path.Combine(Locations.GetChacheFolder(), "maps");

@@ -28,6 +28,7 @@ namespace InstanceConfig
         public int MaxPlayers = 100;
 
         public string ScriptPath = "../../../server_data/test/server/";
+        public string ClientScripts = "../../../server_data/test/client/";
 
         public string ResourceHost = string.Empty;
 

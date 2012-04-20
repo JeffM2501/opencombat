@@ -29,8 +29,24 @@ namespace Game
         {
             FileStream fs = file.OpenRead();
             byte[] buffer = new byte[file.Length];
-            fs.Read(buffer, buffer.Length, 1);
+            fs.Read(buffer, 0, (int)file.Length);
             fs.Close();
+            return GetMD5Hash(buffer);
+        }
+
+        public static string GetMD5Hash(DirectoryInfo directory)
+        {
+            byte[] buffer = new byte[0];
+            int offset = 0;
+            foreach (FileInfo file in directory.GetFiles())
+            {
+                FileStream fs = file.OpenRead();
+                Array.Resize(ref buffer,(int)( + file.Length));
+                fs.Read(buffer, offset, (int)buffer.Length);
+                offset = buffer.Length;
+                fs.Close();
+            }
+
             return GetMD5Hash(buffer);
         }
     }

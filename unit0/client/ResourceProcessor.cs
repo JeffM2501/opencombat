@@ -27,6 +27,8 @@ namespace Client
 
         public static event EventHandler<EventArgs> ResourcesComplete;
 
+        public static string ScriptDirectory = string.Empty;
+
         public static void NewResponce(ResourceResponceMessage responce)
         {
             if (responce != null)
@@ -82,7 +84,7 @@ namespace Client
             if (res == null)
                 return;
 
-            if (res.Name == ResourceRequestMessage.MapResourceName)
+            if (res.ResType == ResourceResponceMessage.Resource.ResourceType.Map)
             {
                 Client.CacheWorld(World.WorldDefData.Deserialize(e.Result), res.Hash);
             }
@@ -90,7 +92,6 @@ namespace Client
             {
                 // do stuff?
             }
-
 
             lock (ResourcesToWebGet)
                 ResourcesToWebGet.Remove(res);
@@ -144,14 +145,19 @@ namespace Client
                         }
                         else
                         {
-                            bool processMe = true;
-                            if (res.Name == ResourceRequestMessage.MapResourceName)
+                            
+                            bool getMe = false;
+                            if (res.ResType == ResourceResponceMessage.Resource.ResourceType.Map)
                             {
-                                if (Client.HaveWorld(res.Hash))
-                                    processMe = false;
+                                if (!Client.HaveWorld(res.Hash))
+                                    getMe = true;
+                            }
+                            else if (res.ResType == ResourceResponceMessage.Resource.ResourceType.Script)
+                            {
+
                             }
 
-                            if (processMe)
+                            if (getMe)
                             {
                                 ResourceRequestMessage msg = new ResourceRequestMessage();
                                 msg.ResourceNames.Add(res.Name);
