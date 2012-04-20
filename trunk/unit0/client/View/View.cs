@@ -208,7 +208,6 @@ namespace Client
             Vector4 lightInfo = new Vector4(State.GameWorld.Info.SunPosition.X, State.GameWorld.Info.SunPosition.Y, State.GameWorld.Info.SunPosition.Z, 1.0f);
             GL.Light(LightName.Light0, LightParameter.Position, lightInfo);
 
-
             // draw world
             if (renderer != null)
             {

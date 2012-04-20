@@ -45,6 +45,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "client", "client", "{7CF9EB3D-467E-4D96-97FF-7098F71D1D5E}"
 	ProjectSection(SolutionItems) = preProject
 		server_data\test\client\Game.py = server_data\test\client\Game.py
+		server_data\test\client\GUI.py = server_data\test\client\GUI.py
 	EndProjectSection
 EndProject
 Global

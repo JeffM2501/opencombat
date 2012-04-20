@@ -47,9 +47,34 @@ namespace Client
             Spinners[0] = Texture.Get(Locations.FindDataFile("ui/outer_spinner.png"), Texture.SmoothType.SmoothMip, false);
             Spinners[1] = Texture.Get(Locations.FindDataFile("ui/inner_spinner.png"), Texture.SmoothType.SmoothMip, false);
 
-            GUIRenderer = new HudRenderer(new ViewBounds(TheView.Window.Size));
+            GUIRenderer = new HudRenderer();
+            GUIRenderer.LoadGUIElements += new EventHandler<EventArgs>(LoadGUIElements);
+            GUIRenderer.Init(new ViewBounds(TheView.Window.Size));
 
             Clock.Start();
+        }
+
+        protected void LoadGUIElements(object sender, EventArgs args)
+        {
+            ClientScripting.Script.LoadHudElements(GUIRenderer);
+
+//             // call a script?
+//             PannelElement chatBox = new PannelElement();
+//             chatBox.pannelType = "chatbox";
+//             chatBox.alignment = PannelElement.Alignmnet.RightBottom;
+//             chatBox.origin = PannelElement.Alignmnet.RightBottom;
+//             chatBox.pos = new Vector2(0, 0);
+//             chatBox.size = new Size(300,250);
+//             chatBox.color = PannelElement.ElementColor.White;
+//             chatBox.enabled = true;
+// 
+//             GUIRenderer.LoadElement(chatBox);
+            return;
+            
+            string UIPath = "ui/";
+
+            foreach (string file in Locations.FindFilesInDataDirs(UIPath, "*.xml"))
+                GUIRenderer.LoadElement(UIPath + file);
         }
 
         public void Resize()
@@ -284,9 +309,11 @@ namespace Client
 
         public void StatusChange ( View.ViewStatus status)
         {
-            ShowWait = status != View.ViewStatus.Playing;
+            ShowWait = status != View.ViewStatus.Playing && status != View.ViewStatus.New;
 
-            if (status == View.ViewStatus.Playing)
+            if (status == View.ViewStatus.New)
+                GL.ClearColor(Color.LightSlateGray);
+            else if (status == View.ViewStatus.Playing)
                 GL.ClearColor(Color.LightSkyBlue);
             else
             {

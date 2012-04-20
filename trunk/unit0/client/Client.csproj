@@ -93,6 +93,8 @@
     </Compile>
     <Compile Include="View\Hud\HudElements.cs" />
     <Compile Include="View\Hud\HudRenderer.cs" />
+    <Compile Include="View\Hud\Renderers\FrameRenderers.cs" />
+    <Compile Include="View\Hud\Renderers\TextRenderers.cs" />
     <Compile Include="View\View.cs" />
     <Compile Include="View\View.Hud.cs" />
     <Compile Include="View\View.Debug.cs" />

@@ -103,7 +103,7 @@ namespace Client.Hud
 
         public ChatMessage[] ChatMessages = new ChatMessage[0];
 
-        public HudRenderer(ViewBounds bounds)
+        public void Init(ViewBounds bounds)
         {
             WindowBounds = bounds;
             LoadPannelDefs();
@@ -206,27 +206,53 @@ namespace Client.Hud
                 e.enabled = false;
         }
 
+        public event EventHandler<EventArgs> LoadElmentRenderers;
+
         protected void LoadPannelDefs()
         {
-            new FrameRenderer("window", "ui/xp_32.png");
-            new FrameRenderer("button", "ui/xp_32_button.png");
-            new FrameRenderer("frame", "ui/16_white_rounded.png");
+            if (LoadElmentRenderers != null)
+                LoadElmentRenderers(this, EventArgs.Empty);
+
+//             new FrameRenderer("window", "ui/xp_32.png");
+//             new FrameRenderer("button", "ui/xp_32_button.png");
+//             new FrameRenderer("frame", "ui/16_white_rounded.png");
             new TextLabelRenderer(chatFont, "chatFontLabel");
             new TextLabelRenderer(anouncementFont, "anouncementFontLabel");
             new TextEditRenderer(chatFont, "chatFontTextEdit");
             new ChatPannelRenderer(chatFont, Color.Blue, Color.Red, "chatWindow");
             new ImagePannelRenderer("image");
+            new SizeableChatBoxFrame("chatbox","ui/chatbox.png");
         }
+
+        public event EventHandler<EventArgs> LoadGUIElements;
 
         protected void LoadUI()
         {
-            string UIPath = "ui/";
-
-            foreach (string file in Locations.FindFilesInDataDirs(UIPath,"*.xml"))
-                LoadElement(UIPath + file);
+            if (LoadGUIElements != null)
+                LoadGUIElements(this, EventArgs.Empty);
         }
 
-        protected PannelElement LoadElement(string path)
+        public PannelElement NewElement(string name, string type)
+        {
+            PannelElement element = new PannelElement();
+            element.name = name;
+            element.pannelType = type;
+
+            return element;
+        }
+
+        public PannelElement LoadElement(PannelElement element)
+        {
+            if (element != null)
+            {
+                element.view = WindowBounds;
+                element.Adopt();
+                elements.Add(element);
+            }
+            return element;
+        }
+
+        public PannelElement LoadElement(string path)
         {
             string item = Locations.FindDataFile(path);
             if (item == string.Empty)
@@ -239,12 +265,9 @@ namespace Client.Hud
                 XmlSerializer xml = new XmlSerializer(typeof(PannelElement));
 
                 fs = new FileStream(item, FileMode.Open, FileAccess.Read);
-                e = (PannelElement)xml.Deserialize(fs);
-                e.view = WindowBounds;
-                e.Adopt();
-                elements.Add(e);
+                e =  LoadElement((PannelElement)xml.Deserialize(fs));
             }
-            catch (System.Exception ex)
+            catch (System.Exception /*ex*/)
             {
 
             }
@@ -359,6 +382,17 @@ namespace Client.Hud
         public Vector2 pos = Vector2.Zero;
         public Size size = Size.Empty;
 
+
+        public void SetPosition(float x, float y)
+        {
+            pos = new Vector2(x, y);
+        }
+
+        public void SetSize(int x, int y)
+        {
+            size = new Size(x, y);
+        }
+
         public enum Alignmnet
         {
             Relative,
@@ -381,9 +415,25 @@ namespace Client.Hud
             public float red = 1.0f;
             public float green = 1.0f;
             public float blue = 1.0f;
+
+            public ElementColor() { }
+            public ElementColor(float r, float g, float b) { red = r; green = g; blue = b; }
+
+            public static ElementColor White = new ElementColor();
         }
 
-        public ElementColor color = new ElementColor();
+        public ElementColor color = ElementColor.White;
+
+        public void SetColor(float red, float green, float blue, float a)
+        {
+            color = new ElementColor(red, green, blue);
+            alpha = a;
+        }
+
+        public void SetColor(float red, float green, float blue)
+        {
+            color = new ElementColor(red, green, blue);
+        }
 
         public float alpha = 1;
 
@@ -445,8 +495,19 @@ namespace Client.Hud
         {
             public string name = string.Empty;
             public string value = string.Empty;
+            public Option() { }
+            public Option(string _name, string _value)
+            {
+                name = _name;
+                value = _value;
+            }
         }
         public List<Option> options = new List<Option>();
+
+        public void AddOption(string name, string value)
+        {
+            options.Add(new Option(name, value));
+        }
 
         [System.Xml.Serialization.XmlIgnoreAttribute]
         public Dictionary<string, string> optionMap = new Dictionary<string, string>();

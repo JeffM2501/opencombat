@@ -130,6 +130,7 @@ namespace Client
         void Window_Load(object sender, EventArgs e)
         {
             GameView.SetStatus(View.ViewStatus.New, "Please Wait");
+            return;
 
             string server = "localhost";
             int port = 2501;
