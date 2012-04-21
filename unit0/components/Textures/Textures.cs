@@ -413,6 +413,11 @@ namespace Textures
             Draw(color, 1, 1);
         }
 
+        public void DrawAtAlpha(float alpha)
+        {
+            Draw(Color.White, alpha, 1);
+        }
+
         public void Draw(Color color, float scale)
         {
             Draw(color, 1, scale);
@@ -438,6 +443,34 @@ namespace Textures
             GL.TexCoord2(0, 1);
             GL.Vertex2(-w, h);
             GL.End();
+        }
+
+        public void Draw(Color color, float alpha, Size bounds)
+        {
+            if (bounds.Width <= 0 || bounds.Height <= 0)
+                return;
+
+            // compute a scale
+            float scale = bounds.Width / Bounds.X;
+            if (scale > (bounds.Height/ Bounds.Y))
+                scale = bounds.Height / Bounds.Y;
+
+            Draw(color, alpha, scale);
+        }
+
+        public void Draw(Size bounds)
+        {
+            Draw(Color.White, 1, bounds);
+        }
+
+        public void Draw(Color color, Size bounds)
+        {
+            Draw(color, 1, bounds);
+        }
+
+        public void DrawAtAlpha(float alpha, Size bounds)
+        {
+            Draw(Color.White, alpha, bounds);
         }
     }
 }
