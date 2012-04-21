@@ -187,6 +187,8 @@ namespace GameInstance
             ConnectInfo info = new ConnectInfo();
             info.GameStyle = GameInfo.Info.GameStyle;
             info.Options = GameInfo.Info.UserOptions;
+            info.PlayerModels = GameInfo.Info.PlayerModels;
+            info.PlayerAvatars = GameInfo.Info.PlayerAvatars;
             info.PID = player.PID;
             info.UID = player.UID;
             info.Name = player.Name;
