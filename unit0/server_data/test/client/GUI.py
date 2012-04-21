@@ -5,6 +5,6 @@ def LoadHud (HUD):
     chatBox.SetPos(0,0);
     chatBox.SetSize(300,250);
     chatBox.color = PannelElement.ElementColor.White;
-    chatBox.enabled = true;
-    GUIRenderer.LoadElement(chatBox);
-    return True;
+	chatBox.enabled = True;
+	GUIRenderer.LoadElement(chatBox);
+	return True;
