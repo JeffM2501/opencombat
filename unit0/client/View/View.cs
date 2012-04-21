@@ -65,7 +65,7 @@ namespace Client
             Window.Load += new EventHandler<EventArgs>(Window_Load);
             Window.VisibleChanged += new EventHandler<EventArgs>(Window_VisibleChanged);
 
-            HudProcessor = new HUD(this, ClientGame game);
+            HudProcessor = new HUD(this, game);
         }
 
         public void LinkChat(ChatProcessor chat, ClientGame game)

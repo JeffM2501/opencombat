@@ -49,7 +49,7 @@ namespace Client
             Spinners = new Texture[2];
             Spinners[0] = Texture.Get(Locations.FindDataFile("ui/outer_spinner.png"), Texture.SmoothType.SmoothMip, false);
             Spinners[1] = Texture.Get(Locations.FindDataFile("ui/inner_spinner.png"), Texture.SmoothType.SmoothMip, false);
-            GUIRenderer = new HudRenderer();
+            GUIRenderer = new HudRenderer(new ViewBounds(TheView.Window.Size));
             GUIRenderer.LoadGUIElements += new EventHandler<EventArgs>(LoadGUIElements);
 
             Clock.Start();
@@ -57,7 +57,7 @@ namespace Client
 
         public void ScriptsLoaded()
         {
-            GUIRenderer.Init(new ViewBounds(TheView.Window.Size));
+            GUIRenderer.Init();
         }
 
         public void LinkChat(ChatProcessor chat)
