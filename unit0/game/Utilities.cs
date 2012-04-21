@@ -41,8 +41,8 @@ namespace Game
             foreach (FileInfo file in directory.GetFiles())
             {
                 FileStream fs = file.OpenRead();
-                Array.Resize(ref buffer,(int)( + file.Length));
-                fs.Read(buffer, offset, (int)buffer.Length);
+                Array.Resize(ref buffer, (int)(buffer.Length + file.Length));
+                fs.Read(buffer, offset, (int)file.Length);
                 offset = buffer.Length;
                 fs.Close();
             }
