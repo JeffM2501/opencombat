@@ -107,7 +107,8 @@ namespace Client
 
         void ConnectionComplete (object sender, EventArgs args)
         {
-            ClientScripting.Script.Init(Connection.ScriptingInfo.ScriptSet);
+          //  ClientScripting.Script.Init(Connection.ScriptingInfo.ScriptSet);
+            SendSystemMessage("Connection Complete");
         }
 
         void ConnectionError(object sender, EventArgs args)
@@ -116,6 +117,7 @@ namespace Client
             {
                 Done = true;
                 LastError = "Connection Failure";
+                SendSystemMessage(LastError);
 
                 Status = ServerConnection.ConnectionStatus.Disconnected;
                 AddPendingEvents(StatusChanged);
@@ -128,7 +130,7 @@ namespace Client
             {
                 Done = true;
                 LastError = "Connection Terminated";
-
+                SendSystemMessage(LastError);
                 Status = ServerConnection.ConnectionStatus.Disconnected;
                 AddPendingEvents(StatusChanged);
             }
