@@ -209,14 +209,14 @@ namespace Client
 
             string scriptCacheDir = Path.Combine(dir, Connection.ScriptingInfo.ScriptHash);
             if (!Directory.Exists(scriptCacheDir))
-                return false;
+                Directory.CreateDirectory(scriptCacheDir);
 
-            string scriptPath = Path.Combine(scriptCacheDir, hash);
+            string scriptPath = Path.Combine(scriptCacheDir, res.Hash);
 
             if (!Directory.Exists(scriptPath))
-                return false;
+                Directory.CreateDirectory(scriptPath);
 
-            string scriptFile = Path.Combine(scriptPath, name);
+            string scriptFile = Path.Combine(scriptPath, res.Name);
             if (!File.Exists(scriptFile))
                 return false;
         }
