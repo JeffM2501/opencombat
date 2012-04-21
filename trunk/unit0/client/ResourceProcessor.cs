@@ -84,15 +84,8 @@ namespace Client
             if (res == null)
                 return;
 
-            if (res.ResType == ResourceResponceMessage.Resource.ResourceType.Map)
-            {
-                Client.CacheWorld(World.WorldDefData.Deserialize(e.Result), res.Hash);
-            }
-            else
-            {
-                // do stuff?
-            }
-
+            Client.CacheResource(res, e.Result);
+           
             lock (ResourcesToWebGet)
                 ResourcesToWebGet.Remove(res);
 
@@ -133,31 +126,19 @@ namespace Client
                 {
                     if (res.data == null || res.data.Length == 0)
                     {
-                        if (res.URL != string.Empty)
+                        if (!Client.HaveResource(res))
                         {
-                            lock (ResourcesToWebGet)
+                            if (res.URL != string.Empty)
                             {
-                                ResourcesToWebGet.Add(res);
-                                WebClient client = new WebClient();
-                                client.DownloadDataCompleted += new DownloadDataCompletedEventHandler(client_DownloadCompleted);
-                                client.DownloadDataAsync(new Uri(ResourceHost + "?action=get&path=" + HttpUtility.UrlEncode(res.URL)), res);
+                                lock (ResourcesToWebGet)
+                                {
+                                    ResourcesToWebGet.Add(res);
+                                    WebClient client = new WebClient();
+                                    client.DownloadDataCompleted += new DownloadDataCompletedEventHandler(client_DownloadCompleted);
+                                    client.DownloadDataAsync(new Uri(ResourceHost + "?action=get&path=" + HttpUtility.UrlEncode(res.URL)), res);
+                                }
                             }
-                        }
-                        else
-                        {
-                            
-                            bool getMe = false;
-                            if (res.ResType == ResourceResponceMessage.Resource.ResourceType.Map)
-                            {
-                                if (!Client.HaveWorld(res.Hash))
-                                    getMe = true;
-                            }
-                            else if (res.ResType == ResourceResponceMessage.Resource.ResourceType.Script)
-                            {
-
-                            }
-
-                            if (getMe)
+                            else
                             {
                                 ResourceRequestMessage msg = new ResourceRequestMessage();
                                 msg.ResourceNames.Add(res.Name);
@@ -171,14 +152,7 @@ namespace Client
                         lock (ResourcesToProtoGet)
                             ResourcesToProtoGet.Remove(res.Name);
 
-                        if (res.Name == ResourceRequestMessage.MapResourceName)
-                        {
-                            Client.CacheWorld(World.WorldDefData.Deserialize(res.data), res.Hash);
-                        }
-                        else
-                        {
-                            // stuff
-                        }
+                        Client.CacheResource(res,res.data);
                     }
 
                     res = NextToProcess();

@@ -49,5 +49,40 @@ namespace Game
 
             return GetMD5Hash(buffer);
         }
+
+        public static string ReadMD5HashFromFile(string hashFile)
+        {
+            FileInfo file = new FileInfo(hashFile);
+            if (!file.Exists)
+                return string.Empty;
+
+            TextReader reader = file.OpenText();
+            string hash = reader.ReadLine();
+            reader.Close();
+            return hash;
+        }
+
+        public static string GetMD5Hash(string file, string hashFile)
+        {
+            string hash = string.Empty;
+            if (hashFile != string.Empty)
+                hash = ReadMD5HashFromFile(hashFile);
+
+            if (hash != string.Empty)
+                return hash;
+
+            hash = GetMD5Hash(new FileInfo(file));
+            if (hashFile != null)
+            {
+                FileInfo outfile = new FileInfo(hashFile);
+                FileStream fs = outfile.OpenWrite();
+                StreamWriter tw = new StreamWriter(fs);
+                tw.WriteLine(hash);
+                tw.Close();
+                fs.Close();
+            }
+
+            return hash;
+        }
     }
 }

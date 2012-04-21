@@ -82,7 +82,7 @@ namespace GameInstance
             if (!_Die)
                 LoadSettings();
 
-            ResourceProcessor.AddResource(ResourceRequestMessage.MapResourceName, Map.SaveWorldWithGeometry().Serialize()); ;
+            ResourceProcessor.AddResource(ResourceRequestMessage.MapResourceName, Map.SaveWorldWithGeometry().Serialize(),ResourceResponceMessage.Resource.ResourceType.Map); ;
             Map.FlushGeometry();
 
             return Map;
@@ -105,7 +105,7 @@ namespace GameInstance
                 fs.Read(buffer, 0, (int)file.Length);
                 fs.Close();
 
-                ResourceProcessor.AddResource("Script:" + file.Name, buffer, true);
+                ResourceProcessor.AddResource(file.Name, buffer, true, ResourceResponceMessage.Resource.ResourceType.Script);
             }
 
             ServerScripting.Script.GetGameInfo(GameInfo.Info);
