@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using System.IO.Compression;
 
 using Game;
 using Game.Messages;
@@ -198,12 +199,7 @@ namespace Client
             if (!Directory.Exists(scriptCacheDir))
                 return false;
 
-            string scriptPath = Path.Combine(scriptCacheDir,hash);
-
-            if (!Directory.Exists(scriptPath))
-                return false;
-
-            string scriptFile = Path.Combine(scriptPath, name);
+            string scriptFile = Path.Combine(scriptCacheDir, name);
             if (!File.Exists(scriptFile))
                 return false;
 
@@ -230,26 +226,42 @@ namespace Client
             if (!Directory.Exists(scriptCacheDir))
                 Directory.CreateDirectory(scriptCacheDir);
 
-            string scriptPath = Path.Combine(scriptCacheDir, res.Hash);
-
-            if (!Directory.Exists(scriptPath))
-                Directory.CreateDirectory(scriptPath);
-
-            string scriptFile = Path.Combine(scriptPath, res.Name);
-            if (!File.Exists(scriptFile))
+            string scriptFile = Path.Combine(scriptCacheDir, res.Name);
+            if (File.Exists(scriptFile))
                 File.Delete(scriptFile);
 
-            FileInfo file = new FileInfo(scriptFile);
-            FileStream fs = file.OpenWrite();
-            fs.Write(buffer, 0, buffer.Length);
-            fs.Close();
+            if (res.Compressed)
+            {
+                FileInfo file = new FileInfo(scriptFile);
+
+                MemoryStream ms = new MemoryStream(buffer);
+                GZipStream gz = new GZipStream(ms, CompressionMode.Decompress);
+                FileStream fs = file.OpenWrite();
+                byte[] output = new byte[1024];
+
+                int read = gz.Read(output,0,output.Length);
+                while (read != 0)
+                {
+                    fs.Write(output, 0, read);
+                    read = gz.Read(output, 0, output.Length);
+                }
+                gz.Close();
+                fs.Close();
+                ms.Close();
+            }
+            else
+            {
+                FileInfo file = new FileInfo(scriptFile);
+                FileStream fs = file.OpenWrite();
+                fs.Write(buffer, 0, buffer.Length);
+                fs.Close();
+            }
 
             string scriptHashFile = scriptFile + ".md5";
-            if (!File.Exists(scriptHashFile))
+            if (File.Exists(scriptHashFile))
                 File.Delete(scriptHashFile);
 
-            if (Utilities.GetMD5Hash(scriptFile, scriptHashFile) != res.Hash)
-                throw (new Exception("Hash on save does not match for " + scriptFile));
+            Utilities.WriteMD5HashToFile(scriptHashFile,res.Hash);
         }
 
         protected void CacheWorld(byte[] data, string hash)

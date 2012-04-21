@@ -62,6 +62,16 @@ namespace Game
             return hash;
         }
 
+        public static void WriteMD5HashToFile(string hashFile, string hash)
+        {
+            FileInfo outfile = new FileInfo(hashFile);
+            FileStream fs = outfile.OpenWrite();
+            StreamWriter tw = new StreamWriter(fs);
+            tw.WriteLine(hash);
+            tw.Close();
+            fs.Close();
+        }
+
         public static string GetMD5Hash(string file, string hashFile)
         {
             string hash = string.Empty;
@@ -73,14 +83,7 @@ namespace Game
 
             hash = GetMD5Hash(new FileInfo(file));
             if (hashFile != null)
-            {
-                FileInfo outfile = new FileInfo(hashFile);
-                FileStream fs = outfile.OpenWrite();
-                StreamWriter tw = new StreamWriter(fs);
-                tw.WriteLine(hash);
-                tw.Close();
-                fs.Close();
-            }
+                WriteMD5HashToFile(hashFile, hash);
 
             return hash;
         }
