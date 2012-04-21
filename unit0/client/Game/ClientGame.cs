@@ -5,6 +5,7 @@ using System.Text;
 using System.IO;
 
 using Game;
+using Game.Messages;
 using GridWorld;
 
 using OpenTK;
@@ -137,7 +138,17 @@ namespace Client
             return null;// WorldBuilder.NewWorld(string.Empty, null);
         }
 
-        public bool HaveWorld(string hash)
+        public bool HaveResource(ResourceResponceMessage.Resource res)
+        {
+            if (res.ResType == ResourceResponceMessage.Resource.ResourceType.Map)
+                return HaveWorld(res.Hash);
+            else if (res.ResType == ResourceResponceMessage.Resource.ResourceType.Script)
+                return HaveScript(res.Name, res.Hash);
+
+            return false;
+        }
+
+        protected bool HaveWorld(string hash)
         {
             string dir = Path.Combine(Locations.GetChacheFolder(),"maps");
             if (!Directory.Exists(dir))
@@ -158,7 +169,7 @@ namespace Client
             return true;   
         }
 
-        public bool HaveScript(string name, string hash)
+        protected bool HaveScript(string name, string hash)
         {
             string dir = Path.Combine(Locations.GetChacheFolder(), "scripts");
             if (!Directory.Exists(dir))
@@ -169,14 +180,51 @@ namespace Client
                 return false;
 
             string scriptPath = Path.Combine(scriptCacheDir,hash);
-            
-            // check script file here!
 
-            return true;
+            if (!Directory.Exists(scriptPath))
+                return false;
+
+            string scriptFile = Path.Combine(scriptPath, name);
+            if (!File.Exists(scriptFile))
+                return false;
+
+            string scriptHashFile = scriptFile + ".md5";
+
+            return Utilities.GetMD5Hash(scriptFile, scriptHashFile) == hash;
         }
 
-        public void CacheWorld(World.WorldDefData buffer, string hash)
+        public void CacheResource(ResourceResponceMessage.Resource res, byte[] buffer)
         {
+            if (res.ResType == ResourceResponceMessage.Resource.ResourceType.Map)
+                CacheWorld(buffer,res.Hash);
+            else if (res.ResType == ResourceResponceMessage.Resource.ResourceType.Script)
+                CacheScript(res,buffer);
+        }
+
+        protected void CacheScript(ResourceResponceMessage.Resource res, byte[] buffer)
+        {
+            string dir = Path.Combine(Locations.GetChacheFolder(), "scripts");
+            if (!Directory.Exists(dir))
+                Directory.CreateDirectory(dir);
+
+            string scriptCacheDir = Path.Combine(dir, Connection.ScriptingInfo.ScriptHash);
+            if (!Directory.Exists(scriptCacheDir))
+                return false;
+
+            string scriptPath = Path.Combine(scriptCacheDir, hash);
+
+            if (!Directory.Exists(scriptPath))
+                return false;
+
+            string scriptFile = Path.Combine(scriptPath, name);
+            if (!File.Exists(scriptFile))
+                return false;
+        }
+
+        protected void CacheWorld(byte[] data, string hash)
+        {
+            World.WorldDefData buffer = World.WorldDefData.Deserialize(data);
+
             string dir = Path.Combine(Locations.GetChacheFolder(), "maps");
             if (!Directory.Exists(dir))
                 Directory.CreateDirectory(dir);

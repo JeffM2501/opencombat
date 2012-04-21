@@ -34,6 +34,7 @@ namespace GameInstance
             res.Name = name;
             res.URL = url;
             res.ResType = resType;
+            res.Compressed = false;
 
             if (Program.Config.ResourceHost != string.Empty)
             {
@@ -79,6 +80,11 @@ namespace GameInstance
 
         public static void AddResource(string name, byte[] data, ResourceResponceMessage.Resource.ResourceType resType)
         {
+            AddResourceData(name, data, resType, false);
+        }
+
+        protected static void AddResourceData(string name, byte[] data, ResourceResponceMessage.Resource.ResourceType resType, bool compres)
+        {
             lock (Resources)
             {
                 if (ResourceNames.ContainsKey(name))
@@ -89,6 +95,7 @@ namespace GameInstance
             res.Name = name;
             res.data = data;
             res.ResType = resType;
+            res.Compressed = compres;
 
             if (data != null && data.Length > 0)
                 res.Hash = Utilities.GetMD5Hash(data);
@@ -102,7 +109,7 @@ namespace GameInstance
         public static void AddResource(string name, byte[] data, bool compress, ResourceResponceMessage.Resource.ResourceType resType)
          {
              if (!compress)
-                 AddResource(name, data, resType);
+                 AddResourceData(name, data, resType,false);
              else
              {
                  MemoryStream inStream = new MemoryStream(data);
@@ -120,7 +127,7 @@ namespace GameInstance
                  }
                  gs.Close();
                  inStream.Close();
-                 AddResource(name, buffer,resType);
+                 AddResourceData(name, buffer, resType, true);
              }
          }
 

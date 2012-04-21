@@ -53,6 +53,7 @@ namespace Game.Messages
             public string Name = string.Empty;
             public string Hash = string.Empty;
             public string URL = string.Empty;
+            public bool Compressed = false;
             public byte[] data = new byte[0];
 
             public Resource()
@@ -70,6 +71,7 @@ namespace Game.Messages
                 msg.Write(Hash);
                 msg.Write(URL);
                 msg.Write((byte)ResType);
+                msg.Write(Compressed);
 
                 msg.Write(data.Length);
                 if (data.Length > 0)
@@ -82,6 +84,7 @@ namespace Game.Messages
                 Hash = msg.ReadString();
                 URL = msg.ReadString();
                 ResType = (ResourceType)Enum.ToObject(typeof(ResourceType), msg.ReadByte());
+                Compressed = msg.ReadBoolean();
 
                 int size = msg.ReadInt32();
                 if (size > 0)
