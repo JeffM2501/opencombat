@@ -195,7 +195,8 @@ namespace GameInstance
             info.AvatarID = player.AvatarID;
             info.TeamID = -1;
             info.TeamName = string.Empty;
-            info.ScriptPack = ServerScripting.Script.ScriptPackName;
+            info.ScriptPack = GameInfo.Info.ClientScriptPack;
+            info.ScriptPackHash = GameInfo.Info.ClientScriptsHash;
 
             player.SendReliable(info.Pack(NewMessage()));
 
