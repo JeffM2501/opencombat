@@ -195,9 +195,13 @@ namespace Client.Hud
         public double TargetRenderFrequency = 1;
         public double UpdateFrequency = 1;
 
-        public void Init(ViewBounds bounds)
+        public HudRenderer(ViewBounds bounds)
         {
             WindowBounds = bounds;
+        }
+
+        public void Init()
+        {
             LoadPannelDefs();
 
             LoadUI();
