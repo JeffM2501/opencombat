@@ -40,8 +40,8 @@ namespace Client.Hud
 
         public override void DrawElementText(TextPrinter printer, ViewBounds view, PannelElement element, double now, double frameTime)
         {
-            ChatLines lines = element.RenderTag as ChatLines;
-            if (lines == null)
+            ChatInfo info = element.RenderTag as ChatInfo;
+            if (info == null)
                 return;
 
             int lineHeight = (int)(printer.Measure("X", font).BoundingBox.Height + 6);
@@ -49,27 +49,28 @@ namespace Client.Hud
             Size size = element.GetElementSize();
             int lineCount = size.Height / lineHeight;
 
-            if (lineCount > lines.messages.Length)
-                lineCount = lines.messages.Length;
-
             Vector2 pos = element.GetWorldPos();
 
             for (int i = 0; i < lineCount; i++)
             {
-                ChatMessage msg = lines.messages[lines.messages.Length - i - 1];
+                ChatInfo.ChatMessage msg = info.GetRecentMessage(i);
 
-                if (msg.chat != string.Empty)
+                if (msg == null)
+                    break;
+
+                if (msg.Text != string.Empty)
                 {
+                    string fromName = info.GetUser(msg.From).Name;
                     int yoffset = i * lineHeight;
-                    if (msg.from != string.Empty)
+                    if (fromName != string.Empty)
                     {
-                        int xoffset = (int)(printer.Measure(msg.from, font).BoundingBox.Width + 0.5);
+                        int xoffset = (int)(printer.Measure(fromName, font).BoundingBox.Width + 0.5);
 
-                        printer.Print(msg.from, font, fromColor, new RectangleF(pos.X, view.Bounds.Height - (pos.Y + yoffset) - lineHeight, xoffset, lineHeight));
-                        printer.Print(msg.chat, font, element.Color, new RectangleF(pos.X + xoffset, view.Bounds.Height - (pos.Y + yoffset) - lineHeight, size.Width - xoffset, lineHeight));
+                        printer.Print(fromName, font, fromColor, new RectangleF(pos.X, view.Bounds.Height - (pos.Y + yoffset) - lineHeight, xoffset, lineHeight));
+                        printer.Print(msg.Text, font, element.Color, new RectangleF(pos.X + xoffset, view.Bounds.Height - (pos.Y + yoffset) - lineHeight, size.Width - xoffset, lineHeight));
                     }
                     else
-                        printer.Print(msg.chat, font, serverColor, new RectangleF(pos.X, view.Bounds.Height - (pos.Y + yoffset) - lineHeight, size.Width, lineHeight));
+                        printer.Print(msg.Text, font, serverColor, new RectangleF(pos.X, view.Bounds.Height - (pos.Y + yoffset) - lineHeight, size.Width, lineHeight));
                 }
             }
         }
