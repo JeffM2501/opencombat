@@ -112,22 +112,12 @@ namespace GameInstance
                  AddResourceData(name, data, resType,false);
              else
              {
-                 MemoryStream inStream = new MemoryStream(data);
+                 MemoryStream inStream = new MemoryStream();
                  GZipStream gs = new GZipStream(inStream, CompressionMode.Compress);
-
-                 byte[] buffer = new byte[0];
-                 byte[] readBuffer = new byte[1024];
-                 int read = gs.Read(readBuffer,0,1024);
-                 while (read > 0)
-                 {
-                     int len = buffer.Length;
-                     Array.Resize(ref buffer, buffer.Length + read);
-                     Array.Copy(readBuffer, 0, buffer, len, read);
-                     read = gs.Read(readBuffer, 0, 1024);
-                 }
+                 gs.Write(data, 0, data.Length);
                  gs.Close();
                  inStream.Close();
-                 AddResourceData(name, buffer, resType, true);
+                 AddResourceData(name, inStream.GetBuffer(), resType, true);
              }
          }
 
