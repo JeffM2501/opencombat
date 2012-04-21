@@ -35,7 +35,18 @@ namespace Client
 
         public EventHandler<EventArgs> StatusChanged;
 
-        protected ChatProcessor Chat = null;
+        public class GameInfoEventArgs : EventArgs
+        {
+            public ConnectInfo Info = null;
+            public GameInfoEventArgs(ConnectInfo info) : base()
+            {
+                Info = info;
+            }
+        }
+
+        public EventHandler<GameInfoEventArgs> GameInfoLoaded;
+
+        public ChatProcessor Chat = null;
 
         Thread worker = null;
 
@@ -187,8 +198,6 @@ namespace Client
                 return;
             }
 
-            ClientScripting.Script.Init(info.ScriptPack);
-
             Player.UID = info.UID;
             Player.PID = info.PID;
 
@@ -209,6 +218,9 @@ namespace Client
 
             if (Connected != null)
                 Connected(this,EventArgs.Empty);
+
+            if (GameInfoLoaded != null)
+                GameInfoLoaded(this, new GameInfoEventArgs(info));
 
              // ask for a list of resources with an empty request
             SendReliable(new ResourceRequestMessage());

@@ -37,11 +37,103 @@ namespace Client.Hud
         }
     }
 
-    public class ChatMessage
+    public class ChatInfo
     {
-        public string from = string.Empty;
-        public string chat = string.Empty;
+        public class ChatMessage
+        {
+            public UInt64 From = UInt64.MaxValue;
+            public string Text = string.Empty;
+
+            public ChatMessage(UInt64 from, string text)
+            {
+                From = from;
+                Text = text;
+            }
+        }
+
+        public void AddMessage(UInt64 from, string text)
+        {
+            lock (ChatMessages)
+                ChatMessages.Add(new ChatMessage(from, text));
+        }
+
+        public void TrimChat(int maxValue)
+        {
+            lock (ChatMessages)
+            {
+                if (ChatMessages.Count > maxValue)
+                    ChatMessages.RemoveRange(0, maxValue);
+            }
+        }
+
+        public ChatMessage GetRecentMessage(int index)
+        {
+            lock (ChatMessages)
+            {
+                int realIndex = ChatMessages.Count - index - 1;
+                if (realIndex < 0 || realIndex >= ChatMessages.Count)
+                    return null;
+
+                return ChatMessages[realIndex];
+            }
+        }
+
+        protected List<ChatMessage> ChatMessages = new List<ChatMessage>();
+
+        public class ChatUser
+        {
+            public string Name = "Unknown";
+            public Texture Icon = null;
+            public UInt64 UID = UInt64.MaxValue;
+
+            public static ChatUser Empty = new ChatUser();
+        }
+
+        protected Dictionary<UInt64, ChatUser> ChatUsers = new Dictionary<UInt64, ChatUser>();
+
+        public void AddUser(ChatUser user)
+        {
+            lock (ChatUsers)
+            {
+                if (ChatUsers.ContainsKey(user.UID))
+                    ChatUsers[user.UID] = user;
+                else
+                    ChatUsers.Add(user.UID, user);
+            }
+        }
+
+        public ChatUser GetUser(UInt64 uid)
+        {
+            lock (ChatUsers)
+            {
+                if (ChatUsers.ContainsKey(uid))
+                    return ChatUsers[uid];
+                
+            }
+            return ChatUser.Empty;
+        }
+
+        public static UInt64 GameChatUID = UInt64.MaxValue - 2;
+        public static UInt64 ErrorChatUID = UInt64.MaxValue - 3;
+
+        protected string _OutboundLine = string.Empty;
+
+        public string OutboundLine
+        {
+            get
+            {
+                lock (_OutboundLine)
+                    return (string)_OutboundLine.Clone();
+            }
+
+            set
+            {
+                lock (_OutboundLine)
+                    _OutboundLine = value;
+            }
+        }
     }
+    
 
     public class HudRenderer
     {
@@ -50,6 +142,8 @@ namespace Client.Hud
         public TextPrinter printer = new TextPrinter(TextQuality.High);
 
         PlayerListPannelRenderer.PlayerList playerUIList = new PlayerListPannelRenderer.PlayerList();
+
+        public ChatInfo Chat = new ChatInfo();
 
         public class TextItem
         {
@@ -100,8 +194,6 @@ namespace Client.Hud
         public double RenderFrequency = 1;
         public double TargetRenderFrequency = 1;
         public double UpdateFrequency = 1;
-
-        public ChatMessage[] ChatMessages = new ChatMessage[0];
 
         public void Init(ViewBounds bounds)
         {
@@ -332,12 +424,7 @@ namespace Client.Hud
 
         protected void ChatLogUpdater(PannelElement element)
         {
-            ChatPannelRenderer.ChatLines lines = element.RenderTag as ChatPannelRenderer.ChatLines;
-            if (lines == null)
-                lines = new ChatPannelRenderer.ChatLines();
-
-            lines.messages = ChatMessages;
-            element.RenderTag = lines;
+            element.RenderTag = Chat;
         }
 
         public void Render(double now, double frameTime)
