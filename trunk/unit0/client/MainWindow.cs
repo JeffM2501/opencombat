@@ -36,17 +36,19 @@ namespace Client
             Game = new ClientGame(InputTracker);
             Game.ToggleDrawing += new EventHandler<EventArgs>(ToggleDebugDrawing_Changed);
             Game.AddDebugLogItem += new ClientGame.DebugValueCallback(DebugValueCallback);
-
             Game.StatusChanged += new EventHandler<EventArgs>(Game_StatusChanged);
            
             Window.UpdateFrame += new EventHandler<FrameEventArgs>(Window_UpdateFrame);
             Window.Closed += new EventHandler<EventArgs>(Window_Closed);
 
-            GameView = new View(Window, Game.State);
+            GameView = new View(Window, Game);
             GameView.ModifyCamera += new View.ModifyCameraCB(GameView_ModifyCamera);
 
             // so it will hopefully bet called after the view has had it's time to load the window
             Window.Load += new EventHandler<EventArgs>(Window_Load);
+
+            // link up the view to the game
+            Game.ScriptsLoaded += new EventHandler<EventArgs>(GameView.ScriptsLoaded);
         }
 
         void Game_StatusChanged(object sender, EventArgs e)
@@ -130,7 +132,6 @@ namespace Client
         void Window_Load(object sender, EventArgs e)
         {
             GameView.SetStatus(View.ViewStatus.New, "Please Wait");
-            return;
 
             string server = "localhost";
             int port = 2501;
@@ -138,6 +139,8 @@ namespace Client
             Game.Connect(server, port);
 
             GameView.SetStatus(View.ViewStatus.Connecting, server + ":" + port.ToString());
+
+            GameView.LinkChat(Game.Connection.Chat,Game);
         }
 
         void Window_Closed(object sender, EventArgs e)

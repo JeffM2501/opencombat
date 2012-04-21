@@ -21,6 +21,7 @@ namespace Client
     public class HUD
     {
         public View TheView = null;
+        ClientGame TheGame = null;
 
         Font WaitFont = new Font(FontFamily.GenericSansSerif, 72);
         Font WaitInfoFont = new Font(FontFamily.GenericSansSerif, 14);
@@ -35,10 +36,12 @@ namespace Client
         public string StateMessage = string.Empty;
 
         protected string WaitHeader = "Processing";
+  
 
-        public HUD(View view)
+        public HUD(View view, ClientGame game)
         {
             TheView = view;
+            TheGame = game;
         }
 
         public void Init()
@@ -46,12 +49,58 @@ namespace Client
             Spinners = new Texture[2];
             Spinners[0] = Texture.Get(Locations.FindDataFile("ui/outer_spinner.png"), Texture.SmoothType.SmoothMip, false);
             Spinners[1] = Texture.Get(Locations.FindDataFile("ui/inner_spinner.png"), Texture.SmoothType.SmoothMip, false);
-
             GUIRenderer = new HudRenderer();
             GUIRenderer.LoadGUIElements += new EventHandler<EventArgs>(LoadGUIElements);
-            GUIRenderer.Init(new ViewBounds(TheView.Window.Size));
 
             Clock.Start();
+        }
+
+        public void ScriptsLoaded()
+        {
+            GUIRenderer.Init(new ViewBounds(TheView.Window.Size));
+        }
+
+        public void LinkChat(ChatProcessor chat)
+        {
+            chat.NewChatUser += new EventHandler<ChatProcessor.ChatUserArgs>(chat_NewChatUser);
+            chat.RecivedChatMessage += new EventHandler<ChatProcessor.ChatMessageArgs>(chat_RecivedChatMessage);
+            chat.OutboundChatChanged += new EventHandler<EventArgs>(chat_OutboundChatChanged);
+
+            ChatInfo.ChatUser systemUser = new ChatInfo.ChatUser();
+            systemUser.Name = "Game";
+            systemUser.UID = ChatInfo.GameChatUID;
+            GUIRenderer.Chat.AddUser(systemUser);
+
+            ChatInfo.ChatUser errorUser = new ChatInfo.ChatUser();
+            errorUser.Name = "Error";
+            errorUser.UID = ChatInfo.ErrorChatUID;
+            GUIRenderer.Chat.AddUser(errorUser);
+        }
+
+        public void SystemMessageSent(object sender, ClientGame.SystemMessageEventArgs args)
+        {
+            GUIRenderer.Chat.AddMessage(ChatInfo.GameChatUID, args.Text);
+        }
+
+        void chat_OutboundChatChanged(object sender, EventArgs e)
+        {
+            GUIRenderer.Chat.OutboundLine = (sender as ChatProcessor).OutboundChatLine;
+        }
+
+        void chat_RecivedChatMessage(object sender, ChatProcessor.ChatMessageArgs e)
+        {
+            GUIRenderer.Chat.AddMessage(e.From, e.Text);
+        }
+
+        void chat_NewChatUser(object sender, ChatProcessor.ChatUserArgs e)
+        {
+            ChatInfo.ChatUser newUser = new ChatInfo.ChatUser();
+            newUser.Name = e.User.Name;
+            newUser.UID = e.User.UID;
+
+            string avatarTexture = TheGame.GameInfo.PlayerAvatars[e.User.AvatarID];
+            newUser.Icon = Texture.Get(Locations.FindDataFile(avatarTexture));
+            GUIRenderer.Chat.AddUser(newUser);
         }
 
         protected void LoadGUIElements(object sender, EventArgs args)
@@ -98,8 +147,11 @@ namespace Client
 
             if (ShowWait)
                 DrawWaitScreen();
-            else
-                GUIRenderer.Render(Now, Delta);
+            else if (GUIRenderer != null)
+            {
+                lock (GUIRenderer)
+                    GUIRenderer.Render(Now, Delta);
+            }
         }
 
         double lastDotTime = -1;

@@ -8,8 +8,19 @@ namespace Client
     public partial class ClientGame
 	{
         public event EventHandler<EventArgs> StatusChanged;
-
         public event EventHandler<EventArgs> ResourcesComplete;
+        public event EventHandler<EventArgs> ScriptsLoaded;
+
+        public class SystemMessageEventArgs : EventArgs
+        {
+            public string Text = string.Empty;
+            public SystemMessageEventArgs(string txt) : base()
+            {
+                Text = txt;
+            }
+        }
+
+        public event EventHandler<SystemMessageEventArgs> SystemMessage;
 
         public ServerConnection.ConnectionStatus Status = ServerConnection.ConnectionStatus.New;
 
@@ -52,6 +63,12 @@ namespace Client
         {
             Status = Connection.Status;
             AddPendingEvents(ResourcesComplete);
+        }
+
+        public void SendSystemMessage(string message)
+        {
+            if (SystemMessage != null)
+                SystemMessage(this, new SystemMessageEventArgs(message));
         }
 	}
 }

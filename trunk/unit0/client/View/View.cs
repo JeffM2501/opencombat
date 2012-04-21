@@ -51,21 +51,27 @@ namespace Client
             HudProcessor.StateMessage = message;
         }
 
-        public View(GameWindow window, GameState state)
+        public View(GameWindow window, ClientGame game)
         {
             Window = window;
-            State = state;
-            state.ActorCreated += new GameState.ActorEvent(state_ActorCreated);
-            state.ActorDeleted += new GameState.ActorEvent(state_ActorDeleted);
+            State = game.State;
+            State.ActorCreated += new GameState.ActorEvent(state_ActorCreated);
+            State.ActorDeleted += new GameState.ActorEvent(state_ActorDeleted);
 
-            state.MapLoaded += new EventHandler<EventArgs>(state_MapLoaded);
+            State.MapLoaded += new EventHandler<EventArgs>(state_MapLoaded);
             Window.RenderFrame += new EventHandler<FrameEventArgs>(Window_RenderFrame);
             Window.Resize += new EventHandler<EventArgs>(Window_Resize);
             Window.Unload += new EventHandler<EventArgs>(Window_Unload);
             Window.Load += new EventHandler<EventArgs>(Window_Load);
             Window.VisibleChanged += new EventHandler<EventArgs>(Window_VisibleChanged);
 
-            HudProcessor = new HUD(this);
+            HudProcessor = new HUD(this, ClientGame game);
+        }
+
+        public void LinkChat(ChatProcessor chat, ClientGame game)
+        {
+            HudProcessor.LinkChat(chat);
+            game.SystemMessage += new EventHandler<ClientGame.SystemMessageEventArgs>(HudProcessor.SystemMessageSent);
         }
 
         void state_ActorDeleted(GameState sender, GameState.Actor actor)
@@ -86,6 +92,11 @@ namespace Client
         {
             renderer = new GridWorldRenderer(State.GameWorld);
             renderer.StaticInit();
+        }
+
+        public void ScriptsLoaded(object sender, EventArgs args)
+        {
+            HudProcessor.ScriptsLoaded();
         }
 
         void Window_VisibleChanged(object sender, EventArgs e)

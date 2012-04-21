@@ -78,8 +78,33 @@ namespace Client
         public event EventHandler<ChatMessageArgs> FilterChatMessage;
         public event EventHandler<ChatMessageArgs> RecivedChatMessage;
 
+        public event EventHandler<EventArgs> OutboundChatChanged;
+
         protected List<GameMessage> PendingMessages = new List<GameMessage>();
 
+        protected string OutgoingChatLine = string.Empty;
+        public string OutboundChatLine { get { lock (OutgoingChatLine)return (string)OutgoingChatLine.Clone(); } }
+
+        public void AddOutboundChat(string text)
+        {
+            if (text == string.Empty)
+                return;
+
+            lock (OutgoingChatLine)
+                OutgoingChatLine += text;
+
+            if (OutboundChatChanged != null)
+                OutboundChatChanged(this, EventArgs.Empty);
+        }
+
+        public void ClearOutboundChat()
+        {
+            lock (OutgoingChatLine)
+                OutgoingChatLine = "";
+
+            if (OutboundChatChanged != null)
+                OutboundChatChanged(this, EventArgs.Empty);
+        }
 
         protected ServerConnection Connection = null;
 

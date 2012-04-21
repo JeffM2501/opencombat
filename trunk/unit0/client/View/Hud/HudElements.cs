@@ -18,11 +18,6 @@ namespace Client.Hud
         Color fromColor = Color.Blue;
         Color serverColor = Color.Red;
 
-        public class ChatLines
-        {
-            public ChatMessage[] messages = null;
-        }
-
         public ChatPannelRenderer(Font _font, Color _from, Color _server, string name)
         {
             font = _font;

@@ -22,6 +22,8 @@ namespace Client
         public delegate void DebugValueCallback (string name, string value);
         public event DebugValueCallback AddDebugLogItem;
 
+        public ConnectInfo GameInfo = null;
+
         protected void CallDebugLogItem(string name, string value)
         {
             if (AddDebugLogItem != null)
@@ -31,7 +33,7 @@ namespace Client
         public GameState State = null;
         protected InputSystem InputTracker = null;
 
-        ServerConnection Connection = null;
+        public ServerConnection Connection = null;
 
         protected object locker = new object();
 
@@ -74,6 +76,15 @@ namespace Client
 
         public void LoadGame(object sender, EventArgs e)
         {
+            string dir = Path.Combine(Locations.GetChacheFolder(), "scripts");
+            if (Directory.Exists(dir))
+            {
+                string scriptCacheDir = Path.Combine(dir, Connection.ScriptingInfo.ScriptHash);
+                ClientScripting.Script.Init(scriptCacheDir);
+
+                AddPendingEvents(ScriptsLoaded);
+            }
+
             State.Load();
         }
 
@@ -83,14 +94,20 @@ namespace Client
 
             Connection.StatusChanged += new EventHandler<EventArgs>(ServerConnectionStatusChanged);
             Connection.Connected += new EventHandler<EventArgs>(ConnectionComplete);
+            Connection.GameInfoLoaded += new EventHandler<ServerConnection.GameInfoEventArgs>(ConnectionGameInfoLoaded);
             Connection.Failed += new EventHandler<EventArgs>(ConnectionError);
             Connection.Disconnected += new EventHandler<EventArgs>(ConnectionEnded);
+        }
+
+        public void ConnectionGameInfoLoaded(object sender, ServerConnection.GameInfoEventArgs args)
+        {
+            ClientScripting.Script.InitGameScript(Connection.ScriptingInfo.GameStyle);
+            GameInfo = args.Info;
         }
 
         void ConnectionComplete (object sender, EventArgs args)
         {
             ClientScripting.Script.Init(Connection.ScriptingInfo.ScriptSet);
-            ClientScripting.Script.InitGameScript(Connection.ScriptingInfo.GameStyle);
         }
 
         void ConnectionError(object sender, EventArgs args)
@@ -218,7 +235,19 @@ namespace Client
 
             string scriptFile = Path.Combine(scriptPath, res.Name);
             if (!File.Exists(scriptFile))
-                return false;
+                File.Delete(scriptFile);
+
+            FileInfo file = new FileInfo(scriptFile);
+            FileStream fs = file.OpenWrite();
+            fs.Write(buffer, 0, buffer.Length);
+            fs.Close();
+
+            string scriptHashFile = scriptFile + ".md5";
+            if (!File.Exists(scriptHashFile))
+                File.Delete(scriptHashFile);
+
+            if (Utilities.GetMD5Hash(scriptFile, scriptHashFile) != res.Hash)
+                throw (new Exception("Hash on save does not match for " + scriptFile));
         }
 
         protected void CacheWorld(byte[] data, string hash)
