@@ -64,7 +64,7 @@ namespace GameInstance
         public bool GetGameInfo(GameInfo info)
         {
             ScriptScope scope = GetScope("Game");
-            if (scope == null)
+            if (scope == null || !scope.ContainsVariable("SetGameInfo"))
                 return false;
 
             dynamic func = scope.GetVariable("SetGameInfo");
@@ -74,7 +74,7 @@ namespace GameInstance
         public bool NewPlayer(Player player)
         {
             ScriptScope scope = GetScope("Game");
-            if (scope == null)
+            if (scope == null || !scope.ContainsVariable("SetNewPlayerInfo"))
                 return false;
 
             dynamic func = scope.GetVariable("SetNewPlayerInfo");
@@ -84,7 +84,7 @@ namespace GameInstance
         public void PlayerParted(Player player)
         {
             ScriptScope scope = GetScope("Game");
-            if (scope == null)
+            if (scope == null || !scope.ContainsVariable("PlayerParted"))
                 return;
 
             dynamic func = scope.GetVariable("PlayerParted");
@@ -94,7 +94,7 @@ namespace GameInstance
         public Vector4 GetSpawn(Player player)
         {
             ScriptScope scope = GetScope("Game");
-            if (scope == null)
+            if (scope == null || !scope.ContainsVariable("GetPlayerSpawn"))
                 return Vector4.Zero;
 
             dynamic func = scope.GetVariable("GetPlayerSpawn");

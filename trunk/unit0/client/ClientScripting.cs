@@ -69,7 +69,7 @@ namespace Client
         public bool InitGameScript( string gameType )
         {
             ScriptScope scope = GetScope("Game");
-            if (scope == null)
+            if (scope == null || scope.ContainsVariable("InitGame"))
                 return false;
 
             dynamic func = scope.GetVariable("InitGame");
@@ -79,7 +79,7 @@ namespace Client
         public bool LoadHudElements(HudRenderer renderer)
         {
             ScriptScope scope = GetScope("GUI");
-            if (scope == null)
+            if (scope == null || scope.ContainsVariable("LoadHud"))
                 return false;
 
             dynamic func = scope.GetVariable("LoadHud");
