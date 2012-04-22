@@ -34,5 +34,37 @@ namespace Client
                 return a;
             }
         }
+
+        protected int GetAvatarID(int id)
+        {
+            if (id < 0 || id >= GameInfo.PlayerAvatars.Count)
+                return new Random().Next(GameInfo.PlayerAvatars.Count - 1);
+
+            return id;
+        }
+
+        public string GetPlayerAvatar(UInt64 uid)
+        {
+            if (GameInfo.PlayerAvatars.Count == 0)
+                return string.Empty;
+
+            int id = -1;
+
+            if (uid == MyPlayerID)
+            {
+               if(GameInfo.AvatarID >= 0)
+                   id = GetAvatarID(GameInfo.AvatarID);
+            }
+
+            if (id < 0)
+            {
+                ChatProcessor.ChatUser chatUser = Connection.Chat.GetUserInfo(uid);
+                id = GetAvatarID(chatUser.AvatarID);
+                if (chatUser != ChatProcessor.ChatUser.Empty)
+                    chatUser.AvatarID = id; // in case it was random
+            }
+
+            return GameInfo.PlayerAvatars[id];
+        }
     }
 }
