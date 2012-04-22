@@ -187,8 +187,7 @@ namespace Client
             {
                 if (Status == ViewStatus.Playing)
                     DrawPlayField();
-                else
-                    HudProcessor.Draw(fCamera);            
+                HudProcessor.Draw(fCamera);            
             }
 
             GL.PopMatrix();

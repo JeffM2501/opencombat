@@ -324,7 +324,7 @@ namespace Client.Hud
 
             float imageQuaterHeight = Background.Height / 4.0f;
 
-            float textureU = element.size.Width/actualWidht;
+            float textureU = actualWidht/Background.Width;
 
             Vector2 o = element.GetDrawOrigin();
 
@@ -345,9 +345,9 @@ namespace Client.Hud
                 topHeight = bottomHeight = element.size.Height / 2;
 
             // do the bottom
-            float bottomU = 1.0f - (bottomHeight/Background.Height);
+            float bottomV = 1.0f - (bottomHeight/Background.Height);
 
-            GL.TexCoord2(0, bottomU);
+            GL.TexCoord2(0, bottomV);
             GL.Vertex2(0, bottomHeight);
 
             GL.TexCoord2(0, 1);
@@ -356,10 +356,8 @@ namespace Client.Hud
             GL.TexCoord2(textureU, 1);
             GL.Vertex2(actualWidht, 0);
 
-            GL.TexCoord2(textureU, bottomU);
+            GL.TexCoord2(textureU, bottomV);
             GL.Vertex2(actualWidht, bottomHeight);
-
-            float middleU = 0;
 
             if(middleHeight > 0)
             {
@@ -376,16 +374,16 @@ namespace Client.Hud
                 GL.Vertex2(actualWidht, bottomHeight + middleHeight);
             }
 
-            float TopU = 0.25f + (topHeight/Background.Height);
+            float TopV = 0.25f + (topHeight/Background.Height);
 
             // else
             GL.TexCoord2(0, 0.25f);
             GL.Vertex2(0, bottomHeight + middleHeight + topHeight);
 
-            GL.TexCoord2(0, TopU);
+            GL.TexCoord2(0, TopV);
             GL.Vertex2(0, bottomHeight + middleHeight);
 
-            GL.TexCoord2(textureU, TopU);
+            GL.TexCoord2(textureU, TopV);
             GL.Vertex2(actualWidht, bottomHeight + middleHeight);
 
             GL.TexCoord2(textureU, 0.25f);
