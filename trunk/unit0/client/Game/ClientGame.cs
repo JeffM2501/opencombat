@@ -79,6 +79,7 @@ namespace Client
 
         public void LoadGame(object sender, EventArgs e)
         {
+            SendSystemMessage("Loading Scripts");
             string dir = Path.Combine(Locations.GetChacheFolder(), "scripts");
             if (Directory.Exists(dir))
             {
@@ -143,6 +144,7 @@ namespace Client
        
         void State_MapLoaded(object sender, EventArgs e)
         {
+            SendSystemMessage("State Loaded");
             Vector3 pos = SetCameraZ(new Vector3(3, 3, 1));
 // 
 //             PlayerActor = State.AddActor(StandardActors.LocalPlayer) as LocalPlayer;
