@@ -126,7 +126,7 @@ namespace Client
 
         public void Resize()
         {
-            GUIRenderer.WindowBounds.Bounds = TheView.Window.Size;
+            GUIRenderer.WindowBounds.Bounds = TheView.Window.ClientRectangle.Size;
         }
 
         protected bool ShowWait = false;
