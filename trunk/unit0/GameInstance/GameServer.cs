@@ -36,9 +36,17 @@ namespace GameInstance
             State.Load();
 
             Player.NewPlayer += new Player.PlayerEvent(Player_NewPlayer);
+            Player.DeletedPlayer += new Player.PlayerEvent(Player_DeletedPlayer);
 
             // TODO, start the net message thread here
             // that will update sim, process chat, and handle resource requests
+        }
+
+        void Player_DeletedPlayer(Player player)
+        {
+            // this is only to make combo debugging easier, we would NOT do this in production
+            // we would tell the manager that we lost a player
+            _Die = true;
         }
 
         void Player_NewPlayer(Player player)
@@ -60,6 +68,11 @@ namespace GameInstance
                 Manager.Send("System;Kill");
                 Manager.KillMe();
             }
+
+            if (Processor != null)
+                Processor.Kill();
+
+            Processor = null;
         }
 
         World LoadMap()
@@ -115,7 +128,7 @@ namespace GameInstance
 
         public bool Die()
         {
-            return false;
+            return _Die;
         }
 
         public void Update()
