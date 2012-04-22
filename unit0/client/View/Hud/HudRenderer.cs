@@ -139,6 +139,7 @@ namespace Client.Hud
     {
         Font anouncementFont = new Font(FontFamily.GenericSansSerif, 24);
         Font chatFont = new Font(FontFamily.GenericSerif, 12);
+        Font statsFont = new Font(FontFamily.GenericSansSerif, 18);
         public TextPrinter printer = new TextPrinter(TextQuality.High);
 
         PlayerListPannelRenderer.PlayerList playerUIList = new PlayerListPannelRenderer.PlayerList();
@@ -194,6 +195,7 @@ namespace Client.Hud
         public double RenderFrequency = 1;
         public double TargetRenderFrequency = 1;
         public double UpdateFrequency = 1;
+        public double RenderTime = 1;
 
         public HudRenderer(ViewBounds bounds)
         {
@@ -314,8 +316,9 @@ namespace Client.Hud
 //             new FrameRenderer("frame", "ui/16_white_rounded.png");
             new TextLabelRenderer(chatFont, "chatFontLabel");
             new TextLabelRenderer(anouncementFont, "anouncementFontLabel");
+            new TextLabelRenderer(statsFont, "statsFontLabel");
             new TextEditRenderer(chatFont, "chatFontTextEdit");
-            new ChatPannelRenderer(chatFont, Color.Blue, Color.Red, "chatWindow");
+            new ChatPannelRenderer(chatFont, Color.Aqua, Color.Red, "chatWindow");
             new ImagePannelRenderer("image");
             new SizeableChatBoxFrame("chatbox","ui/chatbox.png");
         }
@@ -409,9 +412,11 @@ namespace Client.Hud
         {
             double v = TargetRenderFrequency;
             if (v < 1)
-                v = RenderFrequency;
+                v = RenderTime;
 
-            int f = (int)(v + 0.5f);
+            double fps = 1.0 / v;
+
+            int f = (int)(fps +0.5);;
 
             element.text = f.ToString();
         }
@@ -667,7 +672,7 @@ namespace Client.Hud
                 case Alignmnet.LeftBottom:
                     return pos;
                 case Alignmnet.LeftTop:
-                    return new Vector2(pos.X, bounds.Height + pos.Y);
+                    return new Vector2(pos.X, pos.Y - bounds.Height);
 
                 case Alignmnet.RightBottom:
                     return new Vector2(pos.X - bounds.Width, pos.Y);
