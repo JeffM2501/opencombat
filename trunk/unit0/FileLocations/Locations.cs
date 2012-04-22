@@ -314,12 +314,9 @@ namespace FileLocations
             if (!File.Exists(path))
             {
                 if (CommonDataDir != string.Empty)
-                {
                     path = GetCleanPath(Path.Combine(CommonDataDir, localPath));
-
-                    if (!File.Exists(path))
-                        path = GetCleanPath(Path.Combine(ApplicationDataDir, localPath));
-                }
+                if (!File.Exists(path))
+                    path = GetCleanPath(Path.Combine(ApplicationDataDir, localPath));
             }
 
             PathCache.Add(localPath, path);
