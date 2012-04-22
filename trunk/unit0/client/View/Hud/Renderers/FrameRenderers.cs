@@ -211,6 +211,8 @@ namespace Client.Hud
                 CachedSizes.Add(GetElementSize(element), list);
                 list.Call();
             }
+
+            base.DrawElement(element, now, frameTime);
         }
     }
 
@@ -292,6 +294,8 @@ namespace Client.Hud
             GL.Vertex2(w, h);
 
             GL.End();
+
+            base.DrawElement(element, now, frameTime);
         }
     }
 
@@ -390,6 +394,8 @@ namespace Client.Hud
             GL.Vertex2(actualWidht, bottomHeight + middleHeight + topHeight);
 
             GL.End();
+
+            base.DrawElement(element, now, frameTime);
         }
     }
 }
