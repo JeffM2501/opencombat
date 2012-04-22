@@ -40,7 +40,8 @@ namespace Client.Hud
             if (!element.focus && element.text == string.Empty)
                 return;
 
-            RectangleF rect = printer.Measure(element.text, font).BoundingBox;
+            // we add a little buffer to the width just to ensure the last character prints.
+            RectangleF rect = printer.Measure(element.text + "X", font).BoundingBox;
             float yOffset = rect.Height;
 
             Size s = element.size;
