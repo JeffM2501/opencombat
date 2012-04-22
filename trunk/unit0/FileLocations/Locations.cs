@@ -39,7 +39,8 @@ namespace FileLocations
 
             UserDirectory = userPath;
 
-            bool isBinDir = Directory.Exists(Path.Combine(Path.Combine(exePath,"../"),"bin"));
+            string parrent =  Path.GetDirectoryName(exePath);
+            bool isBinDir = new DirectoryInfo(parrent).Name.ToLower() == "bin";
 
             string exePathNoBin = exePath;
             if (isBinDir)
