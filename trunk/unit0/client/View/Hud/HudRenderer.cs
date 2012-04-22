@@ -466,6 +466,18 @@ namespace Client.Hud
                 GL.Enable(EnableCap.Lighting);
             }
         }
+
+        // shittyness to make python easer
+        public PannelElement.Alignmnet AlignRelative = PannelElement.Alignmnet.Relative;
+        public PannelElement.Alignmnet AlignLeftBottom = PannelElement.Alignmnet.LeftBottom;
+        public PannelElement.Alignmnet AlignLeftTop = PannelElement.Alignmnet.LeftTop;
+        public PannelElement.Alignmnet AlignRightBottom = PannelElement.Alignmnet.RightBottom;
+        public PannelElement.Alignmnet AlignRightTop = PannelElement.Alignmnet.RightTop;
+        public PannelElement.Alignmnet AlignCentered = PannelElement.Alignmnet.Centered;
+        public PannelElement.Alignmnet AlignTopCenter = PannelElement.Alignmnet.TopCenter;
+        public PannelElement.Alignmnet AlignBottomCenter = PannelElement.Alignmnet.BottomCenter;
+        public PannelElement.Alignmnet AlignLeftCenter = PannelElement.Alignmnet.LeftCenter;
+        public PannelElement.Alignmnet AlignRightCenter = PannelElement.Alignmnet.RightCenter;
     }
 
     public class PannelElement

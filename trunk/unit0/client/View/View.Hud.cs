@@ -97,9 +97,7 @@ namespace Client
             ChatInfo.ChatUser newUser = new ChatInfo.ChatUser();
             newUser.Name = e.User.Name;
             newUser.UID = e.User.UID;
-
-            string avatarTexture = TheGame.GameInfo.PlayerAvatars[e.User.AvatarID];
-            newUser.Icon = Texture.Get(Locations.FindDataFile(avatarTexture));
+            newUser.Icon = Texture.Get(TheGame.GetPlayerAvatar(newUser.UID));
             GUIRenderer.Chat.AddUser(newUser);
         }
 
