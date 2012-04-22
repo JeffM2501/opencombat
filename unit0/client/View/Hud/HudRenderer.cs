@@ -485,6 +485,16 @@ namespace Client.Hud
         public Vector2 pos = Vector2.Zero;
         public Size size = Size.Empty;
 
+        public PannelElement  NewChild( string name, string type )
+        {
+            PannelElement element = new PannelElement();
+            element.name = name;
+            element.pannelType = type;
+
+            children.Add(element);
+
+            return element;
+        }
 
         public void SetPosition(float x, float y)
         {
@@ -764,6 +774,7 @@ namespace Client.Hud
                 pannel.ElementRemoved(this);
         }
 
+        public static bool outLinePannels = false;
         public void Draw(double now, double frameTime)
         {
             if (!enabled || pannelType == string.Empty)
@@ -845,6 +856,35 @@ namespace Client.Hud
 
         public virtual void DrawElement(PannelElement element, double now, double frameTime)
         {
+            if (PannelElement.outLinePannels)
+            {
+                GL.PushMatrix();
+                GL.Translate(0, 0, 0.01f);
+
+                GL.Disable(EnableCap.Texture2D);
+                GL.Color4(Color.White);
+                int w = element.size.Width;
+                int h = element.size.Height;
+               
+                Vector2 o = element.GetDrawOrigin();
+
+                GL.Translate(o.X, o.Y, 0);
+
+                GL.Begin(BeginMode.LineLoop);
+
+              
+                GL.Vertex2(0, h);
+
+                GL.Vertex2(0, 0);
+
+                GL.Vertex2(w, 0);
+
+                GL.Vertex2(w, h);
+
+                GL.End();
+                GL.Enable(EnableCap.Texture2D);
+                GL.PopMatrix();
+            }
         }
 
         public virtual void ShowDialog(PannelElement element, string paramaters)
