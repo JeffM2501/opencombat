@@ -43,7 +43,7 @@ namespace Client
 
         public void DrawDebugOrthoGUI()
         {
-            DrawFPS();
+        //    DrawFPS();
             DrawDebugLogLines();
         }
 

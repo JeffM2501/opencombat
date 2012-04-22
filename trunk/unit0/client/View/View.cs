@@ -179,6 +179,8 @@ namespace Client
 
         void Window_RenderFrame(object sender, FrameEventArgs e)
         {
+            HudProcessor.Update(Window);
+
             Window.MakeCurrent();
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
             GL.PushMatrix();
