@@ -60,6 +60,14 @@ namespace Client
             GUIRenderer.Init();
         }
 
+        public void Update(GameWindow window)
+        {
+            GUIRenderer.TargetRenderFrequency = window.TargetRenderFrequency;
+            GUIRenderer.UpdateFrequency = window.UpdateFrequency;
+            GUIRenderer.RenderFrequency = window.RenderFrequency;
+            GUIRenderer.RenderTime = window.RenderPeriod;
+        }
+
         public void LinkChat(ChatProcessor chat)
         {
             chat.NewChatUser += new EventHandler<ChatProcessor.ChatUserArgs>(chat_NewChatUser);
