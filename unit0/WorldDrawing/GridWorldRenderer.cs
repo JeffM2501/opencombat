@@ -11,6 +11,8 @@ using GridWorld;
 using Renderer;
 using Textures;
 
+using System.Diagnostics;
+
 using FileLocations;
 
 namespace WorldDrawing
@@ -360,8 +362,20 @@ namespace WorldDrawing
             GL.End();
         }
 
-        public void DrawSky( Camera cam)
+        Stopwatch SkyAnimationTimer = new Stopwatch();
+
+        double Now()
         {
+            return SkyAnimationTimer.ElapsedMilliseconds * 0.001;
+        }
+
+        public double SunSpinSpeed = 1;
+
+        public void DrawSky( Camera cam )
+        {
+            if (!SkyAnimationTimer.IsRunning)
+                SkyAnimationTimer.Start();
+
             GL.Disable(EnableCap.Lighting);
             GL.Disable(EnableCap.DepthTest);
             GL.DepthMask(false);
@@ -383,6 +397,9 @@ namespace WorldDrawing
             GL.Translate(GameWorld.Info.SunPosition);
             GL.Translate(cam.GetPostion());
             cam.DoBillboard();
+
+            if (SunSpinSpeed > 0)
+                GL.Rotate(SunSpinSpeed * Now(), Vector3d.UnitY);
 
             GL.Color4(Color.White);
             Sun.Bind();
