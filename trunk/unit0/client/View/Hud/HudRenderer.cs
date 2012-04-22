@@ -439,6 +439,7 @@ namespace Client.Hud
                 GL.Normal3(0, 0, 1);
 
                 GL.PushMatrix();
+                GL.LoadIdentity();
                 GL.Translate(0, 0, -1);
 
                 foreach (PannelElement element in elements)
@@ -754,7 +755,7 @@ namespace Client.Hud
         public Vector2 GetWorldPos(Size _size)
         {
             if (parrent != null)
-                return parrent.GetWorldPos(_size) + GetDrawOrigin(_size);
+                return parrent.GetWorldPos() + GetDrawOrigin(_size);
             return GetDrawOrigin(_size);
         }
 

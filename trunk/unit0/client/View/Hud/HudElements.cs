@@ -50,7 +50,6 @@ namespace Client.Hud
             int lineCount = size.Height / lineHeight;
 
             Vector2 pos = element.GetWorldPos();
-
             for (int i = 0; i < lineCount; i++)
             {
                 ChatInfo.ChatMessage msg = info.GetRecentMessage(i);
@@ -64,10 +63,13 @@ namespace Client.Hud
                     int yoffset = i * lineHeight;
                     if (fromName != string.Empty)
                     {
-                        int xoffset = (int)(printer.Measure(fromName, font).BoundingBox.Width + 0.5);
+                        int xoffset = (int)(printer.Measure(fromName, font).BoundingBox.Width + 2.5);
 
-                        printer.Print(fromName, font, fromColor, new RectangleF(pos.X, view.Bounds.Height - (pos.Y + yoffset) - lineHeight, xoffset, lineHeight));
-                        printer.Print(msg.Text, font, element.Color, new RectangleF(pos.X + xoffset, view.Bounds.Height - (pos.Y + yoffset) - lineHeight, size.Width - xoffset, lineHeight));
+                        RectangleF fromRect = new RectangleF(pos.X, view.Bounds.Height - (pos.Y + yoffset) - lineHeight, xoffset, lineHeight);
+                        printer.Print(fromName, font, fromColor, fromRect,TextPrinterOptions.Default, TextAlignment.Near, TextDirection.LeftToRight);
+
+                        RectangleF msgRect = new RectangleF(pos.X + xoffset, view.Bounds.Height - (pos.Y + yoffset) - lineHeight, size.Width - xoffset, lineHeight);
+                        printer.Print(msg.Text, font, element.Color, msgRect);
                     }
                     else
                         printer.Print(msg.Text, font, serverColor, new RectangleF(pos.X, view.Bounds.Height - (pos.Y + yoffset) - lineHeight, size.Width, lineHeight));
