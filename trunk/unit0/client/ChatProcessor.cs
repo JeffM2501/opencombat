@@ -16,6 +16,8 @@ namespace Client
             public string Name = string.Empty;
             public UInt64 UID = UInt64.MaxValue;
             public int AvatarID = -1;
+
+            public static ChatUser Empty = new ChatUser();
         }
 
         protected Dictionary<UInt64, ChatUser> ChatUsers = new Dictionary<UInt64, ChatUser>();
@@ -34,7 +36,7 @@ namespace Client
                 if (ChatUsers.ContainsKey(uid))
                     return ChatUsers[uid];
             }
-            return null;
+            return ChatUser.Empty;
         }
 
         public UInt64 FindChatUser(string name)
