@@ -44,6 +44,8 @@ namespace Client
         protected bool Done = false;
         protected string LastError = string.Empty;
 
+        public UInt64 MyPlayerID = UInt64.MaxValue;
+
         public bool IsDone()
         {
             lock (locker)
@@ -102,8 +104,10 @@ namespace Client
 
         public void ConnectionGameInfoLoaded(object sender, ServerConnection.GameInfoEventArgs args)
         {
-            ClientScripting.Script.InitGameScript(Connection.ScriptingInfo.GameStyle);
+            MyPlayerID = args.Info.UID;
             GameInfo = args.Info;
+
+            ClientScripting.Script.InitGameScript(Connection.ScriptingInfo.GameStyle);
         }
 
         void ConnectionComplete (object sender, EventArgs args)
