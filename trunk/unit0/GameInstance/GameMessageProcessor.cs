@@ -40,6 +40,11 @@ namespace GameInstance
 
         public void Kill()
         {
+            if (Chat != null)
+                Chat.Kill();
+
+            Chat = null;
+
             ResourceProcessor.Kill();
 
             if (worker != null && worker.IsAlive)
