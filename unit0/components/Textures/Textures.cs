@@ -58,6 +58,9 @@ namespace Textures
 
         public static Texture Get(string imageFile, SmoothType smoothing, bool clamped)
         {
+            if (imageFile == null)
+                return Texture.Empty;
+
             string name = (string)imageFile.Clone();
             name += "S" + smoothing.ToString() + "C" + clamped.ToString();
             lock (TextureCaches)
@@ -246,6 +249,8 @@ namespace Textures
             }
         }
 
+        public static Texture Empty = new Texture();
+
         protected Texture(string name, FileInfo info, SmoothType smoothed, bool clamp)
         {
             Name = name;
@@ -268,6 +273,10 @@ namespace Textures
             {
                 TextureCache().Add(name, this);
             }
+        }
+
+        protected Texture()
+        {
         }
 
         public void Invalidate()
@@ -357,6 +366,9 @@ namespace Textures
 
         public void Bind()
         {
+            if (Name == string.Empty)
+                return;
+
             if (LastBound() == BoundID)
                 return;
 
@@ -376,6 +388,13 @@ namespace Textures
         {
             if (imageSize == Size.Empty)
             {
+                if (Name == string.Empty)
+                {
+                    imageSize = new Size(0,0);
+                    imageBounds = Vector2.Zero;
+                    return;
+                }
+
                 if (image != null)
                 {
                     imageSize = new Size(image.Width, image.Height);
