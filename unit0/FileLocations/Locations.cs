@@ -44,7 +44,7 @@ namespace FileLocations
 
             string exePathNoBin = exePath;
             if (isBinDir)
-                exePathNoBin = new DirectoryInfo(Path.Combine(Path.Combine(exePath, "../"), "bin")).FullName;
+                exePathNoBin = Path.GetDirectoryName(parrent);
 
             if (commonPath != string.Empty)
                 CommonDirectory = commonPath;
@@ -251,8 +251,8 @@ namespace FileLocations
             if (CommonDirectory != string.Empty)
                 CommonDataDir = Path.Combine(CommonDataDir, DataDirName);
 
-            if (Directory.Exists(Path.Combine(ApplicationDirectory, "../" + DataDirName))) // check to see if we are in a bin dir
-                ApplicationDataDir = new DirectoryInfo(Path.Combine(ApplicationDirectory, "../" + DataDirName)).FullName;
+            if (Directory.Exists(Path.Combine(Path.GetDirectoryName(ApplicationDirectory), DataDirName))) // check to see if we are in a bin dir
+                ApplicationDataDir = new DirectoryInfo(Path.Combine(Path.GetDirectoryName(ApplicationDirectory), DataDirName)).FullName;
             else if (Directory.Exists(Path.Combine(ApplicationDirectory, "../../../" + DataDirName))) // check and see if we are in a debug dir
                 ApplicationDataDir = new DirectoryInfo(Path.Combine(ApplicationDirectory, "../../../" + DataDirName)).FullName;
             else
