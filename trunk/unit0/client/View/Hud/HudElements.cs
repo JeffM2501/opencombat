@@ -15,8 +15,9 @@ namespace Client.Hud
     public class ChatPannelRenderer : PannelRenderer
     {
         Font font = null;
-        Color fromColor = Color.Blue;
-        Color serverColor = Color.Red;
+        Color fromColor = Color.Aqua;
+        Color serverColor = Color.Maroon;
+        Color ErrorColor = Color.Red;
 
         public ChatPannelRenderer(Font _font, Color _from, Color _server, string name)
         {
@@ -50,30 +51,37 @@ namespace Client.Hud
             int lineCount = size.Height / lineHeight;
 
             Vector2 pos = element.GetWorldPos();
+            int yoffset = 0;
+
             for (int i = 0; i < lineCount; i++)
             {
                 ChatInfo.ChatMessage msg = info.GetRecentMessage(i);
 
-                if (msg == null)
+                if (msg == null || yoffset >= element.size.Height)
                     break;
 
                 if (msg.Text != string.Empty)
                 {
                     string fromName = info.GetUser(msg.From).Name;
-                    int yoffset = i * lineHeight;
-                    if (fromName != string.Empty)
-                    {
-                        int xoffset = (int)(printer.Measure(fromName, font).BoundingBox.Width + 2.5);
+                   
+                    Color nameColor = fromColor;
+                    if (msg.From == ChatInfo.ErrorChatUID)
+                        nameColor = ErrorColor;
+                    else if (msg.From == ChatInfo.GameChatUID || fromName == string.Empty)
+                        nameColor = serverColor;
 
-                        RectangleF fromRect = new RectangleF(pos.X, view.Bounds.Height - (pos.Y + yoffset) - lineHeight, xoffset, lineHeight);
-                        printer.Print(fromName, font, fromColor, fromRect,TextPrinterOptions.Default, TextAlignment.Near, TextDirection.LeftToRight);
+                    if (fromName == string.Empty)
+                        fromName = "Server";
 
-                        RectangleF msgRect = new RectangleF(pos.X + xoffset, view.Bounds.Height - (pos.Y + yoffset) - lineHeight, size.Width - xoffset, lineHeight);
-                        printer.Print(msg.Text, font, element.Color, msgRect);
-                    }
-                    else
-                        printer.Print(msg.Text, font, serverColor, new RectangleF(pos.X, view.Bounds.Height - (pos.Y + yoffset) - lineHeight, size.Width, lineHeight));
-                }
+                    int xoffset = (int)(printer.Measure(fromName, font).BoundingBox.Width + 2.5);
+                    yoffset = i * lineHeight;
+    
+                    RectangleF fromRect = new RectangleF(pos.X, view.Bounds.Height - (pos.Y + yoffset) - lineHeight, xoffset, lineHeight);
+                    printer.Print(fromName, font, fromColor, fromRect,TextPrinterOptions.Default, TextAlignment.Near, TextDirection.LeftToRight);
+
+                    RectangleF msgRect = new RectangleF(pos.X + xoffset, view.Bounds.Height - (pos.Y + yoffset) - lineHeight, size.Width - xoffset, lineHeight);
+                    printer.Print(msg.Text, font, element.Color, msgRect);
+                 }
             }
         }
     }
@@ -150,6 +158,4 @@ namespace Client.Hud
             }
         }
     }
-
-  
 }
