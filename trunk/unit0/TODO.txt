@@ -18,8 +18,10 @@ Verify what dirs are writable on different OSs.
 
 --Input--
 Joysticks?
+Hook up Chat system send
 
 --Sound--
+Refactor dragon oog into a sound system.
 Implement it
 
 
@@ -30,13 +32,14 @@ Make a sim class and hook the input/view into it.
 
 
 --Networking--
-Make a server
-Load worlds on server and pack
 Use Sim on server.
 
 --Graphics--
-VBOs for speed.
+Get GUI working
 Lightmaps?
 Better textures.
 Objects.
 Actors.
+
+--Scripting--
+Figure out how to do enumerations and remove cheeze from hud defs
