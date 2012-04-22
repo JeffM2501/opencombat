@@ -5,7 +5,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client", "client\Client.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Renderer", "components\Renderer\Renderer.csproj", "{3320A147-244A-4710-90FB-A20671FEDE59}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GridWorld", "GridWorld\GridWorld.csproj", "{721F485A-C3A7-4340-AD60-A24F08E18323}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GridWorld", "gridWorld\GridWorld.csproj", "{721F485A-C3A7-4340-AD60-A24F08E18323}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Math3D", "components\Math\Math3D.csproj", "{0BC4671F-FF72-4D3E-9889-44382F6C64F2}"
 EndProject
