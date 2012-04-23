@@ -39,16 +39,12 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="IronPython, Version=2.7.0.40, Culture=neutral, PublicKeyToken=7f709c5b713576e1, processorArchitecture=MSIL">
-      <Package>/home/jeffm/assemblies/IronPython.dll</Package>
     </Reference>
     <Reference Include="Microsoft.Dynamic, Version=1.1.0.20, Culture=neutral, PublicKeyToken=7f709c5b713576e1, processorArchitecture=MSIL">
-      <Package>/home/jeffm/assemblies/Microsoft.Dynamic.dll</Package>
     </Reference>
     <Reference Include="Microsoft.Scripting, Version=1.1.0.20, Culture=neutral, PublicKeyToken=7f709c5b713576e1, processorArchitecture=MSIL">
-      <Package>/home/jeffm/assemblies/Microsoft.Scripting.dll</Package>
     </Reference>
     <Reference Include="OpenTK, Version=1.0.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
-      <Package>/home/jeffm/assemblies/OpenTK.dll</Package>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
