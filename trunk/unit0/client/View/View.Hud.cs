@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Diagnostics;
 
 using OpenTK;
+// use compatability for TextPrinter
 using OpenTK.Graphics;
 
 using GridWorld;

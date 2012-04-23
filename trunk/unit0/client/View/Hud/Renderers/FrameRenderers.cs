@@ -9,6 +9,7 @@ using Renderer;
 using FileLocations;
 
 using OpenTK;
+// use compatability for text printer
 using OpenTK.Graphics;
 
 namespace Client.Hud

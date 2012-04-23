@@ -9,6 +9,7 @@ using Renderer;
 using FileLocations;
 
 using OpenTK;
+// use compatability for TextRenderer
 using OpenTK.Graphics;
 
 namespace Client.Hud
