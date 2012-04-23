@@ -115,7 +115,7 @@ namespace Game
 
         public void AddInput(float linear, float desiredSpin, float desiredTilt)
         {
-            float movement = linear * (float)LinearSpeed;
+            //float movement = linear * (float)LinearSpeed;
 
             double Now = State.Now;
             // see where we are now
