@@ -862,9 +862,13 @@ namespace Client
                         else
                         {
                             MouseAxis mouseAxis = linkedBinding as MouseAxis;
-                            if (mouseAxis != null)
+                            if (mouseAxis != null && MouseButtonStates != null)
                             {
-                                if (mouseAxis.LimitButton == -1 || MouseButtonStates[mouseAxis.LimitButton])
+                                bool button = false;
+                                if (mouseAxis.LimitButton >= 0 && mouseAxis.LimitButton < MouseButtonStates.Length)
+                                    button = false;
+
+                                if (mouseAxis.LimitButton == -1 || button)
                                 {
                                     
                                     if (mouseAxis.IsXAxis)
