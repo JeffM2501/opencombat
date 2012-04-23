@@ -206,7 +206,6 @@ namespace Renderer
             Group group = null;
             FaceSet faceset = null;
 
-            string groupName = string.Empty;
             string objectName = string.Empty;
             string matName = string.Empty;
 

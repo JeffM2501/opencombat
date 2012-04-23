@@ -726,10 +726,6 @@ namespace GridWorld
             if (block.Geom == Cluster.Block.Geometry.Fluid)
                 return true;
 
-            int X = (int)blockPos.X;
-            int Y = (int)blockPos.Y;
-            int Z = (int)blockPos.Z;
-
             Vector3 relPos = pos - blockPos;
             
             switch (block.Geom)

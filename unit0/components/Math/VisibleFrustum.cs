@@ -237,7 +237,7 @@ namespace Math3D
 
         protected void makePlane(Vector3 v1, Vector3 v2, Vector3 eye, ref Plane plane)
         {
-            if (plane == null)
+            if (plane == Plane.Empty)
                 plane = new Plane();
 
             // get normal by crossing v1 and v2 and normalizing
