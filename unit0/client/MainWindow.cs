@@ -26,7 +26,7 @@ namespace Client
       
         protected InputSystem InputTracker = null;
 
-        protected ClientGame Game = null;
+        protected ClientGame TheGame = null;
 
         public MainWindow()
         {
@@ -34,27 +34,27 @@ namespace Client
             Window.VSync = VSyncMode.Adaptive;
 
             InputTracker = new InputSystem(Window);
-            Game = new ClientGame(InputTracker);
-            Game.ToggleDrawing += new EventHandler<EventArgs>(ToggleDebugDrawing_Changed);
-            Game.AddDebugLogItem += new ClientGame.DebugValueCallback(DebugValueCallback);
-            Game.StatusChanged += new EventHandler<EventArgs>(Game_StatusChanged);
+            TheGame = new ClientGame(InputTracker);
+            TheGame.ToggleDrawing += new EventHandler<EventArgs>(ToggleDebugDrawing_Changed);
+            TheGame.AddDebugLogItem += new ClientGame.DebugValueCallback(DebugValueCallback);
+            TheGame.StatusChanged += new EventHandler<EventArgs>(Game_StatusChanged);
            
             Window.UpdateFrame += new EventHandler<FrameEventArgs>(Window_UpdateFrame);
             Window.Closed += new EventHandler<EventArgs>(Window_Closed);
 
-            GameView = new View(Window, Game);
+            GameView = new View(Window, TheGame);
             GameView.ModifyCamera += new View.ModifyCameraCB(GameView_ModifyCamera);
 
             // so it will hopefully bet called after the view has had it's time to load the window
             Window.Load += new EventHandler<EventArgs>(Window_Load);
 
             // link up the view to the game
-            Game.ScriptsLoaded += new EventHandler<EventArgs>(GameView.ScriptsLoaded);
+            TheGame.ScriptsLoaded += new EventHandler<EventArgs>(GameView.ScriptsLoaded);
         }
 
         void Game_StatusChanged(object sender, EventArgs e)
         {
-            switch(Game.Status)
+            switch(TheGame.Status)
             {
                 case ServerConnection.ConnectionStatus.New:
                     GameView.SetStatus(View.ViewStatus.New, "Please Wait");
@@ -69,14 +69,14 @@ namespace Client
                 case ServerConnection.ConnectionStatus.WaitOptions:
                 case ServerConnection.ConnectionStatus.Playing:
                     GameView.SetStatus(View.ViewStatus.Playing, string.Empty);
-                    if (Game.Status == ServerConnection.ConnectionStatus.WaitOptions)
+                    if (TheGame.Status == ServerConnection.ConnectionStatus.WaitOptions)
                     {
                         // show some dialog shit!
                     }
                     break;
 
                 case ServerConnection.ConnectionStatus.Disconnected:
-                    GameView.SetStatus(View.ViewStatus.Errored, Game.GetLastError());
+                    GameView.SetStatus(View.ViewStatus.Errored, TheGame.GetLastError());
                     break;
             }
         }
@@ -89,7 +89,7 @@ namespace Client
 
         void ToggleDebugDrawing_Changed(object sender, EventArgs args)
         {
-            if (sender == Game.ToggleDebugDrawing && Game.ToggleDebugDrawing.Down)
+            if (sender == TheGame.ToggleDebugDrawing && TheGame.ToggleDebugDrawing.Down)
             {
                 GridWorldRenderer.DrawDebugLines = !GridWorldRenderer.DrawDebugLines;
                 Renderer.DisplayList.FlushGL();
@@ -98,12 +98,12 @@ namespace Client
 
         void GameView_ModifyCamera(Renderer.SimpleCamera cam)
         {
-            if (Game.PlayerActor != null)
+            if (TheGame.PlayerActor != null)
             {
-                GameState.BoundableActor.Location loc = Game.PlayerActor.GetLocation();
+                GameState.BoundableActor.Location loc = TheGame.PlayerActor.GetLocation();
 
                 cam.Spin = loc.Rotation.Z;
-                cam.Tilt = Game.TiltAxis.Value;
+                cam.Tilt = TheGame.TiltAxis.Value;
 
                 if (cam.Tilt > 85)
                     cam.Tilt = 85;
@@ -124,8 +124,8 @@ namespace Client
                 cam.ViewPosition.Y = 0;
                 cam.ViewPosition.Z = 18;
 
-                cam.Spin = -Game.SpinAxis.Value;
-                cam.Tilt = Game.TiltAxis.Value;
+                cam.Spin = -TheGame.SpinAxis.Value;
+                cam.Tilt = TheGame.TiltAxis.Value;
             }
            
         }
@@ -137,18 +137,18 @@ namespace Client
             string server = "localhost";
             int port = 2501;
 
-            Game.Connect(server, port);
+            TheGame.Connect(server, port);
 
             GameView.SetStatus(View.ViewStatus.Connecting, server + ":" + port.ToString());
 
-            GameView.LinkChat(Game.Connection.Chat,Game);
+            GameView.LinkChat(TheGame.Connection.Chat,TheGame);
         }
 
         void Window_Closed(object sender, EventArgs e)
         {
             QuitOnExit = true;
-            if (Game != null)
-                Game.Kill();
+            if (TheGame != null)
+                TheGame.Kill();
         }
 
         void Window_UpdateFrame(object sender, FrameEventArgs e)
@@ -156,9 +156,9 @@ namespace Client
             if (InputTracker != null)
                 InputTracker.Update();
 
-            Game.Update();
+            TheGame.Update();
 
-            if (Game.IsDone())
+            if (TheGame.IsDone())
                 Window.Exit();
         }
 
