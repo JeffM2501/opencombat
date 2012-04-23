@@ -266,10 +266,10 @@ namespace InstanceManager
             HttpListenerRequest query = PopWebQuery();
             while (query != null)
             {
-                string action = string.Empty;
+             /*   string action = string.Empty;
                 if (query.QueryString.GetValues("action").Length > 0)
                     action = query.QueryString.GetValues("action")[0];
-
+			*/
                 query = PopWebQuery();
             }
         }

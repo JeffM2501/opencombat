@@ -14,7 +14,7 @@ namespace Editor.Dialogs
 {
     public partial class TexturePicker : Form
     {
-        World TheWorld = null;
+       // World TheWorld = null;
         public int TextureID = -1;
         public int TextureOffset = -1;
 
@@ -29,7 +29,7 @@ namespace Editor.Dialogs
         {
             InitializeComponent();
 
-            TheWorld = world;
+            //TheWorld = world;
 
             foreach (World.TextureInfo info in world.Info.Textures)
             {

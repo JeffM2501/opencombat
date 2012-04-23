@@ -11,7 +11,7 @@ using FileLocations;
 using OpenTK;
 // use compatability for TextRenderer
 using OpenTK.Graphics;
-#pragma warning disable 618
+#pragma warning disable 618 , 612
 
 namespace Client.Hud
 {
@@ -139,7 +139,7 @@ namespace Client.Hud
                     float offset = 0;
                     if (element.textCursorOffset > 0)
                     {
-                        string tmp = element.text.Substring(0, element.textCursorOffset);
+                      //  string tmp = element.text.Substring(0, element.textCursorOffset);
 
                         offset = printer.Measure(element.text, font).BoundingBox.Width;
 

@@ -6,6 +6,7 @@ using System.Text;
 using OpenTK;
 // use compatiblity for GLU
 using OpenTK.Graphics;
+#pragma warning disable 618, 612
 
 #pragma warning disable 618
 

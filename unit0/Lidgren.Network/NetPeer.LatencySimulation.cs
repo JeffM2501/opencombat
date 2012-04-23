@@ -64,8 +64,8 @@ namespace Lidgren.Network
 			{
 				// no latency simulation
 				// LogVerbose("Sending packet " + numBytes + " bytes");
-				bool wasSent = ActuallySendPacket(m_sendBuffer, numBytes, target, out connectionReset);
-				// TODO: handle wasSent == false?
+				ActuallySendPacket(m_sendBuffer, numBytes, target, out connectionReset);
+				// TODO: handle ActuallySendPacket == false?
 				return;
 			}
 

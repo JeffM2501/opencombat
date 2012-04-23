@@ -145,7 +145,7 @@ namespace Client
         void State_MapLoaded(object sender, EventArgs e)
         {
             SendSystemMessage("State Loaded");
-            Vector3 pos = SetCameraZ(new Vector3(3, 3, 1));
+ //           Vector3 pos = SetCameraZ(new Vector3(3, 3, 1));
 // 
 //             PlayerActor = State.AddActor(StandardActors.LocalPlayer) as LocalPlayer;
 //  

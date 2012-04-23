@@ -304,7 +304,7 @@ namespace Editor.Dialogs
         {
             NorthID.Enabled = NorthSet.Enabled = NorthEnabled.Checked;
 
-            World.BlockDef def = BlockList.SelectedItem as World.BlockDef;
+          //  World.BlockDef def = BlockList.SelectedItem as World.BlockDef;
             if (SettingIndexes)
                 return;
 

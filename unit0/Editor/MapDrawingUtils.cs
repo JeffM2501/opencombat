@@ -21,7 +21,7 @@ namespace Editor
             Bitmap bitmap = new Bitmap(BitmapSize.Width, BitmapSize.Height, PixelFormat.Format24bppRgb);
             Graphics graphics = Graphics.FromImage(bitmap);
 
-            Brush brush = Brushes.White;
+           // Brush brush = Brushes.White;
             graphics.FillRectangle(Brushes.White,new Rectangle(0,0,bitmap.Width,bitmap.Height));
 
             World.BlockDef def = world.BlockDefs[BlockDefID];
