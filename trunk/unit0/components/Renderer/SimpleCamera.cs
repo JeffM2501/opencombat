@@ -7,6 +7,8 @@ using OpenTK;
 // use compatiblity for GLU
 using OpenTK.Graphics;
 
+#pragma warning disable 618
+
 namespace Renderer
 {
     public class Camera

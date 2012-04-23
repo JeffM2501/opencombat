@@ -11,6 +11,7 @@ using FileLocations;
 using OpenTK;
 // use compatability for text printer
 using OpenTK.Graphics;
+#pragma warning disable 618
 
 namespace Client.Hud
 {
