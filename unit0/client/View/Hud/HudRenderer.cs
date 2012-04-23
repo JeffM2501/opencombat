@@ -9,8 +9,9 @@ using System.Xml;
 using System.Xml.Serialization;
 
 using OpenTK;
-// use compatability for text printer
+// use compatibility for text printer
 using OpenTK.Graphics;
+#pragma warning disable 618
 
 using Textures;
 using Renderer;

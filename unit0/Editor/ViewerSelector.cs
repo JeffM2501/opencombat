@@ -9,6 +9,7 @@ using WorldDrawing;
 using OpenTK;
 // use compatability for glu
 using OpenTK.Graphics;
+#pragma warning disable 618
 
 namespace Editor
 {

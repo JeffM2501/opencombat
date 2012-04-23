@@ -16,7 +16,8 @@ namespace Client
         Hasher BinHases = new Hasher();
 
         Hasher RemoteDataHashes = null;
-        Hasher RemoteBinHashes = null;
+        // Use later
+        //Hasher RemoteBinHashes = null;
 
         WebClient WebConnection = null;
 
@@ -62,7 +63,7 @@ namespace Client
             NeedToDie = false;
             ErrorOnUpdate = false;
             RemoteDataHashes = null;
-            RemoteBinHashes = null;
+           // RemoteBinHashes = null;
 
             if (DataHashes == null)
                 BuildHashTables();

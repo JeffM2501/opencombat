@@ -27,7 +27,7 @@ namespace Client
 
             bool done = false;
 
-            bool runOnce = false;
+            //bool runOnce = false;
             while (!done)
             {
                 PreGame game = new PreGame();
@@ -35,7 +35,7 @@ namespace Client
 
                 if (game.ShowDialog() == DialogResult.OK)
                 {
-                    runOnce = true;
+                   // runOnce = true;
                     using (MainWindow win = new MainWindow())
                     {
                         win.Run();

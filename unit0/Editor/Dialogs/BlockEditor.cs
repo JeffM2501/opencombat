@@ -380,14 +380,14 @@ namespace Editor.Dialogs
             Redraw();
         }
 
-        bool LeftDown = false;
+        //bool LeftDown = false;
         bool RightDown = false;
         Point lastMouse = Point.Empty;
 
         private void glControl1_MouseDown(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Left)
-                LeftDown = true;
+//             if (e.Button == MouseButtons.Left)
+//                 LeftDown = true;
             if (e.Button == MouseButtons.Right)
                 RightDown = true;
             lastMouse = new Point(e.X, e.Y);
@@ -395,8 +395,8 @@ namespace Editor.Dialogs
 
         private void glControl1_MouseUp(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Left)
-                LeftDown = false;
+//             if (e.Button == MouseButtons.Left)
+//                 LeftDown = false;
             if (e.Button == MouseButtons.Right)
                 RightDown = false;
             lastMouse = new Point(e.X, e.Y);

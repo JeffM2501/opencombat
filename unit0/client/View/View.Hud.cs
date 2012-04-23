@@ -6,8 +6,9 @@ using System.Drawing;
 using System.Diagnostics;
 
 using OpenTK;
-// use compatability for TextPrinter
+// use compatibility for TextPrinter
 using OpenTK.Graphics;
+#pragma warning disable 618, 612
 
 using GridWorld;
 using Game;
@@ -113,24 +114,6 @@ namespace Client
         protected void LoadGUIElements(object sender, EventArgs args)
         {
             ClientScripting.Script.LoadHudElements(GUIRenderer);
-
-//             // call a script?
-//             PannelElement chatBox = new PannelElement();
-//             chatBox.pannelType = "chatbox";
-//             chatBox.alignment = PannelElement.Alignmnet.RightBottom;
-//             chatBox.origin = PannelElement.Alignmnet.RightBottom;
-//             chatBox.pos = new Vector2(0, 0);
-//             chatBox.size = new Size(300,250);
-//             chatBox.color = PannelElement.ElementColor.White;
-//             chatBox.enabled = true;
-// 
-//             GUIRenderer.LoadElement(chatBox);
-            return;
-            
-            string UIPath = "ui/";
-
-            foreach (string file in Locations.FindFilesInDataDirs(UIPath, "*.xml"))
-                GUIRenderer.LoadElement(UIPath + file);
         }
 
         public void Resize()
