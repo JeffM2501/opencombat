@@ -58,7 +58,7 @@
       <Project>{0BC4671F-FF72-4D3E-9889-44382F6C64F2}</Project>
       <Name>Math3D</Name>
     </ProjectReference>
-    <ProjectReference Include="..\GridWorld\GridWorld.csproj">
+    <ProjectReference Include="..\gridWorld\GridWorld.csproj">
       <Project>{721F485A-C3A7-4340-AD60-A24F08E18323}</Project>
       <Name>GridWorld</Name>
     </ProjectReference>
