@@ -32,7 +32,7 @@ namespace FileLocations
         // mostly used for editors and things that don't call startup
         public static string DataPathOveride = string.Empty;
 
-        public static void Statup (string exePath, string commonPath, string userPath, string exeName, string[] args)
+        public static void Startup (string exePath, string commonPath, string userPath, string exeName, string[] args)
         {
             Args = args;
             ThisExePath = exePath;

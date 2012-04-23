@@ -67,7 +67,7 @@ namespace Client
 
             Locations.DataDirName = "base_data";
 
-            Locations.Statup(Application.StartupPath,commonPath,Application.UserAppDataPath,Path.GetFileName(Application.ExecutablePath),args);
+            Locations.Startup(Application.StartupPath,commonPath,Application.UserAppDataPath,Path.GetFileName(Application.ExecutablePath),args);
             return Locations.LaunchHigherExe();
 
         }
