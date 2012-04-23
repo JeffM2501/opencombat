@@ -5,7 +5,7 @@ using System.Text;
 using System.Drawing;
 
 using OpenTK;
-using OpenTK.Graphics;
+using OpenTK.Graphics.OpenGL;
 
 using GridWorld;
 using Game;
@@ -25,10 +25,6 @@ namespace Client
         protected StaticVertexBufferObject vbo1 = null;
         protected List<StaticVertexBufferObject> vbos = new List<StaticVertexBufferObject>();
 
-        Font chatFont = new Font(FontFamily.GenericSerif, 12);
-        public TextPrinter printer = new TextPrinter(TextQuality.High);
-
-
         public void DrawDebugPerspectiveGUI()
         {
             GL.Disable(EnableCap.Texture2D);
@@ -43,8 +39,7 @@ namespace Client
 
         public void DrawDebugOrthoGUI()
         {
-        //    DrawFPS();
-            DrawDebugLogLines();
+
         }
 
         protected void DrawDebugCrap()
@@ -67,34 +62,12 @@ namespace Client
             
         }
 
-        void DrawFPS()
-        {
-            printer.Begin();
-            printer.Print("FPS:" + (1.0f / Window.RenderTime).ToString(), chatFont, Color.White, new RectangleF(0, 0, 100, 25), TextPrinterOptions.Default);
-            printer.End();
-        }
-
         public void AddDebugLogItem(string key, string value)
         {
             if (DebugLogLines.ContainsKey(key))
                 DebugLogLines[key] = value;
             else
                 DebugLogLines.Add(key, value);
-        }
-
-        void DrawDebugLogLines()
-        {
-            int lineHeight = 25;
-            int height = Window.Height - (DebugLogLines.Count * lineHeight);
-
-            printer.Begin();
-            foreach (KeyValuePair<string, string> line in DebugLogLines)
-            {
-                printer.Print(line.Key + ":"+ line.Value, chatFont, Color.White, new RectangleF(0, height, 250, lineHeight), TextPrinterOptions.Default);
-                height += lineHeight;
-            }
-
-            printer.End();
         }
 
         void DrawDebugObjects()

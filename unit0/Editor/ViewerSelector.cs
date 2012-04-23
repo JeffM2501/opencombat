@@ -7,6 +7,7 @@ using GridWorld;
 using WorldDrawing;
 
 using OpenTK;
+// use compatability for glu
 using OpenTK.Graphics;
 
 namespace Editor

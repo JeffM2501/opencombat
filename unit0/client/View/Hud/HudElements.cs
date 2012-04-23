@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using OpenTK;
+// use compatibility for TextPrinter
 using OpenTK.Graphics;
 using Renderer;
 using FileLocations;

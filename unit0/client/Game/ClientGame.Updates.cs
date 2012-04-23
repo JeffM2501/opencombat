@@ -7,7 +7,7 @@ using Game;
 using Game.Messages;
 
 using OpenTK;
-using OpenTK.Graphics;
+using OpenTK.Graphics.OpenGL;
 using OpenTK.Input;
 
 namespace Client

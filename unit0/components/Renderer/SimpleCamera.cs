@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 
 using OpenTK;
+// use compatiblity for GLU
 using OpenTK.Graphics;
 
 namespace Renderer

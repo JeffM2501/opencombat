@@ -9,6 +9,7 @@ using System.Xml;
 using System.Xml.Serialization;
 
 using OpenTK;
+// use compatability for text printer
 using OpenTK.Graphics;
 
 using Textures;

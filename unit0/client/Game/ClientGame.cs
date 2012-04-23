@@ -10,7 +10,7 @@ using Game.Messages;
 using GridWorld;
 
 using OpenTK;
-using OpenTK.Graphics;
+using OpenTK.Graphics.OpenGL;
 using OpenTK.Input;
 using FileLocations;
 

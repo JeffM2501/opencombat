@@ -10,7 +10,7 @@ using Microsoft.Scripting.Hosting;
 
 using Game;
 using OpenTK;
-using OpenTK.Graphics;
+using OpenTK.Graphics.OpenGL;
 
 using Client.Hud;
 
