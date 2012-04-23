@@ -39,13 +39,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="OpenTK, Version=1.0.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
-      <Package>/home/jeffm/assemblies/OpenTK.dll</Package>
     </Reference>
     <Reference Include="OpenTK.Compatibility, Version=1.0.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
-      <Package>/home/jeffm/assemblies/OpenTK.Compatibility.dll</Package>
     </Reference>
     <Reference Include="OpenTK.GLControl, Version=1.0.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
-      <Package>/home/jeffm/assemblies/OpenTK.GLControl.dll</Package>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
