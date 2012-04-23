@@ -13,7 +13,7 @@ namespace Client
     class Patcher
     {
         Hasher DataHashes = new Hasher();
-        Hasher BinHases = new Hasher();
+       // Hasher BinHases = new Hasher();
 
         Hasher RemoteDataHashes = null;
         // Use later

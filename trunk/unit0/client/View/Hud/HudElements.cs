@@ -7,6 +7,8 @@ using System.Text;
 using OpenTK;
 // use compatibility for TextPrinter
 using OpenTK.Graphics;
+#pragma warning disable 618 , 612
+
 using Renderer;
 using FileLocations;
 using Textures;
@@ -78,7 +80,7 @@ namespace Client.Hud
                     yoffset = i * lineHeight;
     
                     RectangleF fromRect = new RectangleF(pos.X, view.Bounds.Height - (pos.Y + yoffset) - lineHeight, xoffset, lineHeight);
-                    printer.Print(fromName, font, fromColor, fromRect,TextPrinterOptions.Default, TextAlignment.Near, TextDirection.LeftToRight);
+                    printer.Print(fromName, font, nameColor, fromRect,TextPrinterOptions.Default, TextAlignment.Near, TextDirection.LeftToRight);
 
                     RectangleF msgRect = new RectangleF(pos.X + xoffset, view.Bounds.Height - (pos.Y + yoffset) - lineHeight, size.Width - xoffset, lineHeight);
                     printer.Print(msg.Text, font, element.Color, msgRect);
@@ -90,8 +92,8 @@ namespace Client.Hud
     public class PlayerListPannelRenderer : PannelRenderer
     {
         Font font = null;
-        Color fromColor = Color.Blue;
-        Color serverColor = Color.Red;
+       // Color fromColor = Color.Blue;
+       // Color serverColor = Color.Red;
 
         public class PlayerList
         {
@@ -110,8 +112,8 @@ namespace Client.Hud
         public PlayerListPannelRenderer(Font _font, Color _from, Color _server, string name)
         {
             font = _font;
-            fromColor = _from;
-            serverColor = _server;
+            //fromColor = _from;
+           // serverColor = _server;
 
             if (!Pannels.ContainsKey(name))
                 Pannels.Add(name, this);

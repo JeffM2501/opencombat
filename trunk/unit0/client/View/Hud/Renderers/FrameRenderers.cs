@@ -323,7 +323,7 @@ namespace Client.Hud
 
         public override void DrawElement(PannelElement element, double now, double frameTime)
         {
-            float thirdHeight = element.size.Height / 3.0f;
+          //  float thirdHeight = element.size.Height / 3.0f;
             float actualWidht = Background.Width;
             if (element.size.Width < actualWidht)
                 actualWidht = element.size.Width;

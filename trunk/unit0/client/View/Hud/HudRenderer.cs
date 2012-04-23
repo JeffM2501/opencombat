@@ -11,7 +11,7 @@ using System.Xml.Serialization;
 using OpenTK;
 // use compatibility for text printer
 using OpenTK.Graphics;
-#pragma warning disable 618
+#pragma warning disable 618 , 612
 
 using Textures;
 using Renderer;
@@ -815,9 +815,9 @@ namespace Client.Hud
                 xml.Serialize(fs, this);
                 fs.Close();
             }
-            catch (System.Exception ex)
+            catch (System.Exception /*ex*/)
             {
-                string l = ex.Message;
+                //string l = ex.Message;
             }
         }
     }

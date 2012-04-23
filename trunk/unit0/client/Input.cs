@@ -478,7 +478,6 @@ namespace Client
         {
             foreach (MouseButton binding in MouseButtonBindings)
             {
-                int oldCount = binding.ControlButton.useCount;
                 binding.ControlButton.useCount--;
                 if (binding.ControlButton.useCount <= 0)
                 {
@@ -787,7 +786,7 @@ namespace Client
             if (!InTextMode())
                 return;
 
-            double now = Now();
+           // double now = Now();
         }
 
         Stopwatch InputTimer = new Stopwatch();

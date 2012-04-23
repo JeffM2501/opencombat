@@ -177,7 +177,7 @@ namespace InstanceManager
 
                         case NetIncomingMessageType.StatusChanged:
                             NetConnectionStatus status = (NetConnectionStatus)im.ReadByte();
-							string reason = im.ReadString();
+							//string reason = im.ReadString();
                             if (status == NetConnectionStatus.Disconnecting)
                             {
                                 lock (Peers)

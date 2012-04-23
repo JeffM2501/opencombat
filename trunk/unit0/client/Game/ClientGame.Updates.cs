@@ -57,7 +57,7 @@ namespace Client
             {
                 double time = now - 0.25f;
 
-                GameState.BoundableActor.Location locNowBefore = PlayerActor.GetLocationAtTime(now);
+               // GameState.BoundableActor.Location locNowBefore = PlayerActor.GetLocationAtTime(now);
 
                 GameState.BoundableActor.Location loc = PlayerActor.GetLocationAtTime(time);
 
@@ -69,11 +69,11 @@ namespace Client
 
                 if (PlayerActor.ClearHistoryBeforeTime(time)) // if there were enough updates to clear any
                 {
-                    GameState.BoundableActor.Location locAfter = PlayerActor.GetLocationAtTime(time);
+                  //  GameState.BoundableActor.Location locAfter = PlayerActor.GetLocationAtTime(time);
 
-                    GameState.BoundableActor.Location locNowAfter = PlayerActor.GetLocationAtTime(now);
+                  //  GameState.BoundableActor.Location locNowAfter = PlayerActor.GetLocationAtTime(now);
 
-                    Vector3 d = locNowBefore.Position - locNowAfter.Position;
+                 //   Vector3 d = locNowBefore.Position - locNowAfter.Position;
                     //  if (d.LengthFast > 0.0001)
                     // An error happend, do some debugin
                 }
