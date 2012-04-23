@@ -41,7 +41,6 @@
     <Reference Include="OpenTK, Version=1.0.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\opentk\Binaries\OpenTK\Release\OpenTK.dll</HintPath>
-      <Package>/home/jeffm/assemblies/OpenTK.dll</Package>
     </Reference>
   </ItemGroup>
   <ItemGroup>
