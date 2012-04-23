@@ -69,7 +69,7 @@
       <Project>{EE05A0AF-465E-4A59-9C6F-7FF2A115AC30}</Project>
       <Name>Game</Name>
     </ProjectReference>
-    <ProjectReference Include="..\GridWorld\GridWorld.csproj">
+    <ProjectReference Include="..\gridWorld\GridWorld.csproj">
       <Project>{721F485A-C3A7-4340-AD60-A24F08E18323}</Project>
       <Name>GridWorld</Name>
     </ProjectReference>

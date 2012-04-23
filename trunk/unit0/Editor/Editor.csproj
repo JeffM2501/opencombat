@@ -154,7 +154,7 @@
       <Project>{6116C236-5282-47FD-B802-459E12D047FB}</Project>
       <Name>FileLocations</Name>
     </ProjectReference>
-    <ProjectReference Include="..\GridWorld\GridWorld.csproj">
+    <ProjectReference Include="..\gridWorld\GridWorld.csproj">
       <Project>{721F485A-C3A7-4340-AD60-A24F08E18323}</Project>
       <Name>GridWorld</Name>
     </ProjectReference>
