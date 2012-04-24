@@ -832,7 +832,11 @@ namespace Client
                              MouseAxis mouseAxis = linkedBinding as MouseAxis;
                              if (mouseAxis != null)
                              {
-                                 if (mouseAxis.LimitButton == -1 || MouseButtonStates[mouseAxis.LimitButton])
+								bool button = false;
+								if (mouseAxis.LimitButton >= 0 && mouseAxis.LimitButton < MouseButtonStates.Length)
+									button = MouseButtonStates[mouseAxis.LimitButton];
+									                                    
+                                 if (mouseAxis.LimitButton == -1 || button)
                                  {
                                      if (mouseAxis.IsXAxis)
                                          thisIncrement = MouseDelta.X * mouseAxis.Factor;
