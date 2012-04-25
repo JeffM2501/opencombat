@@ -311,8 +311,11 @@ namespace Client
             window.Mouse.ButtonDown += new EventHandler<MouseButtonEventArgs>(Mouse_ButtonDown);
             window.Mouse.Move += new EventHandler<MouseMoveEventArgs>(Mouse_Move);
             window.Mouse.WheelChanged += new EventHandler<MouseWheelEventArgs>(Mouse_WheelChanged);
-
-            MouseButtonStates = new bool[window.Mouse.NumberOfButtons];
+			
+			if (window.Mouse.NumberOfButtons == 0)
+				MouseButtonStates = new bool[3]; // stupid macintosh!
+			else
+            	MouseButtonStates = new bool[window.Mouse.NumberOfButtons];
 
             TextMode = false;
 
