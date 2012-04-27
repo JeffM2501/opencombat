@@ -47,6 +47,7 @@ namespace Client
         public UInt64 MyPlayerID = UInt64.MaxValue;
         public int MyAvatarID = -1;
         public int MyTeamID = -1;
+        public int MyModelID = -1;
 
         public bool IsDone()
         {
@@ -88,6 +89,8 @@ namespace Client
                 string scriptCacheDir = Path.Combine(dir, Connection.ScriptingInfo.ScriptHash);
                 ClientScripting.Script.Init(scriptCacheDir);
 
+                ClientScripting.Script.InitGameScript(Connection.ScriptingInfo.GameStyle);
+
                 AddPendingEvents(ScriptsLoaded);
             }
 
@@ -110,10 +113,9 @@ namespace Client
             MyPlayerID = args.Info.UID;
             MyAvatarID = args.Info.AvatarID;
             MyTeamID = args.Info.TeamID;
+            MyModelID = args.Info.ModelID;
 
             GameInfo = args.Info;
-
-            ClientScripting.Script.InitGameScript(Connection.ScriptingInfo.GameStyle);
         }
 
         void ConnectionComplete (object sender, EventArgs args)

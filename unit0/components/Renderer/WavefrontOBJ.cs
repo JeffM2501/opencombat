@@ -17,7 +17,7 @@ namespace Renderer
 
         public delegate string FileCallback(string file);
 
-        public static FileCallback FindFile = null;
+        public FileCallback FindFile = null;
 
         public class Material
         {

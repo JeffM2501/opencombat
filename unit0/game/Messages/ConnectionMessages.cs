@@ -52,6 +52,7 @@ namespace Game.Messages
         public string ScriptPackHash = string.Empty;
 
         public int AvatarID = -1;
+        public int ModelID = -1;
 
         public class OptionInfo
         {
@@ -104,6 +105,7 @@ namespace Game.Messages
             outMsg.Write(PID);
             outMsg.Write(Name);
             outMsg.Write(AvatarID);
+            outMsg.Write(ModelID);
 
             outMsg.Write(TeamID);
             outMsg.Write(TeamName);
@@ -135,6 +137,7 @@ namespace Game.Messages
             PID = msg.ReadUInt64();
             Name = msg.ReadString();
             AvatarID = msg.ReadInt32();
+            ModelID = msg.ReadInt32();
 
             TeamID = msg.ReadInt32();
             TeamName = msg.ReadString();;

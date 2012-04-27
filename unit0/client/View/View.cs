@@ -69,6 +69,26 @@ namespace Client
             Window.VisibleChanged += new EventHandler<EventArgs>(Window_VisibleChanged);
 
             HudProcessor = new HUD(this, game);
+
+            PlayerRenderer.GetPlayerModel = new PlayerRenderer.GraphicInfoCB(GetPlayerModel);
+            PlayerRenderer.GetPlayerTexture = new PlayerRenderer.GraphicInfoCB(GetPlayerTexture);
+        }
+
+        protected string GetPlayerModel(UInt64 GUID)
+        {
+            return TheGame.PlayerModels[TheGame.MyModelID].Model;
+        }
+
+        protected string GetPlayerTexture(UInt64 GUID)
+        {
+            if (TheGame.PlayerModels[TheGame.MyModelID].TeamSkin.Count == 1)
+                return TheGame.PlayerModels[TheGame.MyModelID].TeamSkin[0];
+
+            int team = new Random().Next(TheGame.PlayerModels[TheGame.MyModelID].TeamSkin.Count-1);
+            if (TheGame.MyTeamID >= 0 && TheGame.MyTeamID < TheGame.PlayerModels[TheGame.MyModelID].TeamSkin.Count)
+                team = TheGame.MyTeamID;
+
+            return TheGame.PlayerModels[TheGame.MyModelID].TeamSkin[team];
         }
 
         public void LinkChat(ChatProcessor chat, ClientGame game)

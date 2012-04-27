@@ -198,6 +198,7 @@ namespace GameInstance
             info.UID = player.UID;
             info.Name = player.Name;
             info.AvatarID = player.AvatarID;
+            info.ModelID = (int)player.ModelID;
             info.TeamID = -1;
             info.TeamName = string.Empty;
             info.ScriptPack = GameInfo.Info.ClientScriptPack;
