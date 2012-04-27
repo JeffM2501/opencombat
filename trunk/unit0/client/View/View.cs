@@ -32,6 +32,8 @@ namespace Client
 
         protected HUD HudProcessor = null;
 
+        protected ClientGame TheGame = null;
+
         public enum ViewStatus
         {
             New,
@@ -53,6 +55,7 @@ namespace Client
 
         public View(GameWindow window, ClientGame game)
         {
+            TheGame = game;
             Window = window;
             State = game.State;
             State.ActorCreated += new GameState.ActorEvent(state_ActorCreated);

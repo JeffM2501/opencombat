@@ -22,6 +22,8 @@ namespace WorldDrawing
         public static WavefrontOBJ Tank = null;
         public static List<Texture> TeamTextures = new List<Texture>();
 
+        int textureOffset = 0;
+
         public static OBJRenderer Renderer = null;
 
         public static Texture Shadow = null;
@@ -35,6 +37,12 @@ namespace WorldDrawing
         {
             return Locations.FindDataFile(name);
         }
+
+        public delegate Texture GetPlayerTextureCB(UInt64 GUID);
+        public static GetPlayerTextureCB GetPlayerTexture;
+
+        public delegate string GetPlayerModelCB(UInt64 GUID);
+        public static GetPlayerModelCB GetPlayerModel;
 
         public PlayerRenderer(PlayerActor actor) : base(actor)
         {
