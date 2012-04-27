@@ -45,6 +45,8 @@ namespace Client
         protected string LastError = string.Empty;
 
         public UInt64 MyPlayerID = UInt64.MaxValue;
+        public int MyAvatarID = -1;
+        public int MyTeamID = -1;
 
         public bool IsDone()
         {
@@ -106,6 +108,9 @@ namespace Client
         public void ConnectionGameInfoLoaded(object sender, ServerConnection.GameInfoEventArgs args)
         {
             MyPlayerID = args.Info.UID;
+            MyAvatarID = args.Info.AvatarID;
+            MyTeamID = args.Info.TeamID;
+
             GameInfo = args.Info;
 
             ClientScripting.Script.InitGameScript(Connection.ScriptingInfo.GameStyle);
@@ -145,13 +150,11 @@ namespace Client
         void State_MapLoaded(object sender, EventArgs e)
         {
             SendSystemMessage("State Loaded");
- //           Vector3 pos = SetCameraZ(new Vector3(3, 3, 1));
-// 
-//             PlayerActor = State.AddActor(StandardActors.LocalPlayer) as LocalPlayer;
-//  
-//             PlayerActor.LastUpdatePostion = new Vector3(pos);
-//             PlayerActor.LastUpdateRotation = new Vector3(0, 0, 0);
-//             PlayerActor.LastUpdateTime = State.Now;
+            Vector3 pos = SetCameraZ(new Vector3(3, 3, 1));
+            PlayerActor = State.AddActor(StandardActors.LocalPlayer, MyPlayerID) as LocalPlayer;
+            PlayerActor.LastUpdatePostion = new Vector3(pos);
+            PlayerActor.LastUpdateRotation = new Vector3(0, 0, 0);
+            PlayerActor.LastUpdateTime = State.Now;
         }
 
         World GetWorld()

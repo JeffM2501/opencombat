@@ -73,9 +73,13 @@ namespace Renderer
                 color = Color.White;
             }
 
-            public void Bind ()
+            public void SetColor()
             {
                 GL.Color4(color);
+            }
+            public void Bind ()
+            {
+                SetColor();
                 if (texture != null)
                     texture.Bind();
                 else
@@ -202,13 +206,25 @@ namespace Renderer
             return buffer.Pack();
         }
 
+        public delegate void BindTextureCB(OBJRenderer.Material mat);
+
+        public BindTextureCB BindTexture;
+
+        protected void Bind(OBJRenderer.Material mat)
+        {
+            if (BindTexture != null)
+                BindTexture(mat);
+            else
+                mat.Bind();
+        }
+
         public void Draw()
         {
             if (UseVBO)
             {
                 foreach (KeyValuePair<OBJRenderer.Material, StaticVertexBufferObject> vbos in VBOs)
                 {
-                    vbos.Key.Bind();
+                    Bind(vbos.Key);
                     vbos.Value.Draw();
                 }
             }
@@ -220,7 +236,7 @@ namespace Renderer
                     {
                         foreach (KeyValuePair<string, WavefrontOBJ.FaceSet> faceset in group.FaceSets)
                         {
-                            GetMaterial(faceset.Value).Bind();
+                            Bind(GetMaterial(faceset.Value));
 
                             foreach (WavefrontOBJ.Face face in faceset.Value.Faces)
                             {
