@@ -1,5 +1,5 @@
 def InitGame (gameType):
-    icoTank = Game.AddModel("models/icotank/");
+    icoTank = Game.AddModel("models/icotank/icotank.obj");
     icoTank.AddTeamSkin("models/icotank/blue.png");
     icoTank.AddTeamSkin("models/icotank/purple.png");
     icoTank.AddTeamSkin("models/icotank/red.png");

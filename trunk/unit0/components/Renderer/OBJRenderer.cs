@@ -58,8 +58,6 @@ namespace Renderer
 
                 if (FindTexture != null)
                     file = FindTexture(mat.DiffuseTexture);
-                else if (WavefrontOBJ.FindFile != null)
-                    file = WavefrontOBJ.FindFile(mat.DiffuseTexture);
 
                 if (file != string.Empty && File.Exists(file))
                     texture = Texture.Get(file);
