@@ -18,6 +18,8 @@ namespace Client
         public InputSystem.Axis ZAxis = null;
         public InputSystem.Button ResetZ = null;
 
+        public InputSystem.Button ResetSpin = null;
+
         // debug buttons
         public InputSystem.Button ToggleDebugDrawing = null;
 
@@ -37,6 +39,8 @@ namespace Client
             ZAxis = InputTracker.AddAxis("ZAxis", true, false);
             ResetZ = InputTracker.AddButton("ResetZ");
             ResetZ.Changed = new EventHandler<EventArgs>(ResetZ_Changed);
+            ResetSpin = InputTracker.AddButton("ResetSpin");
+            ResetSpin.Changed = new EventHandler<EventArgs>(ResetSpin_Changed);
 
             ChatButton = InputTracker.AddButton("Chat",new EventHandler<EventArgs>(InputTracker_ChatButton_Changed));
 
@@ -118,12 +122,7 @@ namespace Client
 
             InputTracker.AddBinding(new InputSystem.KeyButton("ToggleDebugDraw", Key.F1));
 
-            InputTracker.AddBinding(new InputSystem.KeyButton("DX+", Key.Keypad6));
-            InputTracker.AddBinding(new InputSystem.KeyButton("DY+", Key.Keypad8));
-            InputTracker.AddBinding(new InputSystem.KeyButton("DX-", Key.Keypad4));
-            InputTracker.AddBinding(new InputSystem.KeyButton("DY-", Key.Keypad2));
-            InputTracker.AddBinding(new InputSystem.KeyButton("DZ+", Key.Keypad9));
-            InputTracker.AddBinding(new InputSystem.KeyButton("DZ-", Key.Keypad3));
+            InputTracker.AddBinding(new InputSystem.KeyButton("ResetSpin", Key.Home));
         }
 
     }

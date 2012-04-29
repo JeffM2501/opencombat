@@ -98,6 +98,11 @@ namespace Client
             CameraOffetZ = 1;
         }
 
+        void ResetSpin_Changed(object sender, EventArgs args)
+        {
+            SpinAxis.Value = 0;
+        }
+
         void ToggleDebugDrawing_Changed(object sender, EventArgs args)
         {
             if (ToggleDrawing != null)
