@@ -20,12 +20,6 @@ namespace Client
 
         // debug buttons
         public InputSystem.Button ToggleDebugDrawing = null;
-        public InputSystem.Button MoveDebugRayXPos = null;
-        public InputSystem.Button MoveDebugRayYPos = null;
-        public InputSystem.Button MoveDebugRayXNeg = null;
-        public InputSystem.Button MoveDebugRayYNeg = null;
-        public InputSystem.Button MoveDebugRayZPos = null;
-        public InputSystem.Button MoveDebugRayZNeg = null;
 
         // tank movement
         protected InputSystem.Axis TankLinearAxis = null;
@@ -47,13 +41,6 @@ namespace Client
             ChatButton = InputTracker.AddButton("Chat",new EventHandler<EventArgs>(InputTracker_ChatButton_Changed));
 
             ToggleDebugDrawing = InputTracker.AddButton("ToggleDebugDraw", new EventHandler<EventArgs>(ToggleDebugDrawing_Changed));
-
-            //             MoveDebugRayXPos = InputTracker.AddButton("DX+", new EventHandler<EventArgs>(MoveDebugRay));
-            //             MoveDebugRayYPos = InputTracker.AddButton("DY+", new EventHandler<EventArgs>(MoveDebugRay));
-            //             MoveDebugRayXNeg = InputTracker.AddButton("DX-", new EventHandler<EventArgs>(MoveDebugRay));
-            //             MoveDebugRayYNeg = InputTracker.AddButton("DY-", new EventHandler<EventArgs>(MoveDebugRay));
-            //             MoveDebugRayZPos = InputTracker.AddButton("DZ+", new EventHandler<EventArgs>(MoveDebugRay));
-            //             MoveDebugRayZNeg = InputTracker.AddButton("DZ-", new EventHandler<EventArgs>(MoveDebugRay));
 
             TankLinearAxis = InputTracker.AddAxis("TankLinear", true, false);
             TankRotaryAxis = InputTracker.AddAxis("TankRotary", true, false);
