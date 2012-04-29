@@ -102,7 +102,7 @@ namespace Client
             {
                 GameState.BoundableActor.Location loc = TheGame.PlayerActor.GetLocation();
 
-                cam.Spin = loc.Rotation.Z;
+                cam.Spin = loc.Rotation.Z + TheGame.SpinAxis.Value;
                 cam.Tilt = TheGame.TiltAxis.Value;
 
                 if (cam.Tilt > 85)
@@ -114,7 +114,7 @@ namespace Client
                 cam.ViewPosition.Z += 1;
 
                 float offset = 2;
-                Vector2 rot = VectorHelper2.FromAngle(cam.Spin);
+                Vector2 rot = VectorHelper2.FromAngle(loc.Rotation.Z + TheGame.SpinAxis.Value);
                 cam.ViewPosition.X -= rot.X * offset;
                 cam.ViewPosition.Y -= rot.Y * offset;
             }
