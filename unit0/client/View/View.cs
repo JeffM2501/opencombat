@@ -70,25 +70,25 @@ namespace Client
 
             HudProcessor = new HUD(this, game);
 
-            PlayerRenderer.GetPlayerModel = new PlayerRenderer.GraphicInfoCB(GetPlayerModel);
+            PlayerRenderer.GetPlayerModel = new PlayerRenderer.GetPlayerModelCB(GetPlayerModel);
             PlayerRenderer.GetPlayerTexture = new PlayerRenderer.GraphicInfoCB(GetPlayerTexture);
         }
 
-        protected string GetPlayerModel(UInt64 GUID)
+        protected PlayerModelDescriptor GetPlayerModel(UInt64 GUID)
         {
-            return TheGame.PlayerModels[TheGame.MyModelID].Model;
+            return TheGame.PlayerModels[TheGame.MyModelID];
         }
 
-        protected string GetPlayerTexture(UInt64 GUID)
+        protected int GetPlayerTexture(UInt64 GUID)
         {
             if (TheGame.PlayerModels[TheGame.MyModelID].TeamSkin.Count == 1)
-                return TheGame.PlayerModels[TheGame.MyModelID].TeamSkin[0];
+                return 0;
 
             int team = new Random().Next(TheGame.PlayerModels[TheGame.MyModelID].TeamSkin.Count-1);
             if (TheGame.MyTeamID >= 0 && TheGame.MyTeamID < TheGame.PlayerModels[TheGame.MyModelID].TeamSkin.Count)
                 team = TheGame.MyTeamID;
 
-            return TheGame.PlayerModels[TheGame.MyModelID].TeamSkin[team];
+            return team;
         }
 
         public void LinkChat(ChatProcessor chat, ClientGame game)
