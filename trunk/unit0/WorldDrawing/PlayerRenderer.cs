@@ -15,12 +15,32 @@ using OpenTK.Graphics.OpenGL;
 
 namespace WorldDrawing
 {
+    public class PlayerModelDescriptor
+    {
+        public string Model = string.Empty;
+        public List<string> TeamSkin = new List<string>();
+
+        public bool YIsUp = false;
+
+        public PlayerModelDescriptor(string model)
+        {
+            Model = model;
+        }
+
+        public void AddTeamSkin(string skin)
+        {
+            TeamSkin.Add(skin);
+        }
+    }
+
     public class PlayerRenderer : ActorRenderer
     {
         public PlayerActor Player = null;
 
         public WavefrontOBJ Tank = null;
         public Texture Skin = null;
+
+        protected bool YIsUp = true;
 
         public string Folder = string.Empty;
 
@@ -40,11 +60,11 @@ namespace WorldDrawing
             return Locations.FindDataFile(name);
         }
 
-        public delegate string GraphicInfoCB(UInt64 GUID);
+        public delegate int GraphicInfoCB(UInt64 GUID);
         public static GraphicInfoCB GetPlayerTexture;
 
-        public delegate string GetPlayerModelCB(UInt64 GUID);
-        public static GraphicInfoCB GetPlayerModel;
+        public delegate PlayerModelDescriptor GetPlayerModelCB(UInt64 GUID);
+        public static GetPlayerModelCB GetPlayerModel;
 
         public PlayerRenderer(PlayerActor actor) : base(actor)
         {
@@ -56,17 +76,29 @@ namespace WorldDrawing
             if(OBJRenderer.FindTexture == null)
                 OBJRenderer.FindTexture = FindTexture;
 
+            PlayerModelDescriptor desc = null;
+
             string file = "models/icotank/icotank.obj";
             if (GetPlayerModel != null)
-                file = GetPlayerModel(actor.GUID);
+                desc = GetPlayerModel(actor.GUID);
+
+            if (desc != null)
+            {
+                file = desc.Model;
+                YIsUp = desc.YIsUp;
+            }
 
             Folder = Path.GetDirectoryName(file);
 
             Tank.Read(new FileInfo(Locations.FindDataFile(file)));
 
             string texture = Path.Combine(Folder, "blue.png");
-            if (GetPlayerTexture != null)
-                texture = GetPlayerTexture(actor.GUID);
+            if (desc != null && GetPlayerTexture != null)
+            {
+                int tID = GetPlayerTexture(actor.GUID);
+                if (tID >= 0 && tID < desc.TeamSkin.Count)
+                    texture = desc.TeamSkin[tID];
+            }
 
             Skin = Texture.Get(Locations.FindDataFile(texture));
 
@@ -96,7 +128,8 @@ namespace WorldDrawing
                 GL.Translate(loc.Position);
                 GL.Rotate(loc.Rotation.Z - 90, 0, 0, 1);
 
-                GL.Rotate(90, 1, 0, 0);
+                if (YIsUp)
+                    GL.Rotate(90, 1, 0, 0);
                 GL.Scale(0.25, 0.25, 0.25);
                 Renderer.Draw();
             GL.PopMatrix();

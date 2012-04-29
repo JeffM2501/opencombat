@@ -124,6 +124,5 @@ namespace Client
 
             InputTracker.AddBinding(new InputSystem.KeyButton("ResetSpin", Key.Home));
         }
-
     }
 }
