@@ -11,6 +11,9 @@ namespace Client
         public event EventHandler<EventArgs> ResourcesComplete;
         public event EventHandler<EventArgs> ScriptsLoaded;
 
+        public event EventHandler<EventArgs> EnterTextMode;
+        public event EventHandler<EventArgs> ExitTextMode;
+
         public class SystemMessageEventArgs : EventArgs
         {
             public string Text = string.Empty;
