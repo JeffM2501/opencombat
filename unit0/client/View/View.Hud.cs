@@ -44,6 +44,19 @@ namespace Client
         {
             TheView = view;
             TheGame = game;
+
+            TheGame.EnterTextMode += new EventHandler<EventArgs>(TheGame_EnterTextMode);
+            TheGame.ExitTextMode += new EventHandler<EventArgs>(TheGame_ExitTextMode);
+        }
+
+        void TheGame_ExitTextMode(object sender, EventArgs e)
+        {
+            GUIRenderer.Chat.Focus = false;
+        }
+
+        void TheGame_EnterTextMode(object sender, EventArgs e)
+        {
+            GUIRenderer.Chat.Focus = true;
         }
 
         public void Init()

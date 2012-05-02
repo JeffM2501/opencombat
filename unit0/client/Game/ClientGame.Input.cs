@@ -55,12 +55,13 @@ namespace Client
 
         void InputTracker_TextModeEnded(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            if (ExitTextMode != null)
+                ExitTextMode(this, EventArgs.Empty);
         }
 
         void InputTracker_TextChanged(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+           // throw new NotImplementedException();
         }
 
         void InputTracker_ChatButton_Changed(object sender, EventArgs args)
@@ -69,6 +70,8 @@ namespace Client
             {
                 InputTracker.IgnoreNextUp(ChatButton.LastKeyUsed);
                 InputTracker.EnterTextMode(ChatButton);
+                if (EnterTextMode != null)
+                    EnterTextMode(this, EventArgs.Empty);
             }
         }
 
@@ -123,6 +126,8 @@ namespace Client
             InputTracker.AddBinding(new InputSystem.KeyButton("ToggleDebugDraw", Key.F1));
 
             InputTracker.AddBinding(new InputSystem.KeyButton("ResetSpin", Key.Home));
+
+            InputTracker.AddBinding(new InputSystem.KeyButton("Chat", Key.Enter));
         }
     }
 }

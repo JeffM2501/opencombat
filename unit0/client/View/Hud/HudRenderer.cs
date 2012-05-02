@@ -134,6 +134,8 @@ namespace Client.Hud
                     _OutboundLine = value;
             }
         }
+
+        public bool Focus = false;
     }
     
 
@@ -398,9 +400,17 @@ namespace Client.Hud
                     element.Update = ChatLogUpdater;
                 else if (element.updateFunction == "PLAYER_LIST")
                     element.Update = PlayerListUpdater;
+                else if (element.updateFunction == "CHAT_ENTRY")
+                    element.Update = ChatEntry;
             }
             foreach (PannelElement child in element.children)
                 LinkUpdates(child);
+        }
+
+        protected void ChatEntry(PannelElement element)
+        {
+            element.text = Chat.OutboundLine;
+            element.focus = Chat.Focus;
         }
 
         protected void PlayerListUpdater(PannelElement element)
@@ -824,6 +834,8 @@ namespace Client.Hud
 
     public class PannelRenderer
     {
+        public bool Focus = false;
+
         public static Dictionary<string, PannelRenderer> Pannels = new Dictionary<string, PannelRenderer>();
         public static PannelRenderer Get(string name)
         {
