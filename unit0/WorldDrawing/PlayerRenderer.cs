@@ -44,8 +44,6 @@ namespace WorldDrawing
 
         public string Folder = string.Empty;
 
-        int textureOffset = 0;
-
         public OBJRenderer Renderer = null;
 
         public Texture Shadow = null;
