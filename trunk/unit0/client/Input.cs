@@ -743,9 +743,17 @@ namespace Client
             }
         }
 
+        bool CharIsEmpty(char c)
+        {
+            if (c == ' ' || c == '\t')
+                return false;
+
+            return c.ToString().Trim() == string.Empty;
+        }
+
         void window_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (!TextMode || e.KeyChar.ToString().Trim() == string.Empty)
+            if (!TextMode || CharIsEmpty(e.KeyChar))
                 return;
 
             if (CapsChar())
@@ -778,7 +786,7 @@ namespace Client
             {
                 if (TextModeString.Length > 0)
                 {
-                    TextModeString.Remove(TextModeString.Length - 1);
+                    TextModeString = TextModeString.Remove(TextModeString.Length - 1);
                     if (TextChanged != null)
                         TextChanged(this, EventArgs.Empty);
                 }

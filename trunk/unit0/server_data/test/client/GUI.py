@@ -3,7 +3,7 @@ def LoadHud (HUD):
 	chatFrame.alignment = HUD.AlignRightBottom;
 	chatFrame.origin = HUD.AlignRightBottom;
 	chatFrame.SetPosition(0,0);
-	chatFrame.SetSize(500,128);
+	chatFrame.SetSize(500,228);
 	chatFrame.enabled = True;
 
 	chatList = chatFrame.NewChild("chatWindow","chatWindow");
@@ -11,16 +11,24 @@ def LoadHud (HUD):
 	chatList.alignment = HUD.AlignLeftBottom;
 	chatList.origin = HUD.AlignLeftBottom;
 	chatList.SetPosition(15,35);
-	chatList.SetSize(460,80);
+	chatList.SetSize(460,180);
 	chatList.enabled = True;
 
 	chatEntry = chatFrame.NewChild("chatEntry","chatFontTextEdit");
 	chatEntry.updateFunction = "CHAT_ENTRY";
 	chatEntry.alignment = HUD.AlignLeftBottom;
 	chatEntry.origin = HUD.AlignLeftBottom;
-	chatEntry.SetPosition(15,2);
-	chatEntry.SetSize(460,30);
+	chatEntry.SetPosition(60,2);
+	chatEntry.SetSize(415,25);
 	chatEntry.enabled = True;
+
+	chatLabel = chatFrame.NewChild("chatEntry","chatFontTextEdit");
+	chatLabel.text = "Chat:";
+	chatLabel.alignment = HUD.AlignLeftBottom;
+	chatLabel.origin = HUD.AlignLeftBottom;
+	chatLabel.SetPosition(15,2);
+	chatLabel.SetSize(50,20);
+	chatLabel.enabled = True;
 
 	HUD.LoadElement(chatFrame);
 
