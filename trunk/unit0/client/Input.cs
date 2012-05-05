@@ -709,6 +709,7 @@ namespace Client
             if (TextMode)
                 return;
 
+            TextMode = true;
             TextModeString = "";
             TextModeEndButton = EndButton;
         }
@@ -744,7 +745,7 @@ namespace Client
 
         void window_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (!TextMode || e.KeyChar.ToString() == string.Empty)
+            if (!TextMode || e.KeyChar.ToString().Trim() == string.Empty)
                 return;
 
             if (CapsChar())

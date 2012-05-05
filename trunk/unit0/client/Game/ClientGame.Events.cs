@@ -5,6 +5,16 @@ using System.Text;
 
 namespace Client
 {
+    public class StringDataEvent : EventArgs
+    {
+        public string Data = string.Empty;
+
+        public void StringDataEvent(string text)
+        {
+            Data = text;
+        }
+    }
+
     public partial class ClientGame
 	{
         public event EventHandler<EventArgs> StatusChanged;
@@ -13,17 +23,9 @@ namespace Client
 
         public event EventHandler<EventArgs> EnterTextMode;
         public event EventHandler<EventArgs> ExitTextMode;
+        public event EventHandler<StringDataEvent> TextChanged;
 
-        public class SystemMessageEventArgs : EventArgs
-        {
-            public string Text = string.Empty;
-            public SystemMessageEventArgs(string txt) : base()
-            {
-                Text = txt;
-            }
-        }
-
-        public event EventHandler<SystemMessageEventArgs> SystemMessage;
+        public event EventHandler<StringDataEvent> SystemMessage;
 
         public ServerConnection.ConnectionStatus Status = ServerConnection.ConnectionStatus.New;
 
