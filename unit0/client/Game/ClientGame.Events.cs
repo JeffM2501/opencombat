@@ -5,11 +5,11 @@ using System.Text;
 
 namespace Client
 {
-    public class StringDataEvent : EventArgs
+    public class StringEventArgs : EventArgs
     {
         public string Data = string.Empty;
 
-        public void StringDataEvent(string text)
+        public StringEventArgs(string text)
         {
             Data = text;
         }
@@ -23,9 +23,9 @@ namespace Client
 
         public event EventHandler<EventArgs> EnterTextMode;
         public event EventHandler<EventArgs> ExitTextMode;
-        public event EventHandler<StringDataEvent> TextChanged;
+        public event EventHandler<StringEventArgs> TextChanged;
 
-        public event EventHandler<StringDataEvent> SystemMessage;
+        public event EventHandler<StringEventArgs> SystemMessage;
 
         public ServerConnection.ConnectionStatus Status = ServerConnection.ConnectionStatus.New;
 
@@ -73,7 +73,7 @@ namespace Client
         public void SendSystemMessage(string message)
         {
             if (SystemMessage != null)
-                SystemMessage(this, new SystemMessageEventArgs(message));
+                SystemMessage(this, new StringEventArgs(message));
         }
 	}
 }

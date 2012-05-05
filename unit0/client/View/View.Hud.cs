@@ -47,11 +47,18 @@ namespace Client
 
             TheGame.EnterTextMode += new EventHandler<EventArgs>(TheGame_EnterTextMode);
             TheGame.ExitTextMode += new EventHandler<EventArgs>(TheGame_ExitTextMode);
+            TheGame.TextChanged += new EventHandler<StringEventArgs>(TheGame_TextChanged);
+        }
+
+        void TheGame_TextChanged(object sender, StringEventArgs e)
+        {
+            GUIRenderer.Chat.OutboundLine = e.Data;
         }
 
         void TheGame_ExitTextMode(object sender, EventArgs e)
         {
             GUIRenderer.Chat.Focus = false;
+            GUIRenderer.Chat.OutboundLine = string.Empty;
         }
 
         void TheGame_EnterTextMode(object sender, EventArgs e)
@@ -87,8 +94,7 @@ namespace Client
         {
             chat.NewChatUser += new EventHandler<ChatProcessor.ChatUserArgs>(chat_NewChatUser);
             chat.RecivedChatMessage += new EventHandler<ChatProcessor.ChatMessageArgs>(chat_RecivedChatMessage);
-            chat.OutboundChatChanged += new EventHandler<EventArgs>(chat_OutboundChatChanged);
-
+  
             ChatInfo.ChatUser systemUser = new ChatInfo.ChatUser();
             systemUser.Name = "Game";
             systemUser.UID = ChatInfo.GameChatUID;
@@ -98,16 +104,13 @@ namespace Client
             errorUser.Name = "Error";
             errorUser.UID = ChatInfo.ErrorChatUID;
             GUIRenderer.Chat.AddUser(errorUser);
+
+            GUIRenderer.Chat.ServerAvatar = Texture.Get(Locations.FindDataFile("ui/server_avatar.png"),Texture.SmoothType.SmoothMip,true);
         }
 
-        public void SystemMessageSent(object sender, ClientGame.SystemMessageEventArgs args)
+        public void SystemMessageSent(object sender, Client.StringEventArgs args)
         {
-            GUIRenderer.Chat.AddMessage(ChatInfo.GameChatUID, args.Text);
-        }
-
-        void chat_OutboundChatChanged(object sender, EventArgs e)
-        {
-            GUIRenderer.Chat.OutboundLine = (sender as ChatProcessor).OutboundChatLine;
+            GUIRenderer.Chat.AddMessage(ChatInfo.GameChatUID, args.Data);
         }
 
         void chat_RecivedChatMessage(object sender, ChatProcessor.ChatMessageArgs e)
@@ -120,7 +123,7 @@ namespace Client
             ChatInfo.ChatUser newUser = new ChatInfo.ChatUser();
             newUser.Name = e.User.Name;
             newUser.UID = e.User.UID;
-            newUser.Icon = Texture.Get(TheGame.GetPlayerAvatar(newUser.UID));
+            newUser.Icon = Texture.Get(Locations.FindDataFile(TheGame.GetPlayerAvatar(newUser.UID)),Texture.SmoothType.SmoothMip,false);
             GUIRenderer.Chat.AddUser(newUser);
         }
 

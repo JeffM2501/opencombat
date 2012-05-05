@@ -94,7 +94,7 @@ namespace Client
         public void LinkChat(ChatProcessor chat, ClientGame game)
         {
             HudProcessor.LinkChat(chat);
-            game.SystemMessage += new EventHandler<ClientGame.SystemMessageEventArgs>(HudProcessor.SystemMessageSent);
+            game.SystemMessage += new EventHandler<Client.StringEventArgs>(HudProcessor.SystemMessageSent);
         }
 
         void state_ActorDeleted(GameState sender, GameState.Actor actor)

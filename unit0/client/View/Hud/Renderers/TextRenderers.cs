@@ -37,32 +37,6 @@ namespace Client.Hud
             HudRenderer.RemoveTextItem(element);
         }
 
-        public override void DrawElement(PannelElement element, double now, double frameTime)
-        {
-            if (element.focus)
-            {
-                GL.Disable(EnableCap.Texture2D);
-
-                GL.PushMatrix();
-                Vector2 o = element.GetDrawOrigin();
-
-                GL.Translate(o.X, o.Y, 0);
-
-                GL.Color4(element.Color);
-                GL.Begin(BeginMode.LineLoop);
-
-                GL.Vertex2(0, 0);
-                GL.Vertex2(element.size.Width, 0);
-                GL.Vertex2(element.size.Width, element.size.Height);
-                GL.Vertex2(0, element.size.Height);
-
-                GL.End();
-                GL.PopMatrix();
-                GL.Enable(EnableCap.Texture2D);
-            }
-            base.DrawElement(element, now, frameTime);
-        }
-
         public override void DrawElementText(TextPrinter printer, ViewBounds view, PannelElement element, double now, double frameTime)
         {
             if (element.text == string.Empty)
@@ -120,6 +94,32 @@ namespace Client.Hud
             HudRenderer.RemoveTextItem(element);
         }
 
+        public override void DrawElement(PannelElement element, double now, double frameTime)
+        {
+            if (element.focus)
+            {
+                GL.Disable(EnableCap.Texture2D);
+
+                GL.PushMatrix();
+                Vector2 o = element.GetDrawOrigin();
+
+                GL.Translate(o.X, o.Y, 0);
+
+                GL.Color4(element.Color);
+                GL.Begin(BeginMode.LineLoop);
+
+                GL.Vertex2(0, 0);
+                GL.Vertex2(element.size.Width, 0);
+                GL.Vertex2(element.size.Width, element.size.Height);
+                GL.Vertex2(0, element.size.Height);
+
+                GL.End();
+                GL.PopMatrix();
+                GL.Enable(EnableCap.Texture2D);
+            }
+            base.DrawElement(element, now, frameTime);
+        }
+
         public override void DrawElementText(TextPrinter printer, ViewBounds view, PannelElement element, double now, double frameTime)
         {
             if (!element.focus && element.text == string.Empty)
@@ -133,6 +133,7 @@ namespace Client.Hud
                 s = new Size((int)rect.Width, (int)rect.Height);
 
             Vector2 pos = element.GetWorldPos(s);
+            pos.X += 2; // just a buffer to make it look better
 
             TextPrinterOptions options = TextPrinterOptions.Default;
             TextAlignment alignment = TextAlignment.Near;

@@ -118,6 +118,8 @@ namespace Client.Hud
         public static UInt64 GameChatUID = UInt64.MaxValue - 2;
         public static UInt64 ErrorChatUID = UInt64.MaxValue - 3;
 
+        public Texture ServerAvatar = null;
+
         protected string _OutboundLine = string.Empty;
 
         public string OutboundLine

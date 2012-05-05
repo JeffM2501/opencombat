@@ -453,13 +453,13 @@ namespace Textures
 
             GL.Begin(BeginMode.Quads);
             GL.Normal3(Vector3.UnitZ);
-            GL.TexCoord2(0, 0);
-            GL.Vertex2(-w, -h);
-            GL.TexCoord2(1, 0);
-            GL.Vertex2(w, -h);
-            GL.TexCoord2(1, 1);
-            GL.Vertex2(w, h);
             GL.TexCoord2(0, 1);
+            GL.Vertex2(-w, -h);
+            GL.TexCoord2(1, 1);
+            GL.Vertex2(w, -h);
+            GL.TexCoord2(1, 0);
+            GL.Vertex2(w, h);
+            GL.TexCoord2(0, 0);
             GL.Vertex2(-w, h);
             GL.End();
         }

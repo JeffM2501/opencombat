@@ -57,11 +57,14 @@ namespace Client
         {
             if (ExitTextMode != null)
                 ExitTextMode(this, EventArgs.Empty);
+
+            Connection.Chat.SendChatMessage(UInt64.MaxValue, Game.Messages.ChatTextMessage.MessageType.Instance, InputTracker.GetTextModeString());
         }
 
         void InputTracker_TextChanged(object sender, EventArgs e)
         {
-           // throw new NotImplementedException();
+            if (TextChanged != null)
+                TextChanged(this, new StringEventArgs(InputTracker.GetTextModeString()));
         }
 
         void InputTracker_ChatButton_Changed(object sender, EventArgs args)
