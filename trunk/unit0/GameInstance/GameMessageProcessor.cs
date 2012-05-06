@@ -74,6 +74,7 @@ namespace GameInstance
             GameMessage.AddMessageCallback(GameMessage.MessageCode.ChatText, ChatMessage); 
             GameMessage.AddMessageCallback(GameMessage.MessageCode.StateChange, StateChange);
             GameMessage.AddMessageCallback(GameMessage.MessageCode.ResourceRequest, ResourceRequest);
+            GameMessage.AddMessageCallback(GameMessage.MessageCode.TimeSync, TimeSync);
         }
 
         void AnyUnhandled(GameMessage.MessageCode code, GameMessage messageData, NetConnection sender)
@@ -97,6 +98,17 @@ namespace GameInstance
             }
 
             player.SendReliable(outMsg);
+        }
+
+        void TimeSync(GameMessage.MessageCode code, GameMessage messageData, NetConnection sender)
+        {
+            TimeSyncMessage msg = messageData as TimeSyncMessage;
+            if (msg == null)
+                return;
+
+            msg.ReplyTime = State.Now;
+
+            (sender.Tag as Player).SendReliable(msg, 1);
         }
 
         void ChatMessage(GameMessage.MessageCode code, GameMessage messageData, NetConnection sender)

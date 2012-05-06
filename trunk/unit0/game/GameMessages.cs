@@ -21,6 +21,8 @@ namespace Game
             ConnectInfo,
             OptionSelect,
 
+            TimeSync,
+
             ResourceRequest,
             ResourceResponce,
 

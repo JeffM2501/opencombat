@@ -285,7 +285,15 @@ namespace Game
         protected double ThisFixedTime = 0;
         protected double FixedTimeIncrement = 0.01;
 
-        public double Now { get { if (UseFixedTime) return ThisFixedTime; else return UpdateTimer.ElapsedMilliseconds / 1000f; } }
+        public double Now { get { return RawNow + ClockOffset;} }
+        public double RawNow { get { if (UseFixedTime) return ThisFixedTime; else return (UpdateTimer.ElapsedMilliseconds / 1000f); } }
+
+        protected double ClockOffset = 0;
+
+        public void SetClockOffset(double time)
+        {
+            ClockOffset = time;
+        }
 
         protected void UpdateActorPosition(Actor actor)
         {

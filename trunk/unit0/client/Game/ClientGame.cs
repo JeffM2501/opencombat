@@ -99,7 +99,7 @@ namespace Client
 
         public void Connect(string host, int port)
         {
-            Connection = new ServerConnection(host, port);
+            Connection = new ServerConnection(host, port, State);
 
             Connection.StatusChanged += new EventHandler<EventArgs>(ServerConnectionStatusChanged);
             Connection.Connected += new EventHandler<EventArgs>(ConnectionComplete);

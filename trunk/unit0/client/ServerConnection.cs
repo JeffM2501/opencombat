@@ -26,6 +26,7 @@ namespace Client
     public class ServerConnection
     {
         NetClient Client = null;
+        GameState State = null;
 
         protected object locker = new object();
 
@@ -83,8 +84,14 @@ namespace Client
 
         public ConnectionStatus Status { get { lock (locker)return conStatus; } protected set { lock (locker)conStatus = value; if (StatusChanged != null) StatusChanged(this, EventArgs.Empty); } }
 
-        public ServerConnection(string address, int port)
+        public Dictionary<int, TimeSyncMessage> OutstandingPings = new Dictionary<int, TimeSyncMessage>();
+        public int LastPingID = 0;
+        public double LastPing = -1;
+        public double RepingTime = 30;
+
+        public ServerConnection(string address, int port, GameState state)
         {
+            State = state;
             RegisterMessageHandlers();
 
             NetPeerConfiguration config = new NetPeerConfiguration(GameMessage.ConnectionName);
@@ -166,6 +173,7 @@ namespace Client
             GameMessage.AddMessageCallback(GameMessage.MessageCode.ResourceResponce, ResourceResponce);
             GameMessage.AddMessageCallback(GameMessage.MessageCode.ChatText, ChatPacket);
             GameMessage.AddMessageCallback(GameMessage.MessageCode.ChatUserInfo, ChatPacket);
+            GameMessage.AddMessageCallback(GameMessage.MessageCode.TimeSync, TimeSync);
         }
 
         void AnyUnhandled(GameMessage.MessageCode code, GameMessage messageData, NetConnection sender)
@@ -186,8 +194,42 @@ namespace Client
             ResourceProcessor.NewResponce(messageData as ResourceResponceMessage);
         }
 
+        void TimeSync(GameMessage.MessageCode code, GameMessage messageData, NetConnection sender)
+        {
+            double now = State.RawNow;
+
+            TimeSyncMessage msg = messageData as TimeSyncMessage;
+            if (msg == null)
+                return;
+
+            TimeSyncMessage ping = msg;
+            if (OutstandingPings.ContainsKey(ping.Token))
+            {
+                ping = OutstandingPings[ping.Token];
+                OutstandingPings.Remove(ping.Token);
+            }
+
+            double delta = now - ping.StartTime;
+            double toServerTime = delta / 2;
+
+            double myTimeAtServer = ping.StartTime + toServerTime;
+            State.SetClockOffset(msg.ReplyTime - myTimeAtServer);
+        }
+
+        protected void SendClockUpdate()
+        {
+            TimeSyncMessage msg = new TimeSyncMessage();
+            msg.Token = LastPingID++;
+            msg.StartTime = State.RawNow;
+            OutstandingPings.Add(msg.Token, msg);
+            SendReliable(msg);
+            LastPing = State.RawNow;
+        }
+
         void ConnectionInfo(GameMessage.MessageCode code, GameMessage messageData, NetConnection sender)
         {
+            SendClockUpdate();
+
             ConnectInfo info = messageData as ConnectInfo;
             if (info == null)
             {
@@ -264,6 +306,9 @@ namespace Client
                     lock (Client)
                         im = Client.ReadMessage();
                 }
+
+                if (State.RawNow - LastPing > RepingTime)
+                    SendClockUpdate();
                 Thread.Sleep(10);
             }
 

@@ -38,6 +38,35 @@ namespace Game.Messages
         }
     }
 
+    public class TimeSyncMessage : GameMessage
+    {
+        public int Token = -1;
+        public double StartTime = 0;
+        public double ReplyTime = 0;
+
+        public TimeSyncMessage()
+        {
+            Code = GameMessage.MessageCode.TimeSync;
+        }
+
+        public override NetOutgoingMessage Pack(NetOutgoingMessage msg)
+        {
+            NetOutgoingMessage outMsg = base.Pack(msg);
+            outMsg.Write(Token);
+            outMsg.Write(StartTime);
+            outMsg.Write(ReplyTime);
+            return outMsg;
+        }
+
+        public override void Unpack(Lidgren.Network.NetIncomingMessage msg)
+        {
+            base.Unpack(msg);
+            Token = msg.ReadInt32();
+            StartTime = msg.ReadDouble();
+            ReplyTime = msg.ReadDouble();
+        }
+    }
+
     public class ConnectInfo : GameMessage
     {
         public UInt64 UID = 0;
