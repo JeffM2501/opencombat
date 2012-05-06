@@ -7,7 +7,7 @@ using Lidgren.Network;
 
 namespace GameInstance
 {
-    internal class ManagerConnection
+    public class ManagerConnection
     {
         NetClient Client = null;
 
