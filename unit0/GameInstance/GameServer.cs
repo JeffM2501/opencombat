@@ -16,7 +16,7 @@ using GridWorld;
 
 namespace GameInstance
 {
-    class GameServer
+    public class GameServer
     {
         public ManagerConnection Manager = null;
 
@@ -56,9 +56,40 @@ namespace GameInstance
                 player.AvatarID = new Random().Next(GameInfo.Info.PlayerAvatars.Count-1);
         }
 
+        public Player NewPlayer(NetConnection con)
+        {
+            // add them
+            Player player = new Player(con, Processor.Server);
+            player.PID = Player.NewPlayerID();
+
+            if (con != null)
+                con.Tag = player;
+
+            // check token against one sent from master hail.Token = 
+            // this should have come from the master, but fake it for now
+            player.UID = player.PID;
+            player.Name = "Player_" + player.UID.ToString();
+            player.Options = new int[GameInfo.Info.UserOptions.Count];
+            for (int i = 0; i < player.Options.Length; i++)
+                player.Options[i] = GameInfo.Info.UserOptions[i].Default;
+
+            return player;
+        }
+
+        public void SendInstanceChat(Player from, string message)
+        {
+            Processor.Chat.ServerMessageToInstance(from.UID, message);
+        }
+
+        public void AddPlayer(Player player)
+        {
+            Processor.AddPlayer(player);
+        }
+
         void State_Ready(object sender, EventArgs e)
         {
-            Processor = new GameMessageProcessor(State);
+            Processor = new GameMessageProcessor(this);
+            ServerScripting.Script.SetupRobots();
         }
 
         public void Kill()
@@ -103,7 +134,7 @@ namespace GameInstance
 
         void LoadSettings()
         {
-            ServerScripting.Script.Init(Program.Config.ScriptPath, State);
+            ServerScripting.Script.Init(Program.Config.ScriptPath, this);
 
             // compute 
             GameInfo.Info.ClientScriptPack = Path.GetDirectoryName(Program.Config.ClientScripts);

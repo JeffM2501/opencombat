@@ -11,6 +11,7 @@ using Microsoft.Scripting.Hosting;
 using Game;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
+using Game.Messages;
 
 namespace GameInstance
 {
@@ -25,10 +26,11 @@ namespace GameInstance
         public string ScriptPackName = string.Empty;
 
         GameState State = null;
+        GameServer Server = null;
 
-        public void Init(string scriptPath, GameState state)
+        public void Init(string scriptPath, GameServer server)
         {
-            // TODO, put an app domain here that dosn't give access to the disk
+            // TODO, put an app domain here that doesn't give access to the disk
             Engine = Python.CreateEngine();
 
             foreach (FileInfo script in new DirectoryInfo(scriptPath).GetFiles("*.py"))
@@ -38,8 +40,13 @@ namespace GameInstance
             }
 
             ScriptPackName = Path.GetDirectoryName(scriptPath);
+            Server = server;
+            State = Server.State;
+        }
 
-            State = state;
+        protected bool ScriptExists(string name)
+        {
+            return CachedScripts.ContainsKey(name);
         }
 
         protected ScriptScope GetScope(ScriptSource source)
@@ -99,6 +106,49 @@ namespace GameInstance
 
             dynamic func = scope.GetVariable("GetPlayerSpawn");
             return func(player);
+        }
+
+        public void SetupRobots()
+        {
+            if (ScriptExists("Robots"))
+            {
+                ScriptScope scope = GetScope("Robots");
+                if (scope == null || !scope.ContainsVariable("GetBotCount"))
+                    return;
+
+                dynamic func = scope.GetVariable("GetBotCount");
+                int bots = func();
+
+                if (!scope.ContainsVariable("NewRobot"))
+                    return;
+
+                func = scope.GetVariable("NewRobot");
+                for (int i = 0; i < bots; i++)
+                {
+                    Player player = Server.NewPlayer(null);
+                    player.UnhandledMessage +=new Player.UnhandleMessageEvent(player_UnhandledMessage);
+                    func(player,i);
+                    Server.AddPlayer(player);
+                }
+            }
+        }
+
+        void  player_UnhandledMessage(Player player, GameMessage message)
+        {
+             ScriptScope scope = GetScope("Robots");
+                if (scope == null)
+                    return;
+
+ 	        switch(message.Code)
+            {
+                case GameMessage.MessageCode.ChatText:
+                    if (scope.ContainsVariable("HandleChat"))
+                    {
+                        dynamic func = scope.GetVariable("HandleChat");
+                        func(player, message as ChatTextMessage, Server);
+                    }
+                    break;
+            }
         }
     }
 }

@@ -80,6 +80,17 @@ namespace GameInstance
             ComposeChatMessage(message);
         }
 
+        public void ServerMessageToInstance(UInt64 from, string text)
+        {
+            ChatTextMessage message = new ChatTextMessage();
+            message.From = from;
+            message.To = UInt64.MaxValue;
+            message.ChatType = ChatTextMessage.MessageType.Instance;
+            message.Text = text;
+            ComposeChatMessage(message);
+        }
+
+
         public void ServerMessageToPlayer(string text, UInt64 UID)
         {
             ChatTextMessage message = new ChatTextMessage();

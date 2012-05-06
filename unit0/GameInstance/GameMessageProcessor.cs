@@ -11,17 +11,19 @@ using Lidgren.Network;
 
 namespace GameInstance
 {
-    class GameMessageProcessor
+    public class GameMessageProcessor
     {
         public GameState State;
+        public GameServer TheGameServer;
         protected Thread worker;
 
-        protected NetServer Server = null;
-        protected ChatProcessor Chat = null;
+        public NetServer Server = null;
+        public ChatProcessor Chat = null;
 
-        public GameMessageProcessor(GameState state)
+        public GameMessageProcessor(GameServer server)
         {
-            State = state;
+            State = server.State;
+            TheGameServer = server;
             RegisterMessageHandlers();
 
             NetPeerConfiguration netConfig = new NetPeerConfiguration(GameMessage.ConnectionName);
@@ -94,7 +96,7 @@ namespace GameInstance
                     outMsg.Selections.Add(option);
             }
 
-            player.SendReliable(outMsg.Pack(NewMessage()));
+            player.SendReliable(outMsg);
         }
 
         void ChatMessage(GameMessage.MessageCode code, GameMessage messageData, NetConnection sender)
@@ -138,7 +140,7 @@ namespace GameInstance
                                     break;
                                 }
                                 else
-                                    NewPlayerConnection(im.SenderConnection);
+                                    TheGameServer.AddPlayer(TheGameServer.NewPlayer(im.SenderConnection));
                             }
                             break;
 
@@ -154,7 +156,7 @@ namespace GameInstance
                                     break;
                                 }
                                 else
-                                    NewPlayerConnection(im.SenderConnection);
+                                    TheGameServer.AddPlayer(TheGameServer.NewPlayer(im.SenderConnection));
                             }
                             break;
 
@@ -171,22 +173,8 @@ namespace GameInstance
             }
         }
 
-        void NewPlayerConnection( NetConnection con)
+        public void AddPlayer(Player player)
         {
-            // add them
-            Player player = new Player(con,Server);
-            player.PID = Player.NewPlayerID();
-
-            con.Tag = player;
-
-            // check token against one sent from master hail.Token = 
-            // this should have come from the master, but fake it for now
-            player.UID = player.PID;
-            player.Name = "Player_" + player.UID.ToString();
-            player.Options = new int[GameInfo.Info.UserOptions.Count];
-            for (int i = 0; i < player.Options.Length; i++)
-                player.Options[i] = GameInfo.Info.UserOptions[i].Default;
-
             Player.AddPlayer(player);
 
             ConnectInfo info = new ConnectInfo();
@@ -204,7 +192,7 @@ namespace GameInstance
             info.ScriptPack = GameInfo.Info.ClientScriptPack;
             info.ScriptPackHash = GameInfo.Info.ClientScriptsHash;
 
-            player.SendReliable(info.Pack(NewMessage()));
+            player.SendReliable(info);
 
             Chat.SendNewPlayerChatInfo(info.PID);
             Chat.SendUserList(info.PID);

@@ -12,14 +12,20 @@ namespace GameInstance
     {
         public delegate void PlayerEvent(Player player);
         public delegate void PlayerOptionEvent(Player player, int option);
+        public delegate void UnhandleMessageEvent(Player player, GameMessage message);
 
         public static event PlayerEvent NewPlayer;
         public static event PlayerEvent DeletedPlayer;
 
         public static event PlayerOptionEvent OptionChanged;
 
+        public event UnhandleMessageEvent UnhandledMessage;
+
         public UInt64 UID = UInt64.MaxValue;
         public UInt64 PID = UInt64.MaxValue;
+
+        // used by scripts to identify bot code
+        public int BotID = -1;
 
         public string Name = string.Empty;
 
@@ -57,9 +63,9 @@ namespace GameInstance
             Connection = con;
         }
 
-        public void SendReliable(NetOutgoingMessage msg)
+        private void SendReliable(NetOutgoingMessage msg)
         {
-            if (!Valid || Connection.Status == NetConnectionStatus.Disconnecting || Connection.Status == NetConnectionStatus.Disconnected)
+            if (!Valid || Connection== null || Connection.Status == NetConnectionStatus.Disconnecting || Connection.Status == NetConnectionStatus.Disconnected)
                 return;
 
             Connection.SendMessage(msg, NetDeliveryMethod.ReliableOrdered, 2);
@@ -72,11 +78,19 @@ namespace GameInstance
 
         public void SendReliable(GameMessage msg, int channel)
         {
-            if (!Valid || Server.Status != NetPeerStatus.Running || Connection.Status == NetConnectionStatus.Disconnecting || Connection.Status == NetConnectionStatus.Disconnected)
+            if (!Valid || Server.Status != NetPeerStatus.Running )
                 return;
 
-            lock (Server)
-                Connection.SendMessage(msg.Pack(Server.CreateMessage()), NetDeliveryMethod.ReliableOrdered, channel);
+            if (Connection == null)
+            {
+                if (UnhandledMessage != null)
+                    UnhandledMessage(this,msg);
+            }
+            else if (Connection.Status != NetConnectionStatus.Disconnecting && Connection.Status != NetConnectionStatus.Disconnected)
+            {
+                lock (Server)
+                    Connection.SendMessage(msg.Pack(Server.CreateMessage()), NetDeliveryMethod.ReliableOrdered, channel);
+            }
         }
 
 
