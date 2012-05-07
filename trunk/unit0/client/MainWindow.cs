@@ -30,7 +30,10 @@ namespace Client
 
         public MainWindow()
         {
-            Window = new GameWindow(1024, 800, GraphicsMode.Default, "Unit 0", GameWindowFlags.Default);
+            GameWindowFlags flags = GameWindowFlags.Default;
+            if (ClientConfig.Config.FullScreen)
+                flags |= GameWindowFlags.Fullscreen;
+            Window = new GameWindow(ClientConfig.Config.WindowSize.Width, ClientConfig.Config.WindowSize.Height, GraphicsMode.Default, "Unit 0", flags);
             Window.VSync = VSyncMode.Adaptive;
 
             InputTracker = new InputSystem(Window);
