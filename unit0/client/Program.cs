@@ -24,6 +24,7 @@ namespace Client
             Application.SetCompatibleTextRenderingDefault(false);
 
             InputSystem.GetBindingFilePath += GetBindingFile;
+            ClientConfig.Load(GetConfigFIle());
 
             bool done = false;
 
@@ -45,6 +46,11 @@ namespace Client
                 else
                     done = true;
             }
+        }
+
+        static string GetConfigFIle()
+        {
+            return Path.Combine(Application.UserAppDataPath, "config.xml");
         }
 
         static string GetBindingFile()
