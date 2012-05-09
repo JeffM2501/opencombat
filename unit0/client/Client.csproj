@@ -70,6 +70,12 @@
     <Compile Include="API\API.cs" />
     <Compile Include="ChatProcessor.cs" />
     <Compile Include="ClientConfig.cs" />
+    <Compile Include="DefaultLauncher.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DefaultLauncher.Designer.cs">
+      <DependentUpon>DefaultLauncher.cs</DependentUpon>
+    </Compile>
     <Compile Include="Game\ClientGame.Avatars.cs" />
     <Compile Include="Game\ClientGame.cs" />
     <Compile Include="ClientScripting.cs" />
@@ -77,14 +83,9 @@
     <Compile Include="Game\ClientGame.Updates.cs" />
     <Compile Include="Hasher.cs" />
     <Compile Include="Input.cs" />
+    <Compile Include="Launcher.cs" />
     <Compile Include="MainWindow.cs" />
     <Compile Include="Patcher.cs" />
-    <Compile Include="PreGame.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="PreGame.Designer.cs">
-      <DependentUpon>PreGame.cs</DependentUpon>
-    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ResourceProcessor.cs" />
@@ -102,8 +103,8 @@
     <Compile Include="View\View.cs" />
     <Compile Include="View\View.Hud.cs" />
     <Compile Include="View\View.Debug.cs" />
-    <EmbeddedResource Include="PreGame.resx">
-      <DependentUpon>PreGame.cs</DependentUpon>
+    <EmbeddedResource Include="DefaultLauncher.resx">
+      <DependentUpon>DefaultLauncher.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
