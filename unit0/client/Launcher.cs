@@ -9,6 +9,8 @@ using System.Diagnostics;
 using System.Net;
 using System.Web;
 
+using Game;
+
 using System.Windows.Forms;
 
 using FileLocations;
@@ -123,7 +125,7 @@ namespace Client
             CheckForUpdates = !ClientConfig.Config.DEVELNOPatch;
 
             // see if we can find an OS specific DLL
-            string OS = Environment.OSVersion.ToString();
+            string OS = Utilities.GetRealPlatform().ToString();
             string dll = Path.Combine(Locations.ThisExePath, "LauncherInterface." + OS + ".dll");
 
             LauncherInterface launcher = GetLauncher(dll);
