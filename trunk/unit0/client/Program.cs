@@ -31,16 +31,16 @@ namespace Client
             //bool runOnce = false;
             while (!done)
             {
-                PreGame game = new PreGame();
-                game.CheckForUpdates = false; //!runOnce;
+                Launcher launcher = new Launcher();
+                launcher.CheckForUpdates = false; //!runOnce;
 
-                if (game.ShowDialog() == DialogResult.OK)
+                if (launcher.Start())
                 {
                    // runOnce = true;
-                    using (MainWindow win = new MainWindow())
+                    using (MainWindow win = new MainWindow(launcher))
                     {
                         win.Run();
-                        done = win.QuitOnExit || game.AutoPlay;
+                        done = win.QuitOnExit;
                     }
                 }
                 else

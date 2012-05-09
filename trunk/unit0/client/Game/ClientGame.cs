@@ -61,9 +61,22 @@ namespace Client
                 return LastError;
         }
 
-        public ClientGame(InputSystem input)
+        public string Host = "localhost";
+        public int Port = 2501;
+
+        public ClientGame(Launcher launcher, InputSystem input)
         {
             InputTracker = input;
+
+            if (launcher.Host != string.Empty)
+            {
+                string[] parts = launcher.Host.Split(":".ToCharArray());
+                if (parts.Length > 1)
+                    int.TryParse(parts[1], out Port);
+
+                Host = parts[0];
+            }
+            
             State = new GameState();
 
             ClientScripting.Script.SetState(this);
@@ -97,9 +110,9 @@ namespace Client
             State.Load();
         }
 
-        public void Connect(string host, int port)
+        public void Connect()
         {
-            Connection = new ServerConnection(host, port, State);
+            Connection = new ServerConnection(Host, Port, State);
 
             Connection.StatusChanged += new EventHandler<EventArgs>(ServerConnectionStatusChanged);
             Connection.Connected += new EventHandler<EventArgs>(ConnectionComplete);

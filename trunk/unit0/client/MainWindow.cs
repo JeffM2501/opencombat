@@ -28,7 +28,7 @@ namespace Client
 
         protected ClientGame TheGame = null;
 
-        public MainWindow()
+        public MainWindow(Launcher launcher)
         {
             GameWindowFlags flags = GameWindowFlags.Default;
             if (ClientConfig.Config.FullScreen)
@@ -37,7 +37,7 @@ namespace Client
             Window.VSync = VSyncMode.Adaptive;
 
             InputTracker = new InputSystem(Window);
-            TheGame = new ClientGame(InputTracker);
+            TheGame = new ClientGame(launcher,InputTracker);
             TheGame.ToggleDrawing += new EventHandler<EventArgs>(ToggleDebugDrawing_Changed);
             TheGame.AddDebugLogItem += new ClientGame.DebugValueCallback(DebugValueCallback);
             TheGame.StatusChanged += new EventHandler<EventArgs>(Game_StatusChanged);
@@ -137,12 +137,9 @@ namespace Client
         {
             GameView.SetStatus(View.ViewStatus.New, "Please Wait");
 
-            string server = "localhost";
-            int port = 2501;
+            TheGame.Connect();
 
-            TheGame.Connect(server, port);
-
-            GameView.SetStatus(View.ViewStatus.Connecting, server + ":" + port.ToString());
+            GameView.SetStatus(View.ViewStatus.Connecting, TheGame.Host + ":" + TheGame.Port.ToString());
 
             GameView.LinkChat(TheGame.Connection.Chat,TheGame);
         }

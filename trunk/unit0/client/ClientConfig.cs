@@ -19,6 +19,21 @@ namespace Client
         public Size WindowSize = new Size(1280, 700);
         public bool FullScreen = false;
 
+        // TODO when actual release happens, change this to NoPatch, and default to false
+        public bool DEVELNOPatch = true;
+
+        // TODO when actual release happens, change this to NoAuth, and default to false
+        public bool DEVELNOAuth = true;
+
+        public bool SaveCredentials = false;
+        public string SavedUsername = string.Empty;
+        public string SavedPassword = string.Empty;
+
+        public bool AutoConnect = true;
+        public string AutoConnectHost = "localhost";
+
+        public string AuthenticationURL = "http://www.opencombat.net/users/auth.php";
+
         public static void Load(string path)
         {
             ConfigPath = path;
