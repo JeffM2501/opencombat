@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
+using Game;
+
 namespace Client
 {
     public partial class DefaultLauncher : Form
@@ -16,8 +18,13 @@ namespace Client
         public bool Authenticated = false;
         public bool UpdatesDone = false;
 
+		public bool NoBrowser = false;
+
         public DefaultLauncher( Launcher launcher )
         {
+			if (Utilities.GetRealPlatform() != Utilities.PlatformType.Windows)
+				NoBrowser = true;
+
             InitializeComponent();
 
             TheLauncher = launcher;
@@ -58,7 +65,8 @@ namespace Client
 
         private void DefaultLauncher_Load(object sender, EventArgs e)
         {
-            NewsBrowser.Navigate(TheLauncher.NewsURL);
+			if (!NoBrowser)
+				NewsBrowser.Navigate(TheLauncher.NewsURL);
 
             Play_BN.Enabled = TheLauncher.CheckForUpdates;
             LoginButton.Enabled = false;

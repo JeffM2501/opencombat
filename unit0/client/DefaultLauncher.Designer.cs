@@ -43,7 +43,8 @@
             this.label2 = new System.Windows.Forms.Label();
             this.Email = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.NewsBrowser = new System.Windows.Forms.WebBrowser();
+			if (!NoBrowser)
+				this.NewsBrowser = new System.Windows.Forms.WebBrowser();
             this.ProgressPanel = new System.Windows.Forms.Panel();
             this.PatchStatusLabel = new System.Windows.Forms.Label();
             this.AutoPlay = new System.Windows.Forms.CheckBox();
@@ -219,14 +220,17 @@
             // 
             // NewsBrowser
             // 
-            this.NewsBrowser.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.NewsBrowser.Location = new System.Drawing.Point(3, 3);
-            this.NewsBrowser.MinimumSize = new System.Drawing.Size(20, 20);
-            this.NewsBrowser.Name = "NewsBrowser";
-            this.NewsBrowser.Size = new System.Drawing.Size(779, 306);
-            this.NewsBrowser.TabIndex = 0;
+			if (!NoBrowser)
+			{
+				this.NewsBrowser.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+				| System.Windows.Forms.AnchorStyles.Left)
+				| System.Windows.Forms.AnchorStyles.Right)));
+				this.NewsBrowser.Location = new System.Drawing.Point(3, 3);
+				this.NewsBrowser.MinimumSize = new System.Drawing.Size(20, 20);
+				this.NewsBrowser.Name = "NewsBrowser";
+				this.NewsBrowser.Size = new System.Drawing.Size(779, 306);
+				this.NewsBrowser.TabIndex = 0;
+			}
             // 
             // ProgressPanel
             // 
