@@ -76,6 +76,12 @@
     <Compile Include="DefaultLauncher.Designer.cs">
       <DependentUpon>DefaultLauncher.cs</DependentUpon>
     </Compile>
+    <Compile Include="FailoverBrowser.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="FailoverBrowser.Designer.cs">
+      <DependentUpon>FailoverBrowser.cs</DependentUpon>
+    </Compile>
     <Compile Include="Game\ClientGame.Avatars.cs" />
     <Compile Include="Game\ClientGame.cs" />
     <Compile Include="ClientScripting.cs" />
@@ -99,6 +105,9 @@
     <Compile Include="View\View.Debug.cs" />
     <EmbeddedResource Include="DefaultLauncher.resx">
       <DependentUpon>DefaultLauncher.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FailoverBrowser.resx">
+      <DependentUpon>FailoverBrowser.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

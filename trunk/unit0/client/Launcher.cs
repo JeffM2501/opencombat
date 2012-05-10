@@ -38,6 +38,8 @@ namespace Client
         public override void Init(Launcher launcher)
         {
             TheLauncher = launcher;
+            FailoverBrowser.UseBrowser = Utilities.GetRealPlatform() == Utilities.PlatformType.Windows;
+
             LauncherDlog = new DefaultLauncher(TheLauncher);
 
             TheLauncher.StartPatch += new EventHandler<EventArgs>(TheLauncher_StartPatch);
