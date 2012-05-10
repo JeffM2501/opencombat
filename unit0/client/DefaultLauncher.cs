@@ -18,13 +18,8 @@ namespace Client
         public bool Authenticated = false;
         public bool UpdatesDone = false;
 
-		public bool NoBrowser = false;
-
         public DefaultLauncher( Launcher launcher )
         {
-			if (Utilities.GetRealPlatform() != Utilities.PlatformType.Windows)
-				NoBrowser = true;
-
             InitializeComponent();
 
             TheLauncher = launcher;
@@ -65,8 +60,7 @@ namespace Client
 
         private void DefaultLauncher_Load(object sender, EventArgs e)
         {
-			if (!NoBrowser)
-				NewsBrowser.Navigate(TheLauncher.NewsURL);
+			panel1.Navigate(TheLauncher.NewsURL);
 
             Play_BN.Enabled = TheLauncher.CheckForUpdates;
             LoginButton.Enabled = false;

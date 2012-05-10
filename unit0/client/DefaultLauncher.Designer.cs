@@ -1,4 +1,6 @@
-﻿namespace Client
+﻿using Client;
+
+namespace Client
 {
     partial class DefaultLauncher
     {
@@ -29,7 +31,9 @@
         private void InitializeComponent()
         {
             this.MainPanel = new System.Windows.Forms.Panel();
+            this.panel1 = new Client.FailoverBrowser();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.AutoPlay = new System.Windows.Forms.CheckBox();
             this.label4 = new System.Windows.Forms.Label();
             this.CallsignList = new System.Windows.Forms.ComboBox();
             this.ServerPulldown = new System.Windows.Forms.ComboBox();
@@ -43,11 +47,8 @@
             this.label2 = new System.Windows.Forms.Label();
             this.Email = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
-			if (!NoBrowser)
-				this.NewsBrowser = new System.Windows.Forms.WebBrowser();
             this.ProgressPanel = new System.Windows.Forms.Panel();
             this.PatchStatusLabel = new System.Windows.Forms.Label();
-            this.AutoPlay = new System.Windows.Forms.CheckBox();
             this.MainPanel.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.AuthGroup.SuspendLayout();
@@ -59,13 +60,23 @@
             this.MainPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.MainPanel.Controls.Add(this.panel1);
             this.MainPanel.Controls.Add(this.groupBox2);
             this.MainPanel.Controls.Add(this.AuthGroup);
-            this.MainPanel.Controls.Add(this.NewsBrowser);
             this.MainPanel.Location = new System.Drawing.Point(2, 1);
             this.MainPanel.Name = "MainPanel";
             this.MainPanel.Size = new System.Drawing.Size(785, 377);
             this.MainPanel.TabIndex = 0;
+            // 
+            // panel1
+            // 
+            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel1.Location = new System.Drawing.Point(3, 3);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(779, 306);
+            this.panel1.TabIndex = 5;
             // 
             // groupBox2
             // 
@@ -83,6 +94,18 @@
             this.groupBox2.TabIndex = 4;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Connection";
+            // 
+            // AutoPlay
+            // 
+            this.AutoPlay.AutoSize = true;
+            this.AutoPlay.Location = new System.Drawing.Point(310, 9);
+            this.AutoPlay.Name = "AutoPlay";
+            this.AutoPlay.Size = new System.Drawing.Size(71, 17);
+            this.AutoPlay.TabIndex = 5;
+            this.AutoPlay.Text = "Auto Play";
+            this.AutoPlay.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.AutoPlay.UseVisualStyleBackColor = true;
+            this.AutoPlay.CheckedChanged += new System.EventHandler(this.AutoPlay_CheckedChanged);
             // 
             // label4
             // 
@@ -218,20 +241,6 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "Email";
             // 
-            // NewsBrowser
-            // 
-			if (!NoBrowser)
-			{
-				this.NewsBrowser.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-				| System.Windows.Forms.AnchorStyles.Left)
-				| System.Windows.Forms.AnchorStyles.Right)));
-				this.NewsBrowser.Location = new System.Drawing.Point(3, 3);
-				this.NewsBrowser.MinimumSize = new System.Drawing.Size(20, 20);
-				this.NewsBrowser.Name = "NewsBrowser";
-				this.NewsBrowser.Size = new System.Drawing.Size(779, 306);
-				this.NewsBrowser.TabIndex = 0;
-			}
-            // 
             // ProgressPanel
             // 
             this.ProgressPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
@@ -250,18 +259,6 @@
             this.PatchStatusLabel.Size = new System.Drawing.Size(35, 13);
             this.PatchStatusLabel.TabIndex = 0;
             this.PatchStatusLabel.Text = "label5";
-            // 
-            // AutoPlay
-            // 
-            this.AutoPlay.AutoSize = true;
-            this.AutoPlay.Location = new System.Drawing.Point(310, 9);
-            this.AutoPlay.Name = "AutoPlay";
-            this.AutoPlay.Size = new System.Drawing.Size(71, 17);
-            this.AutoPlay.TabIndex = 5;
-            this.AutoPlay.Text = "Auto Play";
-            this.AutoPlay.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.AutoPlay.UseVisualStyleBackColor = true;
-            this.AutoPlay.CheckedChanged += new System.EventHandler(this.AutoPlay_CheckedChanged);
             // 
             // DefaultLauncher
             // 
@@ -288,7 +285,6 @@
         #endregion
 
         private System.Windows.Forms.Panel MainPanel;
-        private System.Windows.Forms.WebBrowser NewsBrowser;
         private System.Windows.Forms.Panel ProgressPanel;
         private System.Windows.Forms.GroupBox AuthGroup;
         private System.Windows.Forms.CheckBox SaveAuth;
@@ -306,6 +302,7 @@
         private System.Windows.Forms.Button Play_BN;
         private System.Windows.Forms.Label PatchStatusLabel;
         private System.Windows.Forms.CheckBox AutoPlay;
+        private Client.FailoverBrowser panel1;
 
     }
 }
