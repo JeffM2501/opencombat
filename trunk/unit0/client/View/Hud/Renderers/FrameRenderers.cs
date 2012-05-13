@@ -24,30 +24,21 @@ namespace Client.Hud
 
         protected const float aThird = 1.0f / 3.0f;
 
-        public FrameRenderer(string name, string tex)
+        public override void Register(ElementRenderDef def, FontsCache cache)
         {
-            if (!Pannels.ContainsKey(name))
-                Pannels.Add(name, this);
+            if (def.Paramaters.Count > 0)
+                TextureName = def.Paramaters[0];
+            else
+                TextureName = def.Name;
 
-            TextureName = tex;
-            texture = Texture.Get(Locations.FindDataFile(tex), Texture.SmoothType.Nearest, true);
+            texture = Texture.Get(Locations.FindDataFile(TextureName), Texture.SmoothType.Nearest, true);
             if (texture == null)
                 gridSize = Size.Empty;
             else
                 gridSize = new Size(texture.Width / 3, texture.Height / 3);
-        }
 
-        public FrameRenderer(string tex)
-        {
-            if (!Pannels.ContainsKey(tex))
-                Pannels.Add(tex, this);
-
-            TextureName = tex;
-            texture = Texture.Get(Locations.FindDataFile(tex), Texture.SmoothType.Nearest, true);
-            if (texture == null)
-                gridSize = Size.Empty;
-            else
-                gridSize = new Size(texture.Width / 3, texture.Height / 3);
+             if (!Pannels.ContainsKey(def.Name))
+                Pannels.Add(def.Name, this);
         }
 
         protected Dictionary<Size, DisplayList> CachedSizes = new Dictionary<Size, DisplayList>();
@@ -220,10 +211,10 @@ namespace Client.Hud
 
     public class ImagePannelRenderer : PannelRenderer
     {
-        public ImagePannelRenderer(string name)
+        public override void Register(ElementRenderDef def, FontsCache cache)
         {
-            if (!Pannels.ContainsKey(name))
-                Pannels.Add(name, this);
+            if (!Pannels.ContainsKey(def.Name))
+                Pannels.Add(def.Name, this);
         }
 
         public override Size GetElementSize(PannelElement element)
@@ -305,20 +296,16 @@ namespace Client.Hud
     {
         Texture Background = null;
 
-        public SizeableChatBoxFrame(string name, string textureName)
+        public override void Register(ElementRenderDef def, FontsCache cache)
         {
-            if (!Pannels.ContainsKey(name))
-                Pannels.Add(name, this);
+            string textureName = def.Name;
+            if (def.Paramaters.Count > 0)
+                textureName = def.Paramaters[0];
 
             Background = Texture.Get(Locations.FindDataFile(textureName), Texture.SmoothType.Nearest, true);
-        }
 
-        public SizeableChatBoxFrame(string name)
-        {
-            if (!Pannels.ContainsKey(name))
-                Pannels.Add(name, this);
-
-            Background = Texture.Get(Locations.FindDataFile(name), Texture.SmoothType.Nearest, true);
+            if (!Pannels.ContainsKey(def.Name))
+                Pannels.Add(def.Name, this);
         }
 
         public override void DrawElement(PannelElement element, double now, double frameTime)
