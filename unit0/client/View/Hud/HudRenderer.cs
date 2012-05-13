@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Drawing;
 using System.IO;
-
+using System.Reflection;
 using System.Xml;
 using System.Xml.Serialization;
 
@@ -139,13 +139,127 @@ namespace Client.Hud
 
         public bool Focus = false;
     }
-    
+
+    public class FontDescriptor
+    {
+        public string Name = string.Empty;
+
+        public string Typeface = string.Empty;
+        public int Size = 12;
+
+        public static string GenericSansSerif = "GenericSansSerif";
+        public static string GenericSerif = "GenericSerif";
+        public static string GenericMonoSpace = "GenericMonospace";
+
+        public FontDescriptor() { }
+        public FontDescriptor(string name, string typeface, int size)
+        {
+            Name = name;
+            Typeface = typeface;
+            Size = size;
+        }
+
+        public Font GetFont()
+        {
+            if (Typeface == GenericSansSerif)
+                return new Font(FontFamily.GenericSansSerif, Size);
+            if (Typeface == GenericSerif)
+                return new Font(FontFamily.GenericSerif, Size);
+            if (Typeface == GenericMonoSpace)
+                return new Font(FontFamily.GenericMonospace, Size);
+
+            foreach (FontFamily fam in FontFamily.Families)
+            {
+                if (fam.Name == Typeface)
+                    return new Font(fam, Size);
+            }
+
+            return new Font(FontFamily.GenericSansSerif, Size);
+        }
+    }
+
+    public class ElementRenderDef
+    {
+        public string Name = string.Empty;
+        public string RenderName = string.Empty;
+        public List<string> Paramaters = new List<string>();
+
+        public ElementRenderDef() { }
+        public ElementRenderDef(string name, string renderer)
+        {
+            Name = name;
+            RenderName = renderer;
+        }
+
+        public void Add(string param)
+        {
+            Paramaters.Add(param);
+        }
+    }
+
+    public class GUIPrefs
+    {
+        public List<FontDescriptor> Fonts = new List<FontDescriptor>();
+        public List<ElementRenderDef> Elements = new List<ElementRenderDef>();
+
+        public void Write(string path)
+        {
+            FileInfo file = new FileInfo(path);
+            if (file.Exists)
+                file.Delete();
+
+            FileStream fs = file.OpenWrite();
+            XmlSerializer xml = new XmlSerializer(typeof(GUIPrefs));
+            xml.Serialize(fs, this);
+            fs.Close();
+        }
+
+        public static GUIPrefs Read(string path)
+        {
+            FileInfo file = new FileInfo(path);
+            if (!file.Exists)
+                return new GUIPrefs();
+
+            FileStream fs = file.OpenWrite();
+            XmlSerializer xml = new XmlSerializer(typeof(GUIPrefs));
+            GUIPrefs prefs = (GUIPrefs)xml.Deserialize(fs);
+            fs.Close();
+            return prefs;
+        }
+    }
+
+    public class FontsCache
+    {
+        public Dictionary<string, Font> Fonts = new Dictionary<string, Font>();
+
+        public void Add(FontDescriptor desc)
+        {
+            if (desc.Typeface == FontDescriptor.GenericMonoSpace)
+                Fonts.Add(desc.Name, new Font(FontFamily.GenericMonospace, desc.Size));
+            else if (desc.Typeface == FontDescriptor.GenericSansSerif)
+                Fonts.Add(desc.Name, new Font(FontFamily.GenericSansSerif, desc.Size));
+            else if (desc.Typeface == FontDescriptor.GenericSerif)
+                Fonts.Add(desc.Name, new Font(FontFamily.GenericSerif, desc.Size));
+            else
+                Fonts.Add(desc.Name, new Font(desc.Typeface, desc.Size));
+        }
+
+        public Font Get(string name)
+        {
+            if (Fonts.ContainsKey(name))
+                return Fonts[name];
+
+            if (!Fonts.ContainsKey("DEFAULT"))
+                Fonts.Add("DEFAULT", new Font(FontFamily.GenericMonospace, 12));
+            return Fonts["DEFAULT"];
+        }
+    }
 
     public class HudRenderer
     {
-        Font anouncementFont = new Font(FontFamily.GenericSansSerif, 24);
-        Font chatFont = new Font(FontFamily.GenericSerif, 12);
-        Font statsFont = new Font(FontFamily.GenericSansSerif, 18);
+        protected GUIPrefs Prefs = new GUIPrefs();
+        protected FontsCache FontCache = new FontsCache();
+
         public TextPrinter printer = new TextPrinter(TextQuality.High);
 
         PlayerListPannelRenderer.PlayerList playerUIList = new PlayerListPannelRenderer.PlayerList();
@@ -312,21 +426,80 @@ namespace Client.Hud
 
         public event EventHandler<EventArgs> LoadElmentRenderers;
 
+
+        protected void LoadDefaultDefs()
+        {
+            Prefs.Fonts.Add(new FontDescriptor("Announcement",FontDescriptor.GenericSansSerif,24));
+            Prefs.Fonts.Add(new FontDescriptor("Chat",FontDescriptor.GenericSerif,12));
+            Prefs.Fonts.Add(new FontDescriptor("Stats",FontDescriptor.GenericSansSerif,18));
+
+            ElementRenderDef elemnent = new ElementRenderDef("chatFontLabel", "TextLabelRenderer");
+            elemnent.Add("Chat");
+            Prefs.Elements.Add(elemnent);
+
+            elemnent = new ElementRenderDef("anouncementFontLabel", "TextLabelRenderer");
+            elemnent.Add("Announcement");
+            Prefs.Elements.Add(elemnent);
+
+            elemnent = new ElementRenderDef("statsFontLabel", "TextLabelRenderer");
+            elemnent.Add("Stats");
+            Prefs.Elements.Add(elemnent);
+
+            elemnent = new ElementRenderDef("chatFontTextEdit", "TextEditRenderer");
+            elemnent.Add("Chat");
+            Prefs.Elements.Add(elemnent);
+
+            elemnent = new ElementRenderDef("image", "ImagePannelRenderer");
+            Prefs.Elements.Add(elemnent);
+
+            elemnent = new ElementRenderDef("chatbox", "SizeableChatBoxFrame");
+            elemnent.Add("ui/chatbox.png");
+            Prefs.Elements.Add(elemnent);
+
+            elemnent = new ElementRenderDef("chatWindow", "ChatPannelRenderer");
+            elemnent.Add("Chat");
+            elemnent.Add(Color.Aqua.Name);
+            elemnent.Add(Color.Red.Name);
+            Prefs.Elements.Add(elemnent);
+
+            // save that shit
+            Prefs.Write(GetGUIPrefsFile());
+        }
+
+        protected string GetGUIPrefsFile()
+        {
+            return Path.Combine(Locations.UserDirectory, "GUIPrefs.xml");
+        }
+
         protected void LoadPannelDefs()
         {
-            if (LoadElmentRenderers != null)
-                LoadElmentRenderers(this, EventArgs.Empty);
+            Prefs = GUIPrefs.Read(GetGUIPrefsFile());
 
-//             new FrameRenderer("window", "ui/xp_32.png");
-//             new FrameRenderer("button", "ui/xp_32_button.png");
-//             new FrameRenderer("frame", "ui/16_white_rounded.png");
-            new TextLabelRenderer(chatFont, "chatFontLabel");
-            new TextLabelRenderer(anouncementFont, "anouncementFontLabel");
-            new TextLabelRenderer(statsFont, "statsFontLabel");
-            new TextEditRenderer(chatFont, "chatFontTextEdit");
-            new ChatPannelRenderer(chatFont, Color.Aqua, Color.Red, "chatWindow");
-            new ImagePannelRenderer("image");
-            new SizeableChatBoxFrame("chatbox","ui/chatbox.png");
+            if (LoadElmentRenderers != null)
+                LoadElmentRenderers(Prefs, EventArgs.Empty);
+
+            if (Prefs.Elements.Count == 0)
+                LoadDefaultDefs();
+
+            Dictionary<string,Type> rendererCache = new Dictionary<string,Type>();
+
+            foreach (Type t in Assembly.GetExecutingAssembly().GetTypes())
+            {
+                if (t.IsSubclassOf(typeof(PannelRenderer)))
+                    rendererCache.Add(t.Name,t);
+            }
+
+            foreach (FontDescriptor font in Prefs.Fonts)
+                FontCache.Add(font);
+
+            foreach (ElementRenderDef def in Prefs.Elements)
+            {
+                if (rendererCache.ContainsKey(def.RenderName))
+                {
+                    PannelRenderer r = (PannelRenderer)Activator.CreateInstance(rendererCache[def.RenderName]);
+                    r.Register(def, FontCache);
+                }
+            }
         }
 
         public event EventHandler<EventArgs> LoadGUIElements;
@@ -838,25 +1011,23 @@ namespace Client.Hud
     {
         public bool Focus = false;
 
+        public string RenderName = "default";
+
         public static Dictionary<string, PannelRenderer> Pannels = new Dictionary<string, PannelRenderer>();
         public static PannelRenderer Get(string name)
         {
             if (Pannels.ContainsKey(name))
                 return Pannels[name];
 
-            PannelRenderer p = new PannelRenderer(name);
+            PannelRenderer p = new PannelRenderer();
             Pannels.Add(name, p);
             return p;
         }
 
-        public PannelRenderer()
+        public virtual void Register (ElementRenderDef def, FontsCache cache)
         {
-        }
-
-        public PannelRenderer(string name)
-        {
-            if (!Pannels.ContainsKey(name))
-                Pannels.Add(name, this);
+            if (!Pannels.ContainsKey(def.Name))
+                Pannels.Add(def.Name, this);
         }
 
         public virtual Size GetElementSize(PannelElement element)

@@ -9,7 +9,7 @@ using Renderer;
 using FileLocations;
 
 using OpenTK;
-// use compatability for TextRenderer
+// use compatibility for TextRenderer
 using OpenTK.Graphics;
 #pragma warning disable 618 , 612
 
@@ -19,12 +19,13 @@ namespace Client.Hud
     {
         Font font = null;
 
-        public TextLabelRenderer(Font _font, string name)
+        public override void Register(ElementRenderDef def, FontsCache cache)
         {
-            font = _font;
+            if (def.Paramaters.Count > 0)
+                font = cache.Get(def.Paramaters[0]);
 
-            if (!Pannels.ContainsKey(name))
-                Pannels.Add(name, this);
+            if (!Pannels.ContainsKey(def.Name))
+                Pannels.Add(def.Name, this);
         }
 
         public override void ElementAdded(PannelElement element)
@@ -76,12 +77,13 @@ namespace Client.Hud
             public bool lastBlinkState = true;
         }
 
-        public TextEditRenderer(Font _font, string name)
+        public override void Register(ElementRenderDef def, FontsCache cache)
         {
-            font = _font;
+           if (def.Paramaters.Count > 0)
+                font = cache.Get(def.Paramaters[0]);
 
-            if (!Pannels.ContainsKey(name))
-                Pannels.Add(name, this);
+            if (!Pannels.ContainsKey(def.Name))
+                Pannels.Add(def.Name, this);
         }
 
         public override void ElementAdded(PannelElement element)

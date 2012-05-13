@@ -22,14 +22,19 @@ namespace Client.Hud
         Color serverColor = Color.Maroon;
         Color ErrorColor = Color.Red;
 
-        public ChatPannelRenderer(Font _font, Color _from, Color _server, string name)
+        public override void Register(ElementRenderDef def, FontsCache cache)
         {
-            font = _font;
-            fromColor = _from;
-            serverColor = _server;
+            if (def.Paramaters.Count > 0)
+                font = cache.Get(def.Paramaters[0]);
 
-            if (!Pannels.ContainsKey(name))
-                Pannels.Add(name, this);
+            if (def.Paramaters.Count > 1)
+                fromColor = Color.FromName(def.Paramaters[1]);
+
+            if (def.Paramaters.Count > 2)
+                serverColor = Color.FromName(def.Paramaters[2]);
+
+            if (!Pannels.ContainsKey(def.Name))
+                Pannels.Add(def.Name, this);
         }
 
         public override void ElementAdded(PannelElement element)
@@ -159,14 +164,15 @@ namespace Client.Hud
             public List<Item> items = new List<Item>();
         }
 
-        public PlayerListPannelRenderer(Font _font, Color _from, Color _server, string name)
+        public override void Register(ElementRenderDef def, FontsCache cache)
         {
-            font = _font;
+            if (def.Paramaters.Count > 0)
+                font = cache.Get(def.Paramaters[0]);
             //fromColor = _from;
            // serverColor = _server;
 
-            if (!Pannels.ContainsKey(name))
-                Pannels.Add(name, this);
+            if (!Pannels.ContainsKey(def.Name))
+                Pannels.Add(def.Name, this);
         }
 
         public override void ElementAdded(PannelElement element)
