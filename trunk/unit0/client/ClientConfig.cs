@@ -32,7 +32,7 @@ namespace Client
         public bool AutoConnect = true;
         public string AutoConnectHost = "localhost";
 
-        public string AuthenticationURL = "http://www.opencombat.net/users/auth.php";
+        public string AuthenticationURL = "http://opencombat.invertedpolarity.com/users/auth.php";
 
         public static void Load(string path)
         {
