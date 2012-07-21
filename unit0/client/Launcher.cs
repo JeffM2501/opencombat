@@ -100,8 +100,8 @@ namespace Client
 
         public event EventHandler<EventArgs> PatchRequresRestart;
 
-        public string RegisterURL = "http://www.opencombat.net/users/register.php";
-        public string AuthenticateURL = "http://www.opencombat.net/users/authenticate.php";
+        public string RegisterURL = "http://opencombat.invertedpolarity.com/users/register.php";
+        public string AuthenticateURL = "http://opencombat.invertedpolarity.com/users/authenticate.php";
 
         protected Thread PatchThread = null;
 
@@ -110,7 +110,7 @@ namespace Client
 
         public bool Start()
         {
-            NewsURL = "http://www.opencombat.net/wiki/wikka.php?wakka=Unit0News";
+            NewsURL = "http://opencombat.invertedpolarity.com/wiki/wikka.php?wakka=Unit0News";
             if (ClientConfig.Config.SaveCredentials)
             {
                 SaveCredentials = true;

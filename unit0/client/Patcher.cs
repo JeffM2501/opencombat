@@ -40,8 +40,8 @@ namespace Client
         protected int TotalFilesToGet = 0;
         protected int TotalFilesGot = 0;
 
-        public static string DataUpdateURL = "http://www.opencombat.net/updates/data.php";
-        public static string BinUpdateURL = "http://www.opencombat.net/updates/bin.php";
+        public static string DataUpdateURL = "http://opencombat.invertedpolarity.com/updates/data.php";
+        public static string BinUpdateURL = "http://opencombat.invertedpolarity.com/updates/bin.php";
 
         protected List<string> OutOfDateDataFiles = null;
 
