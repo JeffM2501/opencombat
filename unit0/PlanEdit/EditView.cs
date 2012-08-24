@@ -24,11 +24,6 @@ namespace PlanEdit
             InitializeComponent();
         }
 
-        private void MapOverviewBox_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
 		public void SavePrefs(Prefs pref)
 		{
 			string prefsFile = Path.Combine(Application.CommonAppDataPath, "Prefs.xml");
@@ -72,5 +67,43 @@ namespace PlanEdit
 
 			PlanView = new PlanRenderer(MapOverviewBox, Editor.TheWorld, Editor.ThePrefs);
 		}
+
+        private void ZBar_Scroll(object sender, EventArgs e)
+        {
+            PlanView.ZLevel = ZBar.Value;
+            MapOverviewBox.Invalidate();
+        }
+
+        private void MapOverviewBox_MouseClick(object sender, MouseEventArgs e)
+        {
+
+        }
+
+        private void MapOverviewBox_MouseMove(object sender, MouseEventArgs e)
+        {
+            int dX = e.X - mousePos.X;
+            int dY = e.Y - mousePos.Y;
+
+            if (e.Button == MouseButtons.Right)
+            {
+                PlanView.DrawOffset.X += dX;
+                PlanView.DrawOffset.Y += dY;
+                MapOverviewBox.Invalidate();
+            }
+
+            mousePos = new Point(e.X, e.Y);
+        }
+
+        Point mousePos = new Point(0, 0);
+
+        private void MapOverviewBox_MouseDown(object sender, MouseEventArgs e)
+        {
+            mousePos = new Point(e.X, e.Y);
+        }
+
+        private void MapOverviewBox_MouseUp(object sender, MouseEventArgs e)
+        {
+            mousePos = new Point(e.X, e.Y);
+        }
     }
 }

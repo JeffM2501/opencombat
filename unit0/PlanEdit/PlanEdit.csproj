@@ -61,6 +61,7 @@
     <Compile Include="EditView.Designer.cs">
       <DependentUpon>EditView.cs</DependentUpon>
     </Compile>
+    <Compile Include="ImageCache.cs" />
     <Compile Include="PlanRenderer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
