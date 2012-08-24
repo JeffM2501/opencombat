@@ -11,6 +11,7 @@ using Game;
 using Renderer;
 
 using WorldDrawing;
+using GameDrawing;
 
 namespace Client
 {
