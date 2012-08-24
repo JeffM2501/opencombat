@@ -147,6 +147,10 @@
       <Project>{6116C236-5282-47FD-B802-459E12D047FB}</Project>
       <Name>FileLocations</Name>
     </ProjectReference>
+    <ProjectReference Include="..\GameDrawing\GameDrawing.csproj">
+      <Project>{0BC958F6-E63F-4077-8732-9AD45AC0BAB3}</Project>
+      <Name>GameDrawing</Name>
+    </ProjectReference>
     <ProjectReference Include="..\game\Game.csproj">
       <Project>{EE05A0AF-465E-4A59-9C6F-7FF2A115AC30}</Project>
       <Name>Game</Name>

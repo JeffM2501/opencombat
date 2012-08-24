@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -65,10 +65,6 @@
     <ProjectReference Include="..\FileLocations\FileLocations.csproj">
       <Project>{6116C236-5282-47FD-B802-459E12D047FB}</Project>
       <Name>FileLocations</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\game\Game.csproj">
-      <Project>{EE05A0AF-465E-4A59-9C6F-7FF2A115AC30}</Project>
-      <Name>Game</Name>
     </ProjectReference>
     <ProjectReference Include="..\gridWorld\GridWorld.csproj">
       <Project>{721F485A-C3A7-4340-AD60-A24F08E18323}</Project>
