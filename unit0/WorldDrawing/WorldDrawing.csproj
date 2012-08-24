@@ -43,10 +43,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ActorRenderer.cs" />
     <Compile Include="DebugDrawing.cs" />
     <Compile Include="GridWorldRenderer.cs" />
-    <Compile Include="PlayerRenderer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
