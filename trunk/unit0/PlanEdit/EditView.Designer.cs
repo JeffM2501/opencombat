@@ -1,6 +1,6 @@
 ﻿namespace PlanEdit
 {
-    partial class Form1
+    partial class EditView
     {
         /// <summary>
         /// Required designer variable.
